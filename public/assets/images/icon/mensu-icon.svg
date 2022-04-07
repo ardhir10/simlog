@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="mensu-icon" transform="translate(-46.243)">
+    <path id="Path_90" data-name="Path 90" d="M113.32,6.407h1.134V5.468h-1.6v-2.5H114V2.028h-1.174a3.066,3.066,0,0,0-5.77,0h-1.174v.938h1.14v2.5h-1.6v.938h1.134l-.669,6.745h-1.717L104.146,16h11.577V13.152h-1.734ZM109.936.938a1.753,1.753,0,0,1,1.718,1.09h-3.437a1.753,1.753,0,0,1,1.718-1.09Zm-1.776,2.028h3.551v2.5h-1.2V3.934h-1.144V5.468h-1.2Zm-.46,3.441h4.472l.669,6.745h-5.811Zm6.879,8.655H105.3l.007-.972h9.276Z" transform="translate(-55.695)" fill="#fff"/>
+    <path id="Path_91" data-name="Path 91" d="M241,269.516h1.144v.837H241Z" transform="translate(-187.33 -261.094)" fill="#fff"/>
+    <path id="Path_92" data-name="Path 92" d="M241,329.569h1.144v.837H241Z" transform="translate(-187.33 -319.27)" fill="#fff"/>
+    <path id="Path_93" data-name="Path 93" d="M0,0,1,.1l.213,2.41-1-.1Z" transform="matrix(0.557, -0.83, 0.83, 0.557, 46.243, 2.816)" fill="#fff"/>
+    <path id="Path_94" data-name="Path 94" d="M0,0,2.209.132l.067.963L.067.963Z" transform="translate(46.257 5.26) rotate(-20.174)" fill="#fff"/>
+    <path id="Path_95" data-name="Path 95" d="M0,0,2.41.213l.1,1L.1,1Z" transform="matrix(0.831, -0.557, 0.557, 0.831, 59.484, 3.197)" fill="#fff"/>
+    <path id="Path_96" data-name="Path 96" d="M0,0,.963.067l.132,2.209L.132,2.209Z" transform="translate(59.715 5.495) rotate(-69.826)" fill="#fff"/>
+  </g>
+</svg>
