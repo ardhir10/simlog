@@ -173,7 +173,7 @@
                     <div class="card shadow-lg card__one animate__animated  animate__fadeInUp card-4">
                         <div class="card-body">
                             <div class="d-flex">
-                                {{-- <img class="" height="50" src="{{asset('images/icon/kapal-negara.png')}}" alt=""> --}}
+                                <img class="" height="50" src="{{asset('images/icon/kategori.png')}}" alt="">
                                 <div class="ms-2 mt-1">
                                     <span class="fw-bold fs-6  d-block ">Master Kategori Barang</span>
                                     <span class="d-block text-grey">
@@ -190,7 +190,7 @@
                     <div class="card shadow-lg card__one animate__animated  animate__fadeInUp card-4">
                         <div class="card-body">
                             <div class="d-flex">
-                                {{-- <img class="" height="50" src="{{asset('images/icon/kapal-negara.png')}}" alt=""> --}}
+                                <img class="" height="50" src="{{asset('images/icon/unit.png')}}" alt="">
                                 <div class="ms-2 mt-1">
                                     <span class="fw-bold fs-6  d-block ">Master Satuan</span>
                                     <span class="d-block text-grey">

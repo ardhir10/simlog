@@ -102,7 +102,7 @@
     <div class="col-lg-12">
         <div class="form-group">
             <label for=""><strong>Spesifikasi Barang</strong></label>
-              <textarea id="summernote" rows="15" name="spesifikasi_barang"></textarea>
+              <textarea id="summernote" class="d-none" rows="15" name="spesifikasi_barang"></textarea>
         </div>
     </div>
 </div>

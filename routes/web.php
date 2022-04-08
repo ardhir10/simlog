@@ -38,6 +38,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/{id}', 'BarangPersediaanController@update')->name('update');
     });
 
+    Route::prefix('permintaan-barang')->name('permintaan-barang.')->group(function () {
+        Route::get('/', 'PermintaanBarangController@index')->name('index');
+        Route::get('/create', 'PermintaanBarangController@create')->name('create');
+        Route::post('/add-barang/{id}/{permintaanBarangId}', 'PermintaanBarangController@addBarang')->name('add-barang');
+        Route::get('/delete-barang/{id}', 'PermintaanBarangController@deleteBarang')->name('delete-barang');
+        Route::get('/batalkan-permintaan/{id}', 'PermintaanBarangController@batalkanPermintaan')->name('batalkan-permintaan');
+        Route::post('/ajukan-permintaan/{id}', 'PermintaanBarangController@ajukanPermintaan')->name('ajukan-permintaan');
+        Route::get('/detail/{id}', 'PermintaanBarangController@detail')->name('detail');
+        Route::get('/cetak-nota-dinas/{id}', 'PermintaanBarangController@pdfNotaDinas')->name('nota-dinas');
+    });
+
     // --- MASTER DATA
     Route::prefix('master-data')->name('master-data.')->group(function () {
         Route::get('/', 'DataMasterController@index')->name('index');
@@ -119,6 +130,7 @@ Route::get('/master-data/user/{id}/delete', 'UserController@delete')->name('user
 Route::get('/master-data/user/show/{id}', 'UserController@show')->name('user.show');
 Route::get('/user-setting', 'UserController@userSetting')->name('user.setting');
 Route::post('/user-setting', 'UserController@userSettingUpdate')->name('user.setting.update');
+Route::get('/user-s', 'UserController@userSettingUpdate')->name('public-data.user');
 
 
 

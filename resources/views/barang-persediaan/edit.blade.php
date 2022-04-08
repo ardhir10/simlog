@@ -98,6 +98,7 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script>
     $(document).ready(function() {
+        $('#summernote').removeClass('d-none');
         $('#summernote').summernote('code',@json($data->spesifikasi_barang));
 
 

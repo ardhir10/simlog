@@ -59,7 +59,7 @@
 
                 {{-- ALL USER --}}
                 <li>
-                    <a href="/">
+                    <a href="{{route('permintaan-barang.index')}}">
                         <i class="icon nav-icon" data-feather="trello"></i>
                         <span class="menu-item" data-key="t-sales">Permintaan barang</span>
                     </a>

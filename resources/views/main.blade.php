@@ -398,8 +398,6 @@
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
     rel='stylesheet' />
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<link rel="stylesheet" href="{{asset('assets/css/maps.css')}}">
     @stack('scripts')
     <script>
         $('.ada').val();

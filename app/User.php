@@ -64,4 +64,16 @@ class User extends Authenticatable
     public function liniUsaha(){
         return $this->belongsTo(LiniUsaha::class);
     }
+
+    public function kapalNegara()
+    {
+        return $this->belongsTo(KapalNegara::class,'kapal_negara_id','id');
+    }
+
+    public function srop()
+    {
+        return $this->belongsTo(StasiunRadioPantai::class, 'srop_id', 'id');
+    }
+
+
 }

@@ -147,18 +147,18 @@ class BarangPersediaanController extends Controller
             $BarangPersediaan = BarangPersediaan::find($id);
             BarangPersediaan::destroy($id);
 
-            if ($BarangPersediaan->foto_barang) {
-                $picture_path = public_path('dokumen_barang/foto_barang/' . $BarangPersediaan->foto_barang);
-                if (File::exists($picture_path)) {
-                    File::delete($picture_path);
-                }
-            }
-            if ($BarangPersediaan->dokumen_bast) {
-                $picture_path = public_path('dokumen_barang/dokumen_bast/' . $BarangPersediaan->dokumen_bast);
-                if (File::exists($picture_path)) {
-                    File::delete($picture_path);
-                }
-            }
+            // if ($BarangPersediaan->foto_barang) {
+            //     $picture_path = public_path('dokumen_barang/foto_barang/' . $BarangPersediaan->foto_barang);
+            //     if (File::exists($picture_path)) {
+            //         File::delete($picture_path);
+            //     }
+            // }
+            // if ($BarangPersediaan->dokumen_bast) {
+            //     $picture_path = public_path('dokumen_barang/dokumen_bast/' . $BarangPersediaan->dokumen_bast);
+            //     if (File::exists($picture_path)) {
+            //         File::delete($picture_path);
+            //     }
+            // }
             return redirect()->route('barang-persediaan.index')->with(['failed' => 'Data berhasil di hapus !']);
         } catch (\Throwable $th) {
             return redirect()->route('barang-persediaan.index')->with(['failed' => $th->getMessage()]);
