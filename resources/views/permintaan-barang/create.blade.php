@@ -236,7 +236,7 @@
                             <br>
                             <div class="float-start">
                                 <a href="{{route('permintaan-barang.batalkan-permintaan',$data->id)}}" onclick="return confirm('Yakin batalkan permintaan, semua data akan dihapus ?')">
-                                    <button class=" btn btn-danger">
+                                    <button  type="button" class=" btn btn-danger">
                                     <i class="fa fa-times"></i>
                                     Batalkan Permintaan</button>
                                 </a>
