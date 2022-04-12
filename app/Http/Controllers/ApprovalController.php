@@ -358,9 +358,7 @@ class ApprovalController extends Controller
             }
 
 
-
-
-
+            // Buat Update Nomor BAST !
 
             // UPDATE STATUS PERMINTAAN BARANG
             PermintaanBarang::where('id', $id)

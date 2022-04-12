@@ -261,6 +261,24 @@ class PermintaanBarangController extends Controller
         return $pdf->stream($permintaanBarang->nomor_upp3 . ' (UPP3).pdf');
     }
 
+    public function pdfUpp4(Request $request, $id)
+    {
+        $data['title'] = 'UPP4';
+
+        $permintaanBarang = PermintaanBarang::where('id', $id)
+            ->first();
+        $data['data'] = $permintaanBarang;
+        if ($request->v == 'html') {
+            return view('pdf.upp4', $data);
+        }
+
+
+        $pdf = PDF::loadView('pdf.upp4', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
+        // $font = Font_Metrics::get_font("helvetica", "bold");
+
+        return $pdf->stream($permintaanBarang->nomor_upp3 . ' (UPP3).pdf');
+    }
+
     private function generateNomorUpp3($notaDinas)
     {
         /*

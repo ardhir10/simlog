@@ -308,7 +308,7 @@
                                                         <div>
                                                             <span class="d-block"
                                                                 style="font-size:20px;font-weight:bold;">UPP4</span>
-                                                            <a href="{{route('permintaan-barang.upp3',$data->id)}}"
+                                                            <a href="{{route('permintaan-barang.upp4',$data->id)}}"
                                                                 target="_blank">
                                                                 <button class="btn btn-sm btn-success">Download</button>
                                                             </a>

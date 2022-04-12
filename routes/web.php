@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/detail/{id}', 'PermintaanBarangController@detail')->name('detail');
         Route::get('/cetak-nota-dinas/{id}', 'PermintaanBarangController@pdfNotaDinas')->name('nota-dinas');
         Route::get('/cetak-nota-upp3/{id}', 'PermintaanBarangController@pdfUpp3')->name('upp3');
+        Route::get('/cetak-nota-upp4/{id}', 'PermintaanBarangController@pdfUpp4')->name('upp4');
     });
 
     Route::prefix('approval')->name('approval.')->group(function () {

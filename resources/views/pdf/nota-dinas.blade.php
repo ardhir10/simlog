@@ -39,7 +39,8 @@
     <div class="header">
         <table>
             <tr>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_of_the_Ministry_of_Transportation_of_the_Republic_of_Indonesia.svg/1200px-Logo_of_the_Ministry_of_Transportation_of_the_Republic_of_Indonesia.svg.png" height="130px" alt=""></td>
+                <td>
+                    <img src="{{asset('assets/images/icon/kemenhub.png')}}" height="130px" alt=""></td>
                 <td style="vertical-align: top;">
                     <div style="padding-left:20px;width:100%">
                         <div>
