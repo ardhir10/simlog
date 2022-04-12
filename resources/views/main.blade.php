@@ -301,6 +301,17 @@
             border-bottom-right-radius:  10px !important;
         }
 
+        .noti-dotnya {
+            text-align: center;
+            position: absolute;
+            height: 20px;
+            margin: auto;
+            color: white;
+            line-height: 20px;
+            width: 20px;
+            border-radius: 10px;
+        }
+
     </style>
 
 </head>

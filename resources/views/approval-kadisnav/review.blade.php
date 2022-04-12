@@ -1,3 +1,5 @@
+
+
 @extends('main')
 
 
@@ -66,7 +68,15 @@
         <div class="col-lg-12">
             <div class="card shadow-lg">
                 <div class="card-header justify-content-between d-flex align-items-center">
-                    <h4 class="card-title">{{$page_title}}</h4>
+                    <h4 class="card-title">{{$page_title}}
+                        @if (optional($data->lastProcess())->role_to_name == Auth::user()->role->name)
+                            <span class="noti-dotnya bg-danger"> ! </span>
+                        @else
+
+                        @endif
+                    </h4>
+
+
 
                 </div>
                 <div class="card-body">
@@ -74,14 +84,34 @@
                         @include('components.flash-message')
                     </div>
                     <div class="col-lg-12">
-                        <div class="d-block mb-3">
-                            <span>{{$data->perihal}}</span>
-                            <br>
-                            <span class="d-block">Diminta Oleh : {{$data->dimintaOleh()}}</span>
-                            <span class="d-block">Bagian/Bidang : {{$data->bagianBidang()}}</span>
-                            <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
-                            <span class="d-block">Tanggal Permintaan :
-                                {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="d-block mb-3">
+                                    <span>{{$data->perihal}}</span>
+                                    <br>
+                                    <span class="d-block">Diminta Oleh : {{$data->dimintaOleh()}}</span>
+                                    <span class="d-block">Bagian/Bidang : {{$data->bagianBidang()}}</span>
+                                    <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
+                                    <span class="d-block">Tanggal Permintaan :
+                                        {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 offset-lg-2">
+                                <div class="text-end">
+                                    @if (optional($data->lastProcess())->role_to_name == Auth::user()->role->name)
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">TINDAK LANJUT</button>
+                                        <span class="d-block">Anda Belum memberikan tindak lanjut terhadap Permintaan Barang ini. Harap berikan tindak lanjut dengan menekan tombol tindak lanjut diatas.</span>
+                                    @else
+                                        @if (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'SETUJUI')
+                                            <h1 class="text-success">DISETUJUI</h1>
+                                        @else
+                                            <h1 class="text-danger">DITOLAK</h1>
+                                        @endif
+                                        <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button>
+                                    @endif
+
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card">
@@ -110,14 +140,35 @@
                                                         {{date('H:i:s',strtotime($data->tanggal_permintaan))}}</p>
                                                 </div>
                                             </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Dalam Proses Approval
-                                                    </h5>
-                                                    <p class="text-muted">-</p>
+
+                                            @foreach ($data->timeline as $apv)
+                                                @if ($apv->status == 'done')
+                                                @php
+                                                $class = 'event-list';
+                                                @endphp
+                                                @elseif ($apv->status == 'reject')
+                                                @php
+                                                $class = 'event-list-reject';
+                                                @endphp
+                                                @else
+                                                @php
+                                                $class = 'event-list-pending';
+                                                @endphp
+                                                @endif
+                                                <div class="swiper-slide" style="">
+                                                    <div class="{{$class}} text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
+                                                        </h5>
+                                                        <p class="text-muted">
+                                                             {{date('d F T',strtotime($apv->timestamp))}} ||
+                                                            {{date('H:i:s',strtotime($apv->timestamp))}}
+                                                            {{-- {{$apv->role_to_name}} --}}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide ">
+                                            @endforeach
+
+                                            {{-- <div class="swiper-slide ">
                                                 <div class="event-list text-start">
                                                     <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Disetujui</h5>
                                                     <p class="text-muted">-</p>
@@ -142,7 +193,7 @@
                                                     <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diterima</h5>
                                                     <p class="text-muted">-</p>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <!-- end swiper slide -->
                                         </div>
@@ -241,7 +292,8 @@
                                                     <div>
                                                         <span class="d-block"
                                                             style="font-size:20px;font-weight:bold;">Nota Dinas</span>
-                                                        <a href="{{route('permintaan-barang.nota-dinas',$data->id)}}" target="_blank">
+                                                        <a href="{{route('permintaan-barang.nota-dinas',$data->id)}}"
+                                                            target="_blank">
                                                             <button class="btn btn-sm btn-success">Download</button>
                                                         </a>
                                                     </div>
@@ -256,21 +308,66 @@
                                                     <div>
                                                         <span class="d-block"
                                                             style="font-size:20px;font-weight:bold;">UPP3</span>
-                                                        <a href="{{route('permintaan-barang.upp3',$data->id)}}" target="_blank">
+                                                        <a href="{{route('permintaan-barang.upp3',$data->id)}}"
+                                                            target="_blank">
                                                             <button class="btn btn-sm btn-success">Download</button>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
+                                            @if ($data->approvals->where('kategori','PERSETUJUAN')->first->id ?? null)
+                                                <div class="col-lg-3">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <img height="65" src="{{asset('assets/images/icon/file.png')}}"
+                                                                alt="">
+                                                        </div>
+                                                        <div>
+                                                            <span class="d-block"
+                                                                style="font-size:20px;font-weight:bold;">UPP4</span>
+                                                            <a href="{{route('permintaan-barang.upp3',$data->id)}}"
+                                                                target="_blank">
+                                                                <button class="btn btn-sm btn-success">Download</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        {{-- PERSETUJUAN --}}
+                        <hr>
+                        <div class="row animate__animated  animate__fadeIn">
+                            <div class="col-lg-12">
+                                <div class="card shadow-lg">
+                                    <div class="card-body ">
+                                        <h3 class="fw-bold">PERSETUJUAN</h3>
+                                        <div class="row ">
+                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN') as $appvs)
+                                                <div class="col-lg-12">
+                                                    <div class="card" style="border: 1px solid">
+                                                        <div class="card-body p-4">
+                                                            <p class="text-muted">
+                                                                {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                            <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
+                                                            <span class="d-block mb-2">Keterngan :</span>
+                                                            <span>{{$appvs->keterangan}}</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -282,6 +379,85 @@
 </div> <!-- container-fluid -->
 </div>
 @endsection
+
+
+@push('modals')
+<div>
+    <!-- sample modal content -->
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Tindak Lanjut</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                    </button>
+                </div>
+                <form action="{{route('approval.tindak-lanjut',$data->id)}}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label for=""></label>
+                            <select name="tindak_lanjut" class="form-select" id="">
+                                <option value="SETUJUI">SETUJUI</option>
+                                <option value="TOLAK">TOLAK</option>
+                                <option value="REVIEW">REVIEW</option>
+                                <option value="UPDATE">UPDATE</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">TINDAK LANJUT</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    @if ($data->approvals->where('kategori','PERSETUJUAN'))
+        <!-- sample modal content -->
+        <div id="myModalUpdate" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Edit Tindak Lanjut </h5>
+                        <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close">
+
+                        </button>
+                    </div>
+                    <form action="{{route('approval.tindak-lanjut-update',['id'=>$data->id,'idApproval'=>$data->approvals->where('kategori','APPROVAL')->first()->id ?? 0,'idPersetujuan'=>$data->approvals->where('kategori','PERSETUJUAN')->first()->id ?? 0])}}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group mb-2">
+                                <label for=""></label>
+                                <select name="tindak_lanjut" class="form-select" id="">
+                                    <option  value="SETUJUI">SETUJUI</option>
+                                    <option  value="TOLAK">TOLAK</option>
+                                    <option  value="REVIEW">REVIEW</option>
+                                    <option  value="UPDATE">UPDATE</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Keterangan</label>
+                                <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control">{{$data->approvals->where('kategori','PERSETUJUAN')->first()->keterangan ?? null}}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">TINDAK LANJUT</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    @endif
+</div>
+@endpush
 
 @push('scripts')
 

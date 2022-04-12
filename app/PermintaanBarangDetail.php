@@ -11,6 +11,6 @@ class PermintaanBarangDetail extends Model
 
     public function barang()
     {
-        return $this->belongsTo(BarangPersediaan::class, 'barang_persediaan_id', 'id');
+    return $this->belongsTo(BarangPersediaan::class, 'barang_persediaan_id', 'id');
     }
 }

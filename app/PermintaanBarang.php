@@ -13,6 +13,30 @@ class PermintaanBarang extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function lastProcess($role = ''){
+        if($role){
+            return $process = ApprovalProcess::where('permintaan_barang_id', $this->id)
+                ->where('role_to_name',$role)
+                ->orderBy('id', 'desc')
+                ->first();
+        }else{
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->orderBy('id','desc')
+            ->first();
+        }
+    }
+    public function isTindakLanjut($step = 1){
+        return $process = ApprovalProcess::where('step','>',$step)
+            ->orderBy('id','desc')
+            ->first();
+    }
+    public function approvals(){
+        return $this->hasMany(ApprovalProcess::class, 'permintaan_barang_id', 'id');
+    }
+    public function timeline(){
+        return $this->hasMany(ApprovalProcess::class, 'permintaan_barang_id', 'id');
+    }
+
     public function barang_diminta(){
         return $this->hasMany(PermintaanBarangDetail::class,'permintaan_barang_id','id');
     }
@@ -68,7 +92,6 @@ class PermintaanBarang extends Model
         return $kode;
     }
     public function bagianBidang(){
-
         $roleName = $this->user->role->name ?? null;
         if (
             $roleName == 'Kepala Distrik Navigasi' ||
@@ -95,6 +118,41 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Inventaris'
         ) {
             $kode = 'Bidang Logistik';
+        } else {
+            $kode = 'NONUSER';
+        }
+
+        return $kode;
+    }
+
+    public function bagianBidangUpp3()
+    {
+        $roleName = $this->user->role->name ?? null;
+        if (
+            $roleName == 'Kepala Distrik Navigasi' ||
+            $roleName == 'Kabag Tata Usaha' ||
+            $roleName == 'Subbag Kepegawaian dan Umum' ||
+            $roleName == 'Subbag Keuangan'
+        ) {
+            $kode = 'TU';
+        } else if (
+            $roleName == 'Kabid Operasi' ||
+            $roleName == 'Seksi Program' ||
+            $roleName == 'Seksi Sarana Prasarana' ||
+            $roleName == 'Nakhoda' ||
+            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala SROP' ||
+            $roleName == 'Kepala Kelompok Pengamatan Laut' ||
+            $roleName == 'Kepala Kelompok Bengkel' ||
+            $roleName == 'Kepala Kelompok SBNP'
+        ) {
+            $kode = 'OPS';
+        } else if (
+            $roleName == 'Kabid Logistik' ||
+            $roleName == 'Seksi Pengadaan' ||
+            $roleName == 'Seksi Inventaris'
+        ) {
+            $kode = 'LOG';
         } else {
             $kode = 'NONUSER';
         }

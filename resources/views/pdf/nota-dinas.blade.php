@@ -44,11 +44,11 @@
                     <div style="padding-left:20px;width:100%">
                         <div>
                             <span style="font-size:2vw;font-size: 35px;display:block;font-weight:bolder; ">KEMENTERIAN PERHUBUNGAN</span>
-                            <span style="font-size: 1vw;font-size:22px;display:block;font-weight:bolder; ">DIREKTORAT JENDERAL PERHUBUNGAN LAUT</span>
-                            <span style="font-size: 1vw;font-size:22px;display:block;font-weight:bolder; ">DISTRIK NAVIGASI KELAS I TANJUNG PRIOK</span>
+                            <span style="font-size: 1vw;font-size:23px;display:block;font-weight:bolder; ">DIREKTORAT JENDERAL PERHUBUNGAN LAUT</span>
+                            <span style="font-size: 1vw;font-size:24.5px;display:block;font-weight:bolder; ">DISTRIK NAVIGASI KELAS I TANJUNG PRIOK</span>
                         </div>
                         <div>
-                            <table style="font-size:11px">
+                            <table style="font-size:10px">
                                 <tr>
                                     <td style="vertical-align: top;">
                                         <div style="margin-left:-4px">
@@ -62,34 +62,41 @@
                                             </table>
                                         </div>
                                     </td>
-                                    <td style="vertical-align: top;">
+                                    <td style="vertical-align: top;font-size:10px">
                                         <div style="padding-left: 10px;">
                                             <table style="">
                                                 <tr>
                                                     <td>TELP</td>
-                                                    <td>: (021) 4393, 0070</td>
+                                                    <td style="white-space: nowrap">: (021) 4393, 0070</td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
-                                                    <td>: (021) 4393, 1849</td>
+                                                    <td style="white-space: nowrap">: (021) 4393, 1849</td>
                                                 </tr>
                                                 <tr>
                                                     <td>FAX</td>
-                                                    <td>: (021) 4393, 0534</td>
+                                                    <td style="white-space: nowrap">: (021) 4393, 0534</td>
                                                 </tr>
 
                                             </table>
                                         </div>
                                     </td>
                                     <td style="vertical-align: top;">
-                                        <div style="padding-left: 3px;">
+                                        <div style="padding-left:10px;">
                                             <table style="">
                                                 <tr>
-                                                    <td>W</td>
-                                                    <td >: <span style="font-size: 8px">https://hubla.dephub.go.id/disnavtanjungpriok</span></td>
+                                                    <td>
+                                                        <img src="{{ asset('/images/icon/browser.png') }}" width="10" alt="">
+                                                        {{-- <img src="{{ public_path('/images/icon/browser.png') }}"  width="10" alt=""> --}}
+                                                    </td>
+                                                    <td >: <span style="font-size: 10px">https://hubla.dephub.go.id/disnavtanjungpriok</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Mail</td>
+                                                    <td>
+                                                        <img src="{{ asset('/images/icon/mail.png') }}" width="10" alt="">
+                                                        {{-- <img src="{{ public_path('/images/icon/mail.png') }}"  width="10" alt=""> --}}
+
+                                                    </td>
                                                     <td>: disnavtanjungpriok@dephub.go.id</td>
                                                 </tr>
                                                 <tr>
@@ -129,7 +136,7 @@
                         <tr>
                             <td>Dari</td>
                             <td style="width: 1%">:</td>
-                            <td> {{$data->user->name ?? null}}</td>
+                            <td> {{$data->dimintaOleh() ?? null}}</td>
                         </tr>
                         <tr>
                             <td>Hal</td>
@@ -138,7 +145,7 @@
                         </tr>
 
                         <tr>
-                            <td>Tanggal Jatuh Tempo </td>
+                            <td>Tanggal</td>
                             <td style="width: 1%">:</td>
                             <td> {{date('d-m-Y H:i:s',strtotime(date('Y-m-d'))) }}</td>
                         </tr>

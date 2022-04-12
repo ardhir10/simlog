@@ -47,7 +47,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/ajukan-permintaan/{id}', 'PermintaanBarangController@ajukanPermintaan')->name('ajukan-permintaan');
         Route::get('/detail/{id}', 'PermintaanBarangController@detail')->name('detail');
         Route::get('/cetak-nota-dinas/{id}', 'PermintaanBarangController@pdfNotaDinas')->name('nota-dinas');
+        Route::get('/cetak-nota-upp3/{id}', 'PermintaanBarangController@pdfUpp3')->name('upp3');
     });
+
+    Route::prefix('approval')->name('approval.')->group(function () {
+
+        Route::get('/review/{id}', 'ApprovalController@review')->name('review');
+        Route::post('/tindak-lanjut/{id}', 'ApprovalController@tindakLanjut')->name('tindak-lanjut');
+        Route::post('/tindak-lanjut-update/{id}/{idApproval}/{idPersetujuan}', 'ApprovalController@tindakLanjutUpdate')->name('tindak-lanjut-update');
+
+    });
+
+
 
     // --- MASTER DATA
     Route::prefix('master-data')->name('master-data.')->group(function () {

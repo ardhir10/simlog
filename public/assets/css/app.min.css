@@ -6262,6 +6262,7 @@ body[data-layout-mode=dark] .countdownlist .count-num::after {
     color: #043a5a
 }
 
+/* ============ */
 .hori-timeline .event-list {
     position: relative;
     text-align: center;
@@ -6293,6 +6294,68 @@ body[data-layout-mode=dark] .countdownlist .count-num::after {
     display: block
 }
 
+body[data-layout-mode=dark] .hori-timeline .event-list:after {
+    border: 5px solid rgba(4, 58, 90, .8)
+}
+.hori-timeline.timeline-card .event-list::after {
+    display: none
+}
+
+.hori-timeline.timeline-card .event-list::before {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: -1
+}
+
+
+/* =========== EVENT LIST PENDING */
+.hori-timeline .event-list-pending {
+    position: relative;
+    text-align: center;
+    padding: 24px
+}
+
+.hori-timeline .event-list-pending::before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    left: 0;
+    top: 7px;
+    background-color: #eff0f2
+}
+
+.hori-timeline .event-list-pending:after {
+    content: "";
+    position: absolute;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: #F0EB23;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    top: -7px !important;
+    left: 7% !important;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    display: block
+}
+
+body[data-layout-mode=dark] .hori-timeline .event-list-pending:after {
+    border: 5px solid rgba(4, 58, 90, .8)
+}
+.hori-timeline.timeline-card .event-list-pending::after {
+    display: none
+}
+
+.hori-timeline.timeline-card .event-list-pending::before {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: -1
+}
+/* =========== EVENT LIST PENDING */
+
 .hori-timeline .swiper-button-next:after,
 .hori-timeline .swiper-button-prev:after {
     font-size: 16px
@@ -6306,16 +6369,7 @@ body[data-layout-mode=dark] .countdownlist .count-num::after {
     transition: all .2s
 }
 
-.hori-timeline.timeline-card .event-list::after {
-    display: none
-}
 
-.hori-timeline.timeline-card .event-list::before {
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    z-index: -1
-}
 
 .verti-timeline {
     position: relative;
@@ -6538,9 +6592,7 @@ body[data-layout-mode=dark] .hori-timeline .event-list:before {
     background-color: #043a5a
 }
 
-body[data-layout-mode=dark] .hori-timeline .event-list:after {
-    border: 5px solid rgba(4, 58, 90, .8)
-}
+
 
 body[data-layout-mode=dark] .hori-timeline.timeline-card .event-list-item {
     background-color: #043a5a

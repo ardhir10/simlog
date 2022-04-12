@@ -31,6 +31,8 @@
     background: #0bb9795b !important;
 }
 
+
+
 </style>
 
 @endpush
@@ -61,7 +63,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="d-flex pb-1">
+                                    <div class="d-flex pb-1 ps-4">
                                         <div class="avatar-sm me-1">
                                             <div class="avatar-title bg-ditolak rounded-circle ">
                                             </div>
@@ -69,21 +71,8 @@
                                         <span class="mt-auto ">Ditolak</span>
                                     </div>
                                 </td>
-                            </tr>
-                            <tr>
                                 <td>
-                                    <div class="d-flex pb-1">
-                                        <div class="avatar-sm me-1">
-                                            <div class="avatar-title bg-diproses rounded-circle ">
-                                            </div>
-                                        </div>
-                                        <span class="m-tauto ">Dalam Proses</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex pb-1">
+                                    <div class="d-flex pb-1 ps-4">
                                         <div class="avatar-sm me-1">
                                             <div class="avatar-title bg-disetujui rounded-circle ">
                                             </div>
@@ -94,7 +83,16 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="d-flex pb-1">
+                                    <div class="d-flex pb-1 ps-4">
+                                        <div class="avatar-sm me-1">
+                                            <div class="avatar-title bg-diproses rounded-circle ">
+                                            </div>
+                                        </div>
+                                        <span class="m-tauto ">Dalam Proses</span>
+                                    </div>
+                                </td>
+                                 <td>
+                                    <div class="d-flex pb-1 ps-4">
                                         <div class="avatar-sm me-1">
                                             <div class="avatar-title bg-selesai rounded-circle ">
                                             </div>
@@ -104,6 +102,7 @@
                                 </td>
 
                             </tr>
+
                         </table>
                     </div>
                     <div class="table-responsive">
@@ -119,26 +118,56 @@
                             </thead>
                             <tbody>
 
-                                @foreach ($permintaan_barang as $item)
-                                    <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('permintaan-barang.detail',$item->id) : ''}}'>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$item->nomor_nota_dinas}}</td>
-                                        <td>{{$item->perihal}}</td>
-                                        <td>{{$item->user->name ?? 'N//A'}}</td>
-                                        <td>
-                                            @if ($item->status == 'diproses')
-                                                <div class="avatar-sm ">
-                                                    <div class="avatar-title bg-diproses rounded-circle font-size-12">
+                                @if ((Auth::user()->role->type == 1) || (Auth::user()->role->type == 3))
+                                    @foreach ($permintaan_barang as $item)
+                                        <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('approval.review',$item->id) : ''}}'>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->nomor_nota_dinas}}
+                                                @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
+                                                    <span class="noti-dotnya bg-danger"> ! </span>
+                                                @else
 
+                                                @endif
+                                            </td>
+                                            <td>{{$item->perihal}}</td>
+                                            <td>{{$item->dimintaOleh() ?? 'N//A'}}</td>
+                                            <td>
+                                                @if ($item->status == 'diproses')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-diproses rounded-circle font-size-12">
+
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @else
-                                                Draft
-                                            @endif
+                                                @else
+                                                    Draft
+                                                @endif
 
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    @foreach ($permintaan_barang as $item)
+                                        <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('permintaan-barang.detail',$item->id) : ''}}'>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->nomor_nota_dinas}}</td>
+                                            <td>{{$item->perihal}}</td>
+                                            <td>{{$item->dimintaOleh() ?? 'N//A'}}</td>
+                                            <td>
+                                                @if ($item->status == 'diproses')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-diproses rounded-circle font-size-12">
+
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    Draft
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+
 
 
 

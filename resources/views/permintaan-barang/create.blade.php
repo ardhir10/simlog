@@ -102,12 +102,12 @@
                                     </div>
                                 </form>
 
-                                <span for="" class=" mb-2 ">Barang Persediaan</span>
+                                <span for="" class=" mb-5 fw-bold ">Barang Persediaan</span>
                                 @if (Request::get('kategori'))
                                     <span class="font-italic">( {{count($barang_persediaan)}} Hasil pencarian )</span>
 
                                 @endif
-                                <div class="row">
+                                <div class="row mt-3">
                                     <div class="col-lg-12">
                                         <div class="table-responsive">
                                             <table class="table-striped datatables" id="data-table"
@@ -142,10 +142,10 @@
                                                                     <input type="number" style="width: 100px;" name="jumlah" class="me-2" value="1" min="1" max="{{$item->jumlah}}">
                                                                     <input type="hidden"  id="beritaTambahan{{$item->id}}" value="" name="berita_tambahan">
                                                                     <button type="button" class="btn btn-sm btn-secondary me-2" onclick="popupBeritaTambahan('beritaTambahan{{$item->id}}')" data-bs-toggle="modal" data-bs-target="#myModal">
-                                                                        <i class="fa fa-sticky-note"></i>
+                                                                        <i class="fa fa-sticky-note"></i> Catatan
                                                                     </button>
                                                                     <button type="submit" class="btn btn-sm btn-success me-2">
-                                                                        <i class="fa fa-shopping-cart"></i>
+                                                                        <i class="fa fa-plus"></i> minta barang
                                                                     </button>
                                                                 </div>
                                                             </form>

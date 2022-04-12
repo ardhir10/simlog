@@ -18,7 +18,7 @@ class CreatePermintaanBarangDetailsTable extends Migration
             $table->integer('permintaan_barang_id');
             $table->integer('barang_persediaan_id');
             $table->float('jumlah');
-            $table->text('berita_tambahan');
+            $table->text('berita_tambahan')->nullable();
 
             // DATA BARANG
             $table->string('final_kategori')->nullable();

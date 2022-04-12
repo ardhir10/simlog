@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ApprovalProcess;
 use App\BarangPersediaan;
 use App\KategoriBarang;
 use App\PermintaanBarang;
@@ -15,8 +16,21 @@ class PermintaanBarangController extends Controller
 {
     public function index(){
         $data['page_title'] = "Permintaan Barang";
-        $data['permintaan_barang'] = PermintaanBarang::where('user_id',Auth::user()->id)
+
+        if ((Auth::user()->role->name ?? null) == 'Kepala Distrik Navigasi') {
+            $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
             ->get();
+        }
+        else if ((Auth::user()->role->name ?? null) == 'Kepala Gudang') {
+            $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
+                ->get();
+        }
+        else{
+            $data['permintaan_barang'] = PermintaanBarang::where('user_id', Auth::user()->id)
+                ->orderBy('id', 'desc')
+            ->get();
+        }
+
         return view('permintaan-barang.index',$data);
     }
 
@@ -37,7 +51,7 @@ class PermintaanBarangController extends Controller
                 $generatePermintaanBarang['user_id'] = $userId;
                 $generatePermintaanBarang['is_draft'] = true;
                 $generatePermintaanBarang['nomor_nota_dinas'] = $this->generateNomorNotaDinas();
-                $generatePermintaanBarang['nomor_upp3'] = $this->generateNomorUpp3();
+                $generatePermintaanBarang['nomor_upp3'] = $this->generateNomorUpp3($generatePermintaanBarang['nomor_nota_dinas']);
                 $generatePermintaanBarang['tanggal_permintaan'] = date('Y-m-d H:i:s');
                 $generatePermintaanBarang['perihal'] = null;
                 $generatePermintaanBarang['status'] = 'draft';
@@ -54,7 +68,7 @@ class PermintaanBarangController extends Controller
             $generatePermintaanBarang['user_id'] = $userId;
             $generatePermintaanBarang['is_draft'] = true;
             $generatePermintaanBarang['nomor_nota_dinas'] = $this->generateNomorNotaDinas();
-            $generatePermintaanBarang['nomor_upp3'] = $this->generateNomorUpp3();
+            $generatePermintaanBarang['nomor_upp3'] = $this->generateNomorUpp3($generatePermintaanBarang['nomor_nota_dinas']);
             $generatePermintaanBarang['tanggal_permintaan'] = date('Y-m-d H:i:s');
             $generatePermintaanBarang['perihal'] = null;
             $generatePermintaanBarang['status'] = 'draft';
@@ -80,7 +94,8 @@ class PermintaanBarangController extends Controller
 
             $data['barang_persediaan'] = $BarangPersediaan->orderBy('id', 'desc')->get();
         }else{
-            $data['barang_persediaan'] = [];
+            $BarangPersediaan = BarangPersediaan::select('*')->get();
+            $data['barang_persediaan'] = $BarangPersediaan;
         }
 
 
@@ -148,6 +163,26 @@ class PermintaanBarangController extends Controller
             $dataPengajuan['perihal'] = $request->perihal;
             PermintaanBarang::where('id', $id)
                 ->update($dataPengajuan);
+
+            $dataPermintaanBarang = PermintaanBarang::where('id', $id)->first();
+            // --- APPROVAL PROCESS 1
+            $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+            $dataApproval['permintaan_barang_id'] = $id;
+            $dataApproval['user_peminta_id'] = $dataPermintaanBarang->user_id;
+            $dataApproval['user_peminta_name'] = $dataPermintaanBarang->user->name ?? '';
+
+            $dataApproval['role_to_name'] = 'Kepala Distrik Navigasi';
+
+            $dataApproval['type'] = 'Dalam Proses Approval';
+            $dataApproval['status'] = '';
+
+            $dataApproval['step'] = 1;
+            $dataApproval['keterangan'] = '';
+            $dataApproval['kategori'] = 'APPROVAL';
+
+            ApprovalProcess::create($dataApproval);
+
+            // Saat permintaan diajukan akan ter record
             DB::commit();
             return redirect()->route('permintaan-barang.index')->with(['success' => 'Data Berhasil diajukan !']);
         } catch (\Throwable $th) {
@@ -200,7 +235,25 @@ class PermintaanBarangController extends Controller
         return $pdf->stream($permintaanBarang->nomor_nota_dinas . ' (Nota Dinas).pdf');
     }
 
-    private function generateNomorUpp3()
+    public function pdfUpp3(Request $request, $id)
+    {
+        $data['title'] = 'Nota Tagih';
+
+        $permintaanBarang = PermintaanBarang::where('id', $id)
+            ->first();
+        $data['data'] = $permintaanBarang;
+        if ($request->v == 'html') {
+            return view('pdf.upp3', $data);
+        }
+
+
+        $pdf = PDF::loadView('pdf.upp3', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled"=>true])->setPaper('a4', 'potrait');
+        // $font = Font_Metrics::get_font("helvetica", "bold");
+
+        return $pdf->stream($permintaanBarang->nomor_upp3 . ' (UPP3).pdf');
+    }
+
+    private function generateNomorUpp3($notaDinas)
     {
         /*
         PL.001/04/SIM/KNK-2022
@@ -220,6 +273,10 @@ class PermintaanBarangController extends Controller
         • Jika Role = (Kepala Kelompok SBNP), Kode = SBNP
         */
 
+        $urutNotaDinas = explode('/', $notaDinas);
+        $urutNotaDinas = explode('.', $urutNotaDinas[0]);
+        $urutNotaDinas = $urutNotaDinas[1];
+
         $roleName = Auth::user()->role->name;
         $kode = $this->getKode($roleName);
 
@@ -228,17 +285,15 @@ class PermintaanBarangController extends Controller
         $obj = DB::table('permintaan_barang')
         ->select('nomor_upp3')
         ->latest('id')
-        ->where('nomor_upp3', 'like', '%' . $month_now . '/' . $kode . '%')
+        ->where('created_at','ilike',$year_now.'%')
         ->first();
 
         if ($obj) {
-            $increment = explode('/', $obj->nomor_upp3);
-            $increment = explode('/', $increment[0]);
-            $increment = explode('.', $increment[0]);
-            $removed1char = substr($increment[1], 1);
-            $generateOrder_nr = 'UPP3.' . str_pad($removed1char + 1, 3, "0", STR_PAD_LEFT) . '/' . $month_now . '/' . $kode . '-' . $year_now;
+            $increment = explode('.', $obj->nomor_upp3);
+            $removed1char = substr($increment[2], 1);
+            $generateOrder_nr = 'L.'.$urutNotaDinas.'.'. str_pad($removed1char + 1, 4, "0", STR_PAD_LEFT).'.'.$this->bagianBidangUpp3($roleName);
         } else {
-            $generateOrder_nr = 'UPP3.' . str_pad(1, 3, "0", STR_PAD_LEFT) . '/' . $month_now . '/' . $kode . '-' . $year_now;
+            $generateOrder_nr = 'L.'.$urutNotaDinas.'.'. str_pad(1, 4, "0", STR_PAD_LEFT).'.'.$this->bagianBidangUpp3($roleName);
         }
         return $generateOrder_nr;
     }
@@ -301,6 +356,40 @@ class PermintaanBarangController extends Controller
             $roleName == 'Kepala Kelompok SBNP'
         ) {
             $kode = 'SBNP';
+        } else {
+            $kode = 'NONUSER';
+        }
+
+        return $kode;
+    }
+
+    private function bagianBidangUpp3($roleName)
+    {
+        if (
+            $roleName == 'Kepala Distrik Navigasi' ||
+            $roleName == 'Kabag Tata Usaha' ||
+            $roleName == 'Subbag Kepegawaian dan Umum' ||
+            $roleName == 'Subbag Keuangan'
+        ) {
+            $kode = 'TU';
+        } else if (
+            $roleName == 'Kabid Operasi' ||
+            $roleName == 'Seksi Program' ||
+            $roleName == 'Seksi Sarana Prasarana' ||
+            $roleName == 'Nakhoda' ||
+            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala SROP' ||
+            $roleName == 'Kepala Kelompok Pengamatan Laut' ||
+            $roleName == 'Kepala Kelompok Bengkel' ||
+            $roleName == 'Kepala Kelompok SBNP'
+        ) {
+            $kode = 'OPS';
+        } else if (
+            $roleName == 'Kabid Logistik' ||
+            $roleName == 'Seksi Pengadaan' ||
+            $roleName == 'Seksi Inventaris'
+        ) {
+            $kode = 'LOG';
         } else {
             $kode = 'NONUSER';
         }
