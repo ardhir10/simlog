@@ -125,18 +125,14 @@
 
     }
 
+    .bg-card-dashboard{
+        background: #C0F4DE !important;
+    }
+
+    .text-dashboard{
+        color: #0D6749 !important;
+    }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
-    rel='stylesheet' />
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<link rel="stylesheet" href="{{asset('assets/css/maps.css')}}">
 
 
 @endpush
@@ -144,8 +140,193 @@
 @section('content')
 <div class="page-content">
     <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h3 class="text-dashboard fw-bolder">Nilai Barang Masuk</h3>
+                            <span>IDR</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;">365.000.000</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="" id="">
+                                    <option value="">Januari</option>
+                                    <option value="">Februari</option>
+                                    <option value="">Maret</option>
+                                    <option value="">April</option>
+                                    <option value="">Mei</option>
+                                    <option value="">Juni</option>
+                                    <option value="">Juli</option>
+                                    <option value="">Agustus</option>
+                                    <option value="">September</option>
+                                    <option value="">Oktober</option>
+                                    <option value="">November</option>
+                                    <option value="">Desember</option>
+                                </select>
+                                <select name="" class="form-sekect" id="">
+                                    <option value="">2022</option>
+                                    <option value="">2021</option>
+                                </select>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h3 class="text-dashboard fw-bolder">Nilai Barang Keluar</h3>
+                            <span>IDR</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;">180.330.750</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="" id="">
+                                    <option value="">Januari</option>
+                                    <option value="">Februari</option>
+                                    <option value="">Maret</option>
+                                    <option value="">April</option>
+                                    <option value="">Mei</option>
+                                    <option value="">Juni</option>
+                                    <option value="">Juli</option>
+                                    <option value="">Agustus</option>
+                                    <option value="">September</option>
+                                    <option value="">Oktober</option>
+                                    <option value="">November</option>
+                                    <option value="">Desember</option>
+                                </select>
+                                <select name="" class="form-sekect" id="">
+                                    <option value="">2022</option>
+                                    <option value="">2021</option>
+                                </select>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h3 class="text-dashboard fw-bolder">Saldo Barang Persediaan</h3>
+                            <span>IDR</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;">976.489.000</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="" id="">
+                                    <option value="">Januari</option>
+                                    <option value="">Februari</option>
+                                    <option value="">Maret</option>
+                                    <option value="">April</option>
+                                    <option value="">Mei</option>
+                                    <option value="">Juni</option>
+                                    <option value="">Juli</option>
+                                    <option value="">Agustus</option>
+                                    <option value="">September</option>
+                                    <option value="">Oktober</option>
+                                    <option value="">November</option>
+                                    <option value="">Desember</option>
+                                </select>
+                                <select name="" class="form-sekect" id="">
+                                    <option value="">2022</option>
+                                    <option value="">2021</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div id="main" style="height:370px;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                            <div class="card-body p-3">
+                                <div class="d-block mb-1">
+                                    <h3 class="text-dashboard fw-bolder">Permintaan Disetujui</h3>
+                                    <span style="font-size: 4vw;font-weight:bold;">34</span>
+                                </div>
+                                <div class="d-block text-end">
+                                    <div class="form-group">
+                                        <select name="" class="" id="">
+                                            <option value="">Januari</option>
+                                            <option value="">Februari</option>
+                                            <option value="">Maret</option>
+                                            <option value="">April</option>
+                                            <option value="">Mei</option>
+                                            <option value="">Juni</option>
+                                            <option value="">Juli</option>
+                                            <option value="">Agustus</option>
+                                            <option value="">September</option>
+                                            <option value="">Oktober</option>
+                                            <option value="">November</option>
+                                            <option value="">Desember</option>
+                                        </select>
+                                        <select name="" class="form-sekect" id="">
+                                            <option value="">2022</option>
+                                            <option value="">2021</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card bg-danger text-white" style="border:1px solid;">
+                            <div class="card-body p-3">
+                                <div class="d-block mb-1">
+                                    <h3 class="text-white fw-bolder">Permintaan Ditolak</h3>
+                                    <span style="font-size: 4vw;font-weight:bold;">11</span>
+                                </div>
+                                <div class="d-block text-end">
+                                    <div class="form-group">
+                                        <select name="" class="" id="">
+                                            <option value="">Januari</option>
+                                            <option value="">Februari</option>
+                                            <option value="">Maret</option>
+                                            <option value="">April</option>
+                                            <option value="">Mei</option>
+                                            <option value="">Juni</option>
+                                            <option value="">Juli</option>
+                                            <option value="">Agustus</option>
+                                            <option value="">September</option>
+                                            <option value="">Oktober</option>
+                                            <option value="">November</option>
+                                            <option value="">Desember</option>
+                                        </select>
+                                        <select name="" class="form-sekect" id="">
+                                            <option value="">2022</option>
+                                            <option value="">2021</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
     @endsection
 
@@ -162,6 +343,30 @@
             $('.nav-link').removeClass('active');
             $(this).addClass('active');
         })
+
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+        xAxis: {
+            type: 'category',
+            data: ['Bahan Baku', 'Suku Cadang', 'Komaliwan', 'Berjaga-Jga', 'Lain-Lain']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+            data: [380000000, 600000000, 560000000, 690000000, 600000000],
+            type: 'bar'
+            }
+        ]
+        };
+
+        option && myChart.setOption(option);
+
 
     </script>
 
