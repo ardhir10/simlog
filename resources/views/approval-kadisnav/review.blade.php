@@ -347,16 +347,27 @@
                                     <div class="card-body ">
                                         <h3 class="fw-bold">PERSETUJUAN</h3>
                                         <div class="row ">
-                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN') as $appvs)
+                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN')->where('step','!=',4) as $appvs)
                                                 <div class="col-lg-12">
                                                     <div class="card" style="border: 1px solid">
                                                         <div class="card-body p-4">
                                                             <p class="text-muted">
                                                                 {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                 {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                            <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
-                                                            <span class="d-block mb-2">Keterngan :</span>
-                                                            <span>{{$appvs->keterangan}}</span>
+                                                            @if ($appvs->role_to_name=='Kepala Distrik Navigasi')
+                                                                <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
+                                                                <span class="d-block mb-2">Keterangan :</span>
+                                                                <span>{{$appvs->keterangan}}</span>
+
+                                                            @elseif($appvs->step == 5)
+                                                                <span class="d-block mb-2">Kepala Gudang Menyerahkan Barang</span>
+                                                            @elseif($appvs->step == 6)
+                                                                <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
+                                                            @else
+                                                                <span class="d-block mb-2">Pesanan sudah disiapkan  {{$appvs->role_to_name}}</span>
+                                                                <span class="d-block mb-2">Keterangan :</span>
+                                                                <span>{{$appvs->keterangan}}</span>
+                                                            @endif
                                                         </div>
                                                     </div>
 

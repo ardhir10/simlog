@@ -52,9 +52,13 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('approval')->name('approval.')->group(function () {
 
+        Route::get('/', 'ApprovalController@index')->name('index');
         Route::get('/review/{id}', 'ApprovalController@review')->name('review');
         Route::post('/tindak-lanjut/{id}', 'ApprovalController@tindakLanjut')->name('tindak-lanjut');
         Route::post('/tindak-lanjut-update/{id}/{idApproval}/{idPersetujuan}', 'ApprovalController@tindakLanjutUpdate')->name('tindak-lanjut-update');
+        Route::post('/pesanan-siap/{id}', 'ApprovalController@pesananSiap')->name('pesanan-siap');
+        Route::post('/terima-barang/{id}', 'ApprovalController@terimaBarang')->name('terima-barang');
+        Route::post('/serahkan-barang/{id}', 'ApprovalController@serahkanBarang')->name('serahkan-barang');
 
     });
 

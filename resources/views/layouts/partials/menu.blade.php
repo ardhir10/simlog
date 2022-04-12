@@ -79,7 +79,7 @@
                     (Auth::user()->role->type ?? null) == 1
                 )
                     <li>
-                        <a href="/">
+                        <a href="{{route('approval.index')}}">
                             <i class="icon nav-icon" data-feather="trello"></i>
                             <span class="menu-item" data-key="t-sales">Approval</span>
                         </a>

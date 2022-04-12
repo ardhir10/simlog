@@ -25,6 +25,10 @@ class PermintaanBarangController extends Controller
             $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
                 ->get();
         }
+        else if ((Auth::user()->role->name ?? null) == 'Admin SIMLOG') {
+            $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
+                ->get();
+        }
         else{
             $data['permintaan_barang'] = PermintaanBarang::where('user_id', Auth::user()->id)
                 ->orderBy('id', 'desc')
@@ -104,8 +108,12 @@ class PermintaanBarangController extends Controller
     public function detail($id)
     {
         $permintaanBarang =
-        PermintaanBarang::where('id', $id)
-        ->first();
+            PermintaanBarang::where('id', $id)
+            ->with(["timeline" => function ($query) {
+                return $query
+                    ->distinct('step');
+            }])
+            ->first();
         $data['page_title'] = $permintaanBarang->nomor_nota_dinas;
         $data['data'] = $permintaanBarang;
         return view('permintaan-barang.detail', $data);

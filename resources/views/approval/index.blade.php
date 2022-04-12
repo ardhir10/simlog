@@ -45,9 +45,7 @@
         <div class="card shadow-lg">
             <div class="card-header justify-content-between d-flex align-items-center">
                 <h4 class="card-title">{{$page_title}}</h4>
-                <a href="{{route('permintaan-barang.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat Permintaan
-                    <i class="fa fa-plus align-middle"></i>
-                </a>
+
             </div>
             <div class="card-body">
                 <div class="col-12">
