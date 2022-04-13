@@ -74,16 +74,27 @@
                         @include('components.flash-message')
                     </div>
                     <div class="col-lg-12">
-                        <div class="d-block mb-3">
-                            <span>{{$data->perihal}}</span>
-                            <br>
-                            <span class="d-block">Diminta Oleh : {{$data->dimintaOleh()}}</span>
-                            <span class="d-block">Bagian/Bidang : {{$data->bagianBidang()}}</span>
-                            <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
-                            <span class="d-block">Tanggal Permintaan :
-                                {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
-                        </div>
+                       <div class="row">
+                            <div class="col-lg-6">
+                                <div class="d-block mb-3">
+                                    <span>{{$data->perihal}}</span>
+                                    <br>
+                                    <span class="d-block">Diminta Oleh : {{$data->dimintaOleh()}}</span>
+                                    <span class="d-block">Bagian/Bidang : {{$data->bagianBidang()}}</span>
+                                    <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
+                                    <span class="d-block">Tanggal Permintaan :
+                                        {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 offset-lg-2">
+                                <div class="text-end">
+                                    @if ($data->approvals->where('step',5)->first() && $data->approvals->where('step',6)->first())
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" disabled>LAPOR DISTRIBUSI</button>
+                                    @endif
 
+                                </div>
+                            </div>
+                        </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="hori-timeline">
@@ -391,6 +402,36 @@
                         <p class="text-center">
                             Dengan menekan tombol lanjutkan , anda sebagai Perminta barang melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
                         </p>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">TERIMA BARANG</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Lapor Distribusi -->
+    <div id="laporDistribusi" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">LAPORAN DISTRIBUSI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                    </button>
+                </div>
+                <form action="{{route('approval.terima-barang',$data->id)}}" method="post">
+                    @csrf
+
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <input type="checkbox" class="">
+                            <label for="">Saya telah melakukan distribusi yang saya terima</label>
+
+                        </div>
 
 
                     </div>
