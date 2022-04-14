@@ -45,7 +45,7 @@
                     @include('master-data.user.create-nakhoda')
                 @elseif(Request::get('role') == 'Kepala SROP')
                     @include('master-data.user.create-kepala-srop')
-                @elseif(Request::get('role') == 'Manager VTS')
+                @elseif(Request::get('role') == 'Kepala VTS')
                     @include('master-data.user.create-manager-vts')
                 @else
                     @include('master-data.user.create-general')

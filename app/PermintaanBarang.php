@@ -25,6 +25,12 @@ class PermintaanBarang extends Model
             ->first();
         }
     }
+    public function lastApproval(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','PERSETUJUAN')
+            ->orderBy('id','desc')
+            ->first();
+    }
     public function isTindakLanjut($step = 1){
         return $process = ApprovalProcess::where('step','>',$step)
             ->orderBy('id','desc')
@@ -45,7 +51,7 @@ class PermintaanBarang extends Model
         $roleName = $this->user->role->name ?? null;
         if ($roleName == 'Nakhoda') {
             $kode = $this->user->kapalNegara->nama_kapal ?? null;
-        } else if ($roleName == 'Manager VTS') {
+        } else if ($roleName == 'Kepala VTS') {
             $kode = $this->user->vts->nama_stasiun_vts ?? null;
 
         } else if ($roleName == 'Kepala SROP') {
@@ -105,7 +111,7 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Program' ||
             $roleName == 'Seksi Sarana Prasarana' ||
             $roleName == 'Nakhoda' ||
-            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala VTS' ||
             $roleName == 'Kepala SROP' ||
             $roleName == 'Kepala Kelompok Pengamatan Laut' ||
             $roleName == 'Kepala Kelompok Bengkel' ||
@@ -140,7 +146,7 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Program' ||
             $roleName == 'Seksi Sarana Prasarana' ||
             $roleName == 'Nakhoda' ||
-            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala VTS' ||
             $roleName == 'Kepala SROP' ||
             $roleName == 'Kepala Kelompok Pengamatan Laut' ||
             $roleName == 'Kepala Kelompok Bengkel' ||

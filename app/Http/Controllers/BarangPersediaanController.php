@@ -48,6 +48,7 @@ class BarangPersediaanController extends Controller
         $dataInsert['kategori_barang_id'] = $request->kategori_barang_id;
         $dataInsert['nama_barang'] = $request->nama_barang;
         $dataInsert['kode_barang'] = $request->kode_barang;
+        $dataInsert['sub_sub_kategori'] = $request->sub_sub_kategori;
 
 
 
@@ -97,6 +98,7 @@ class BarangPersediaanController extends Controller
         $dataInsert['kategori_barang_id'] = $request->kategori_barang_id;
         $dataInsert['nama_barang'] = $request->nama_barang;
         $dataInsert['kode_barang'] = $request->kode_barang;
+        $dataInsert['sub_sub_kategori'] = $request->sub_sub_kategori;
 
 
 

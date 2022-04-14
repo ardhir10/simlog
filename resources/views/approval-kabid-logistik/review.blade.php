@@ -66,7 +66,15 @@
         <div class="col-lg-12">
             <div class="card shadow-lg">
                 <div class="card-header justify-content-between d-flex align-items-center">
-                    <h4 class="card-title">{{$page_title}}</h4>
+                    <h4 class="card-title">{{$page_title}}
+                        @if (optional($data->lastProcess())->role_to_name == Auth::user()->role->name)
+                            <span class="noti-dotnya bg-danger"> ! </span>
+                        @else
+
+                        @endif
+                    </h4>
+
+
 
                 </div>
                 <div class="card-body">
@@ -74,7 +82,7 @@
                         @include('components.flash-message')
                     </div>
                     <div class="col-lg-12">
-                       <div class="row">
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="d-block mb-3">
                                     <span>{{$data->perihal}}</span>
@@ -86,15 +94,10 @@
                                         {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
                                 </div>
                             </div>
-                            <div class="col-lg-4 offset-lg-2">
-                                <div class="text-end">
-                                    @if ($data->approvals->where('step',5)->first() && $data->approvals->where('step',6)->first())
-                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >LAPOR DISTRIBUSI</button>
-                                    @endif
 
-                                </div>
-                            </div>
+
                         </div>
+
                         <div class="card">
                             <div class="card-body">
                                 <div class="hori-timeline">
@@ -273,7 +276,8 @@
                                                     <div>
                                                         <span class="d-block"
                                                             style="font-size:20px;font-weight:bold;">Nota Dinas</span>
-                                                        <a href="{{route('permintaan-barang.nota-dinas',$data->id)}}" target="_blank">
+                                                        <a href="{{route('permintaan-barang.nota-dinas',$data->id)}}"
+                                                            target="_blank">
                                                             <button class="btn btn-sm btn-success">Download</button>
                                                         </a>
                                                     </div>
@@ -288,7 +292,8 @@
                                                     <div>
                                                         <span class="d-block"
                                                             style="font-size:20px;font-weight:bold;">UPP3</span>
-                                                        <a href="{{route('permintaan-barang.upp3',$data->id)}}" target="_blank">
+                                                        <a href="{{route('permintaan-barang.upp3',$data->id)}}"
+                                                            target="_blank">
                                                             <button class="btn btn-sm btn-success">Download</button>
                                                         </a>
                                                     </div>
@@ -312,9 +317,6 @@
                                                     </div>
                                                 </div>
                                             @endif
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -336,42 +338,41 @@
                                                             <p class="text-muted">
                                                                 {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                 {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                            @if ($appvs->role_to_name=='Kepala Distrik Navigasi')
                                                                 <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
                                                                 <span class="d-block mb-2">Keterangan :</span>
-                                                            @elseif($appvs->step == 5)
-                                                                <span class="d-block mb-2">Pengelola Gudang Menyerahkan Barang</span>
-                                                            @elseif($appvs->step == 6)
-                                                                <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
-                                                            @else
-                                                                <span class="d-block mb-2">Pesanan sudah disiapkan  {{$appvs->role_to_name}}</span>
                                                                 <span>{{$appvs->keterangan}}</span>
-                                                            @endif
 
                                                         </div>
                                                     </div>
 
                                                 </div>
                                             @endforeach
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        @if ($data->approvals->where('step',3)->first() && $data->approvals->where('step',4)->first() == null )
-
+                        @if ($data->lastApproval()->type == 'Disetujui Kadisnav')
                             <div class="row animate__animated  animate__fadeIn">
-
                                 <div class="col-lg-4 offset-lg-8">
                                     <div class="text-end">
-                                        <button class="btn btn-lg  btn-success " data-bs-toggle="modal" data-bs-target="#myModal" disabled>KIRIM KURIR</button>
-                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">TERIMA BARANG</button>
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">SETUJU</button>
                                     </div>
                                 </div>
                             </div>
                         @endif
+
+                        @if ($data->approvals->where('step',4)->first() && $data->approvals->where('step',5)->first() == null )
+                            <div class="row animate__animated  animate__fadeIn">
+                                <div class="col-lg-4 offset-lg-8">
+                                    <div class="text-end">
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#modalSerahkanBarang">SERAHKAN BARANG</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+
                     </div>
                 </div>
             </div>
@@ -383,6 +384,8 @@
 </div> <!-- container-fluid -->
 </div>
 @endsection
+
+
 @push('modals')
 <div>
     <!-- sample modal content -->
@@ -390,73 +393,51 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">TERIMA BARANG</h5>
+                    <h5 class="modal-title" id="myModalLabel">PESANAN DISETUJUI</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
-                <form action="{{route('approval.terima-barang',$data->id)}}" method="post">
+                <form action="{{route('approval.kabid-logistik-setuju',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
-                        <p class="text-center">
-                            Dengan menekan tombol lanjutkan , anda sebagai Perminta barang melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
-                        </p>
+                        {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
 
-
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">TERIMA BARANG</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!-- Lapor Distribusi -->
-    <div id="laporDistribusi" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+     <!-- Modal Serahkan Barang -->
+    <div id="modalSerahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">LAPORAN DISTRIBUSI</h5>
+                    <h5 class="modal-title" id="myModalLabel">Serahkan Barang</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
-                <form action="{{route('approval.lapor',$data->id)}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('approval.serahkan-barang',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
-                        <div class="form-group mb-2">
-                            <input type="checkbox" id="check" class="" required>
-                            <label for="check">Saya telah melakukan distribusi yang saya terima</label>
-
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Lokasi Distribusi</label>
-                            <input type="text" name="lokasi_distribusi" class="form-control" required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control" required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Jam</label>
-                            <input type="time" name="jam" class="form-control" required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Keterangan</label>
-                            <textarea name="keterangan" id="" cols="30" rows="3" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Keterangan</label>
-                            <input type="file" multiple name="file[]" class="form-control" required>
-                        </div>
+                        <p class="text-center">Dengan menekan tombol ini maka barang akan diserahkan ke peminta </p>
 
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="">LAPOR</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">SERAHKAN BARANG</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -466,6 +447,7 @@
 
 </div>
 @endpush
+
 @push('scripts')
 
 <!-- swiper js -->

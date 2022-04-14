@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
 
                 ],
                 [
-                    'name'=> 'Kepala Gudang',
+                    'name'=> 'Pengelola Gudang',
                     'type'=> 1,
 
                 ],
@@ -95,7 +95,7 @@ class RoleSeeder extends Seeder
 
                 ],
                 [
-                    'name'=> 'Manager VTS',
+                    'name'=> 'Kepala VTS',
                     'type'=> 2,
 
                 ],

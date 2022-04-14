@@ -57,9 +57,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/review/{id}', 'ApprovalController@review')->name('review');
         Route::post('/tindak-lanjut/{id}', 'ApprovalController@tindakLanjut')->name('tindak-lanjut');
         Route::post('/tindak-lanjut-update/{id}/{idApproval}/{idPersetujuan}', 'ApprovalController@tindakLanjutUpdate')->name('tindak-lanjut-update');
-        Route::post('/pesanan-siap/{id}', 'ApprovalController@pesananSiap')->name('pesanan-siap');
+
+        Route::post('/pengelola-gudang-setuju/{id}', 'ApprovalController@pengelolaGudangsetuju')->name('pengelola-gudang-setuju');
+        Route::post('/kabid-logistik-setuju/{id}', 'ApprovalController@kabidLogistikSetuju')->name('kabid-logistik-setuju');
+        Route::post('/kasie-pengadaan-setuju/{id}', 'ApprovalController@kasiePengadaanSetuju')->name('kasie-pengadaan-setuju');
+        Route::post('/bendahara-materil-setuju/{id}', 'ApprovalController@bendaharaMaterilSetuju')->name('bendahara-materil-setuju');
+        Route::post('/pengelola-gudang-siap/{id}', 'ApprovalController@pengelolaGudangSiap')->name('pengelola-gudang-siap');
+
         Route::post('/terima-barang/{id}', 'ApprovalController@terimaBarang')->name('terima-barang');
         Route::post('/serahkan-barang/{id}', 'ApprovalController@serahkanBarang')->name('serahkan-barang');
+        Route::post('/lapor/{id}', 'ApprovalController@lapor')->name('lapor');
 
     });
 
@@ -102,6 +109,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/kategori-barang/{id}/edit', 'KategoribarangController@edit')->name('kategori-barang.edit');
         Route::post('/kategori-barang/{id}/update', 'KategoribarangController@update')->name('kategori-barang.update');
         Route::get('/kategori-barang/{id}/delete', 'KategoribarangController@delete')->name('kategori-barang.delete');
+
+        Route::get('/sub-kategori-barang', 'SubKategoribarangController@index')->name('sub-kategori-barang.index');
+        Route::get('/sub-kategori-barang/add', 'SubKategoribarangController@create')->name('sub-kategori-barang.create');
+        Route::get('/sub-kategori-barang', 'SubKategoribarangController@index')->name('sub-kategori-barang.index');
+        Route::post('/sub-kategori-barang', 'SubKategoribarangController@store')->name('sub-kategori-barang.store');
+        Route::get('/sub-kategori-barang/{id}/edit', 'SubKategoribarangController@edit')->name('sub-kategori-barang.edit');
+        Route::post('/sub-kategori-barang/{id}/update', 'SubKategoribarangController@update')->name('sub-kategori-barang.update');
+        Route::get('/sub-kategori-barang/{id}/delete', 'SubKategoribarangController@delete')->name('sub-kategori-barang.delete');
 
         // ---SATUAN
         Route::get('/satuan', 'SatuanController@index')->name('satuan.index');

@@ -44,7 +44,7 @@
                     @include('master-data.user.edit-nakhoda')
                 @elseif(Request::get('role') == 'Kepala SROP')
                     @include('master-data.user.edit-kepala-srop')
-                @elseif(Request::get('role') == 'Manager VTS')
+                @elseif(Request::get('role') == 'Kepala VTS')
                     @include('master-data.user.edit-manager-vts')
                 @else
                     @include('master-data.user.edit-general')

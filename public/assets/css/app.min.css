@@ -6566,8 +6566,8 @@ body[data-layout-mode=dark] .hori-timeline .event-list-pending:after {
     left: -55px
 }
 
-[dir=rtl] .hori-timeline .swiper-wrapper {
-    direction: rtl
+[dir=ltr] .hori-timeline .swiper-wrapper {
+    direction: ltr
 }
 
 @media (min-width:768px) {

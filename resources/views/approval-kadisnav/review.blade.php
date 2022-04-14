@@ -360,7 +360,7 @@
                                                                 <span>{{$appvs->keterangan}}</span>
 
                                                             @elseif($appvs->step == 5)
-                                                                <span class="d-block mb-2">Kepala Gudang Menyerahkan Barang</span>
+                                                                <span class="d-block mb-2">Pengelola Gudang Menyerahkan Barang</span>
                                                             @elseif($appvs->step == 6)
                                                                 <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
                                                             @else
@@ -412,7 +412,7 @@
                             <select name="tindak_lanjut" class="form-select" id="">
                                 <option value="SETUJUI">SETUJUI</option>
                                 <option value="TOLAK">TOLAK</option>
-                                <option value="REVIEW">REVIEW</option>
+                                <option value="DISPOSISI">DISPOSISI</option>
                                 <option value="UPDATE">UPDATE</option>
                             </select>
                         </div>

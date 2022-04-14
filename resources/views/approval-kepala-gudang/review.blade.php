@@ -95,6 +95,7 @@
                                 </div>
                             </div>
 
+
                         </div>
 
                         <div class="card">
@@ -330,24 +331,17 @@
                                     <div class="card-body ">
                                         <h3 class="fw-bold">PERSETUJUAN</h3>
                                         <div class="row ">
-                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN')->where('step','!=',4) as $appvs)
+                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN') as $appvs)
                                                 <div class="col-lg-12">
                                                     <div class="card" style="border: 1px solid">
                                                         <div class="card-body p-4">
                                                             <p class="text-muted">
                                                                 {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                 {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                             @if ($appvs->role_to_name=='Kepala Distrik Navigasi')
                                                                 <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
                                                                 <span class="d-block mb-2">Keterangan :</span>
-                                                            @elseif($appvs->step == 5)
-                                                                <span class="d-block mb-2">Kepala Gudang Menyerahkan Barang</span>
-                                                            @elseif($appvs->step == 6)
-                                                                <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
-                                                            @else
-                                                                <span class="d-block mb-2">Pesanan sudah disiapkan  {{$appvs->role_to_name}}</span>
                                                                 <span>{{$appvs->keterangan}}</span>
-                                                            @endif
+
                                                         </div>
                                                     </div>
 
@@ -358,25 +352,27 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($data->approvals->where('step',2)->first() && $data->approvals->where('step',3)->first() == null)
+                        @if ($data->lastApproval()->type == 'Disetujui Bendahara Materil')
                             <div class="row animate__animated  animate__fadeIn">
                                 <div class="col-lg-4 offset-lg-8">
                                     <div class="text-end">
-                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">PESANAN SUDAH SIAP</button>
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#pesananSiap">PESANAN SIAP</button>
                                     </div>
                                 </div>
                             </div>
                         @endif
 
-                        @if ($data->approvals->where('step',4)->first() && $data->approvals->where('step',5)->first() == null )
+                        @if ($data->lastApproval()->type == 'Pesanan Telah disiapkan Pengelola Gudang')
                             <div class="row animate__animated  animate__fadeIn">
                                 <div class="col-lg-4 offset-lg-8">
                                     <div class="text-end">
-                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#modalSerahkanBarang">SERAHKAN BARANG</button>
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#serahkanBarang">SERAHKAN BARANG</button>
                                     </div>
                                 </div>
                             </div>
                         @endif
+
+
 
 
                     </div>
@@ -395,20 +391,20 @@
 @push('modals')
 <div>
     <!-- sample modal content -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="pesananSiap" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">PESANAN SUDAH SIAP</h5>
+                    <h5 class="modal-title" id="myModalLabel">PESANAN SIAP</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
-                <form action="{{route('approval.pesanan-siap',$data->id)}}" method="post">
+                <form action="{{route('approval.pengelola-gudang-siap',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
-                        <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Kepala Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p>
+                        {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
 
                         <div class="form-group">
                             <label for="">Keterangan</label>
@@ -416,7 +412,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -425,7 +421,7 @@
 
 
      <!-- Modal Serahkan Barang -->
-    <div id="modalSerahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="serahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -472,5 +468,27 @@
         window.location = $(this).data("href");
     });
 
+var swiper = new Swiper(".slider", {
+   slidesPerView: 1.1,
+    // spaceBetween: 20,
+     slidesPerView: 'auto',
+  autoplayDisableOnInteraction: false,
+  loopedSlides: 8,
+
+
+
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 5
+            },
+            1024: {
+                slidesPerView: 5
+            }
+        }
+    })
 </script>
 @endpush
