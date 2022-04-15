@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ApprovalProcess;
+use App\BarangKeluar;
 use App\BarangPersediaan;
 use App\LaporanDistribusi;
 use App\PermintaanBarang;
@@ -464,10 +465,79 @@ class ApprovalController extends Controller
 
 
             DB::commit();
-            return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Barah berhasil diserahkan !']);
+            return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Barang berhasil diserahkan !']);
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('approval.review', $permintaanBarang->id)->with(['failed' => $th->getMessage()]);
+        }
+    }
+
+    public function terimaBarang(Request $request, $id)
+    {
+
+
+        $permintaanBarang = PermintaanBarang::find($id);
+
+        try {
+            DB::beginTransaction();
+
+            ApprovalProcess::where('permintaan_barang_id', $id)
+                ->where('type', 'Menunggu Barang Diterima')
+                ->orderBy('id', 'desc')
+                ->first()
+                ->update([
+                    'status' => 'done',
+                    'approve_by_id' => Auth::user()->id,
+                ]);
+            PermintaanBarang::where('id', $id)
+                ->update(['status' => 'Disetujui']);
+
+            $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+            $dataPersetujuan['permintaan_barang_id'] = $id;
+            $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+            $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+            $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
+            $dataPersetujuan['type'] = 'Barang Telah diterima ';
+            $dataPersetujuan['status'] = 'done';
+            $dataPersetujuan['step'] = 0;
+            $dataPersetujuan['keterangan'] = 'Selesai';
+            $dataPersetujuan['tindak_lanjut'] = null;
+            $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+            $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+            ApprovalProcess::create($dataPersetujuan);
+
+
+            foreach ($permintaanBarang->barang_diminta as $key => $value) {
+
+                $barangPersediaan = BarangPersediaan::where('id', $value->barang_persediaan_id)
+                    ->first();
+
+
+                BarangKeluar::create([
+                    'timestamp'=> date('Y-m-d H:i:s'),
+                    'barang_keluar_id'=> $value->barang_persediaan_id,
+                    'permintaan_id'=> $id,
+                    'harga_perolehan'=> $barangPersediaan->harga_perolehan,
+                    'jumlah'=> $value->jumlah,
+                    'tahun_perolehan'=> $barangPersediaan->tahun_perolehan,
+                    'sub_sub_kategori'=> $barangPersediaan->sub_sub_kategori,
+                ]);
+
+            }
+
+
+
+            // UPDATE STATUS PERMINTAAN BARANG
+            PermintaanBarang::where('id', $id)
+                ->update([
+                    'bast_at'=>date('Y-m-d H:i:s'),
+                    'nomor_bast'=>$this->generateNomorBast(),
+                    'status' => 'Barang Diterima']);
+            DB::commit();
+            return redirect()->route('permintaan-barang.detail', $permintaanBarang->id)->with(['success' => 'Sukses Terima barang !']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('permintaan-barang.detail', $permintaanBarang->id)->with(['failed' => $th->getMessage()]);
         }
     }
 
@@ -537,7 +607,8 @@ class ApprovalController extends Controller
         }
     }
 
-    public function terimaBarang(Request $request, $id)
+
+    public function terimaBarangOld(Request $request, $id)
     {
         $permintaanBarang = PermintaanBarang::find($id);
 
@@ -674,6 +745,46 @@ class ApprovalController extends Controller
             $generateOrder_nr = 'P.' . $urutNotaDinas . '.' . str_pad($removed1char + 1, 4, "0", STR_PAD_LEFT) . '.' . $this->bagianBidangUpp4($roleName);
         } else {
             $generateOrder_nr = 'P.' . $urutNotaDinas . '.' . str_pad(1, 4, "0", STR_PAD_LEFT) . '.' . $this->bagianBidangUpp4($roleName);
+        }
+        return $generateOrder_nr;
+    }
+
+    private function generateNomorBast()
+    {
+        /*
+        PL.001/04/SIM/KNK-2022
+        PL. adalah bentuk baku, 001 adalah nomor urut auto generate (Nomor Urut direset jadi 001
+        jika berbeda bulan), 04 Adalah bulan April (05-Mei, 06-Juni, dan seterusnya), SIM adalah
+        bentuk baku yang mengartikan SIMLOG, KNK adalah Kode Role User, -2022 adalah tahun.
+        Kode Role User
+        • Jika Role = (Nakhoda), Kode = KNK
+        • Jika Role = (Kepala VTS), Kode = VTS
+        • Jika Role = (Kepala SROP), Kode = SROP
+        • Jika Role = (Kepala Distrik Navigasi), Kode = TU
+        • Jika Role = (Kabag Tata Usaha, Subbag Kepegawaian & Umum, Subbag Keuangan), Kode = TU
+        • Jika Role = (Kabid Operasi, Seksi Program, Seksi Sarana Prasarana), Kode = OPS
+        • Jika Role = (Kabid Logistik, Seksi Pengadaan, Seksi Inventaris), Kode = LOG
+        • Jika Role = (Kepala Kelompok Pengamatan Laut), Kode = PENGLA
+        • Jika Role = (Kepala Kelompok Bengkel), Kode = BKL
+        • Jika Role = (Kepala Kelompok SBNP), Kode = SBNP
+        */
+
+
+        $roleName = Auth::user()->role->name;
+
+        $year_now = date('Y');
+        $obj = DB::table('permintaan_barang')
+        ->select('nomor_bast')
+        ->latest('id')
+            ->where('created_at', 'ilike', $year_now . '%')
+            ->first();
+
+        if ($obj) {
+            $increment = explode('/', $obj->nomor_bast);
+            $removed1char = substr($increment[0], 1);
+            $generateOrder_nr = str_pad($removed1char + 1, 4, "0", STR_PAD_LEFT) . '/'.$year_now.'/' . $this->bagianBidangUpp4($roleName);
+        } else {
+            $generateOrder_nr = str_pad(1, 4, "0", STR_PAD_LEFT) . '/'.$year_now.'/' . $this->bagianBidangUpp4($roleName);
         }
         return $generateOrder_nr;
     }

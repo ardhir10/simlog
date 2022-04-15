@@ -132,8 +132,21 @@ class PermintaanBarangController extends Controller
         $permintaanBarang =
             PermintaanBarang::where('id', $id)
             ->with(["timeline" => function ($query) {
-                return $query
-                    ->distinct('step');
+                // return $query
+                // ->distinct('step');
+                $query->where(function ($q) {
+                    $q->where('kategori', 'APPROVAL')
+                    ->where('status', '!=', 'done')
+                        ->orwhere('step', 1);
+                })
+                ->orwhere('kategori', 'PERSETUJUAN')
+                ->orderBy('id', 'asc');
+            }])
+            ->with(["approvals" => function ($query) {
+                // return $query
+                // ->distinct('step');
+                $query
+                    ->orderBy('id', 'asc');
             }])
             ->first();
         $data['page_title'] = $permintaanBarang->nomor_nota_dinas;

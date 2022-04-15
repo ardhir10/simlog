@@ -97,91 +97,91 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <div class="hori-timeline">
-                                    <!-- Swiper -->
-                                    <div class="swiper-container slider">
-                                        <div class="d-flex align-items-start">
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-4">Progress Approval</h5>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="swiper-arrow d-flex gap-2 justify-content-end arrow-sm">
-                                                    <div class="swiper-button-prev position-relative rounded-start">
+                                    <div class="hori-timeline">
+                                        <!-- Swiper -->
+                                        <div class="swiper-container slider">
+                                            <div class="d-flex align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="card-title mb-4">Progress Approval</h5>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="swiper-arrow d-flex gap-2 justify-content-end arrow-sm">
+                                                        <div class="swiper-button-prev position-relative rounded-start">
+                                                        </div>
+                                                        <div class="swiper-button-next position-relative rounded-end"></div>
                                                     </div>
-                                                    <div class="swiper-button-next position-relative rounded-end"></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="swiper-wrapper">
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Diajukan</h5>
-                                                    <p class="text-muted">
-                                                        {{date('d F T',strtotime($data->tanggal_permintaan))}} ||
-                                                        {{date('H:i:s',strtotime($data->tanggal_permintaan))}}</p>
-                                                </div>
-                                            </div>
-
-                                            @foreach ($data->timeline as $apv)
-                                                @if ($apv->status == 'done')
-                                                @php
-                                                $class = 'event-list';
-                                                @endphp
-                                                @elseif ($apv->status == 'reject')
-                                                @php
-                                                $class = 'event-list-reject';
-                                                @endphp
-                                                @else
-                                                @php
-                                                $class = 'event-list-pending';
-                                                @endphp
-                                                @endif
-                                                <div class="swiper-slide" style="">
-                                                    <div class="{{$class}} text-start">
-                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
-                                                        </h5>
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Diajukan</h5>
                                                         <p class="text-muted">
-                                                             {{date('d F T',strtotime($apv->timestamp))}} ||
-                                                            {{date('H:i:s',strtotime($apv->timestamp))}}
-                                                            {{-- {{$apv->role_to_name}} --}}
-                                                        </p>
+                                                            {{date('d F T',strtotime($data->tanggal_permintaan))}} ||
+                                                            {{date('H:i:s',strtotime($data->tanggal_permintaan))}}</p>
                                                     </div>
                                                 </div>
-                                            @endforeach
 
-                                            {{-- <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Disetujui</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diserahkan Kepala
-                                                        Gudang</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Kurir Dalam Perjalanan
-                                                    </h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diterima</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div> --}}
+                                                @foreach ($data->timeline as $apv)
+                                                    @if ($apv->status == 'done')
+                                                    @php
+                                                    $class = 'event-list';
+                                                    @endphp
+                                                    @elseif ($apv->status == 'reject')
+                                                    @php
+                                                    $class = 'event-list-reject';
+                                                    @endphp
+                                                    @else
+                                                    @php
+                                                    $class = 'event-list-pending';
+                                                    @endphp
+                                                    @endif
+                                                    <div class="swiper-slide" style="">
+                                                        <div class="{{$class}} text-start">
+                                                            <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
+                                                            </h5>
+                                                            <p class="text-muted">
+                                                                {{date('d F T',strtotime($apv->timestamp))}} ||
+                                                                {{date('H:i:s',strtotime($apv->timestamp))}}
+                                                                {{-- {{$apv->role_to_name}} --}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
 
-                                            <!-- end swiper slide -->
+                                                {{-- <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Disetujui</h5>
+                                                        <p class="text-muted">-</p>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diserahkan Kepala
+                                                            Gudang</h5>
+                                                        <p class="text-muted">-</p>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Kurir Dalam Perjalanan
+                                                        </h5>
+                                                        <p class="text-muted">-</p>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diterima</h5>
+                                                        <p class="text-muted">-</p>
+                                                    </div>
+                                                </div> --}}
+
+                                                <!-- end swiper slide -->
+                                            </div>
+
+
                                         </div>
-
-
                                     </div>
-                                </div>
                             </div>
                             <!-- end card body -->
                         </div>
@@ -360,14 +360,12 @@
                             </div>
                         </div>
 
-                        @if ($data->approvals->where('step',3)->first() && $data->approvals->where('step',4)->first() == null )
-
+                        @if ($data->lastApproval()->type == 'Barang Telah diserahkan Pengelola Gudang')
                             <div class="row animate__animated  animate__fadeIn">
-
                                 <div class="col-lg-4 offset-lg-8">
                                     <div class="text-end">
                                         <button class="btn btn-lg  btn-success " data-bs-toggle="modal" data-bs-target="#myModal" disabled>KIRIM KURIR</button>
-                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">TERIMA BARANG</button>
+                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang">TERIMA BARANG</button>
                                     </div>
                                 </div>
                             </div>
@@ -386,7 +384,7 @@
 @push('modals')
 <div>
     <!-- sample modal content -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="terimaBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

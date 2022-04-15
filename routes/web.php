@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengelola-gudang-siap/{id}', 'ApprovalController@pengelolaGudangSiap')->name('pengelola-gudang-siap');
 
         Route::post('/terima-barang/{id}', 'ApprovalController@terimaBarang')->name('terima-barang');
+
         Route::post('/serahkan-barang/{id}', 'ApprovalController@serahkanBarang')->name('serahkan-barang');
         Route::post('/lapor/{id}', 'ApprovalController@lapor')->name('lapor');
 
