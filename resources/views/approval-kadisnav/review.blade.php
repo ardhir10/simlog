@@ -333,6 +333,24 @@
                                                     </div>
                                                 </div>
                                             @endif
+                                             @if ($data->nomor_bast)
+                                                <div class="col-lg-3">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <img height="65" src="{{asset('assets/images/icon/file.png')}}"
+                                                                alt="">
+                                                        </div>
+                                                        <div>
+                                                            <span class="d-block"
+                                                                style="font-size:20px;font-weight:bold;">BAST</span>
+                                                            <a href="{{route('permintaan-barang.upp4',$data->id)}}"
+                                                                target="_blank">
+                                                                <button class="btn btn-sm btn-success">Download</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
