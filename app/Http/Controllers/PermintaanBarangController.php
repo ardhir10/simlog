@@ -36,7 +36,13 @@ class PermintaanBarangController extends Controller
             ) {
             $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
                 ->get();
+        } else if ((Auth::user()->role->name ?? null) == 'Kurir/Offsetter') {
+            $data['permintaan_barang'] = PermintaanBarang::whereHas('approvals',function($q){
+                $q->where('approve_by_id',Auth::user()->id);
+            })->orderBy('id', 'desc')
+                ->get();
         }
+
         else{
             $data['permintaan_barang'] = PermintaanBarang::where('user_id', Auth::user()->id)
                 ->orderBy('id', 'desc')
@@ -151,6 +157,9 @@ class PermintaanBarangController extends Controller
             ->first();
         $data['page_title'] = $permintaanBarang->nomor_nota_dinas;
         $data['data'] = $permintaanBarang;
+        $data['kurir'] = User::whereHas('role',function($q){
+            $q->where('name', 'Kurir/Offsetter');
+        })->get();
         return view('permintaan-barang.detail', $data);
     }
 
@@ -167,7 +176,7 @@ class PermintaanBarangController extends Controller
                     'permintaan_barang_id' => $permintaanBarangId,
                     'jumlah' => $request->jumlah,
                     'berita_tambahan' => $request->berita_tambahan,
-                    'harga_perolehan' => $dataBarangPersediaan->harga_perolehan,
+                    // 'harga_perolehan' => $dataBarangPersediaan->harga_perolehan,
                 ]
             );
             return redirect()->route('permintaan-barang.create')->with(['success' => 'Barang Berhasil Ditambahkan !']);
@@ -204,7 +213,7 @@ class PermintaanBarangController extends Controller
         try {
             DB::beginTransaction();
             $dataPengajuan['is_draft'] = false;
-            $dataPengajuan['status'] = 'diproses';
+            $dataPengajuan['status'] = 'Diproses';
             $dataPengajuan['perihal'] = $request->perihal;
             PermintaanBarang::where('id', $id)
                 ->update($dataPengajuan);
@@ -311,6 +320,24 @@ class PermintaanBarangController extends Controller
 
 
         $pdf = PDF::loadView('pdf.upp4', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
+        // $font = Font_Metrics::get_font("helvetica", "bold");
+
+        return $pdf->stream($permintaanBarang->nomor_upp3 . ' (UPP3).pdf');
+    }
+
+    public function pdfBast(Request $request, $id)
+    {
+        $data['title'] = 'BAST';
+
+        $permintaanBarang = PermintaanBarang::where('id', $id)
+            ->first();
+        $data['data'] = $permintaanBarang;
+        if ($request->v == 'html') {
+            return view('pdf.bast', $data);
+        }
+
+
+        $pdf = PDF::loadView('pdf.bast', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
         // $font = Font_Metrics::get_font("helvetica", "bold");
 
         return $pdf->stream($permintaanBarang->nomor_upp3 . ' (UPP3).pdf');

@@ -15,7 +15,7 @@
     </div>
     <div class="col-lg-3">
         <div class="form-group">
-            <label for=""><strong>Kode Sub-Sub Kategori</strong></label>
+            <label for=""><strong>Peruntukkan</strong></label>
             <select name="sub_sub_kategori" class="form-select select2" required>
                 <option {{$data->sub_sub_kategori == '01' ? 'selected=selected':''}} value="01">(01) Umum</option>
                 <option {{$data->sub_sub_kategori == '02' ? 'selected=selected':''}} value="02">(02) Tata Usaha</option>

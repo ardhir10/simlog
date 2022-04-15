@@ -163,7 +163,7 @@
                         <tr>
                             <td width="50px">Dimintai Oleh</td>
                             <td style="width: 1%">:</td>
-                            <td> {{$data->user->role->name ?? null}}</td>
+                            <td> {{$data->dimintaOleh() ?? null}}</td>
                         </tr>
                         <tr>
                             <td width="50px">Bagian/Bidang</td>
@@ -234,33 +234,7 @@
                                         <td>{{$item->barang->satuan->nama_satuan ?? null}}</td>
                                     </tr>
                                 @endforeach
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="white-space: nowrap"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="white-space: nowrap"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="white-space: nowrap"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -419,26 +393,56 @@
             <table style="">
                 <tr>
                     <td style="width: auto;padding-right:10px;" width="auto">
-                        <div style="text-align: center;">
+                        <div style="text-align: center;display: block;">
                             <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Dikeluarkan Oleh</span>
+                                <span style="font-size: 12px;">Diverivikasi Oleh</span>
                             </div>
-                            {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('kategori','APPROVAL')->where('step',3)->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                            <span style="display: block;font-size: 12px;">{{$data->approvals->where('kategori','APPROVAL')->where('step',3)->first()->user->role->name ?? '-'}}</span>
-                            <span style="display: block;font-size: 10px;" >{{$data->approvals->where('kategori','APPROVAL')->where('step',3)->first()->timestamp ?? '-'}}</span>
+                            @if ($data->approvals->where('type','Disetujui Bendahara Materil')->first())
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Disetujui Bendahara Materil')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">Bendahara Materil</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Disetujui Bendahara Materil')->first()->timestamp ?? '-'}}</span>
+                            @else
+                                <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
+                                {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}
+                                <span style="display: block;font-size: 12px;">Bendahara Materil</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
+                            @endif
+
+                        </div>
+                    </td>
+                    <td style="width: auto;padding-right:10px;" width="auto">
+                        <div style="text-align: center;display: block;">
+                            <div style="margin-bottom:18px;">
+                                <span style="font-size: 12px;">Dikeluarkan Oleh</span>
+                            </div>
+                            @if ($data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first())
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">Pengelola Gudang</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->timestamp ?? '-'}}</span>
+                            @else
+                                <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
+                                {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}
+                                <span style="display: block;font-size: 12px;">Pengelola Gudang</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
+                            @endif
+
                         </div>
                     </td>
                     <td style="width: auto;padding-right:10px;">
                         <div style="text-align: center;">
-                            <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Diterima Oleh</span>
+                            <div style="margin-bottom:18px;display: block;">
+                                <span style="font-size: 12px;">Diterima Oleh</span>
                             </div>
-                            {{-- <img src="{{asset('images/icon/nay.png')}}" height="72" alt=""> --}}
-                            {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-
-                            <span style="display: block;font-size: 12px;">{{$data->user->name ?? '-'}}</span>
-                            {{-- <span style="display: block;font-size: 12px;">Navigasi</span> --}}
-                            <span style="display: block;font-size: 10px;" >{{$data->approvals->where('kategori','APPROVAL')->where('step',6)->first()->timestamp ?? '-'}}</span>
+                             @if ($data->approvals->where('type','Barang Telah diterima')->first())
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">{{$data->user->name}}</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->timestamp ?? '-'}}</span>
+                            @else
+                                <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
+                                {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}
+                                <span style="display: block;font-size: 12px;">{{$data->user->name}}</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
+                            @endif
                         </div>
                     </td>
 

@@ -36,13 +36,13 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group mb-3">
-                                    <label for=""><strong>Nama Kategori</strong></label>
+                                    <label for=""><strong>Nama Sub Kategori</strong></label>
                                     <input type="text" name="nama_kategori" class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group mb-3">
-                                    <label for=""><strong>Kode Kategori</strong></label>
+                                    <label for=""><strong>Kode Sub Kategori</strong></label>
                                     <input type="text" name="kode_kategori" class="form-control" placeholder="">
                                 </div>
                             </div>

@@ -132,15 +132,21 @@
                                             <td>{{$item->perihal}}</td>
                                             <td>{{$item->dimintaOleh() ?? 'N//A'}}</td>
                                             <td>
-                                                @if ($item->status == 'diproses')
+                                               @if ($item->status == 'Diproses')
                                                     <div class="avatar-sm ">
                                                         <div class="avatar-title bg-diproses rounded-circle font-size-12">
 
                                                         </div>
                                                     </div>
-                                                @elseif ($item->status == 'Pesanan Siap' || $item->status == 'Barang Diterima')
+                                                @elseif ($item->status == 'Disetujui')
                                                     <div class="avatar-sm ">
                                                         <div class="avatar-title bg-disetujui rounded-circle font-size-12">
+
+                                                        </div>
+                                                    </div>
+                                                @elseif ($item->status == 'Selesai')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-selesai rounded-circle font-size-12">
 
                                                         </div>
                                                     </div>
@@ -148,7 +154,6 @@
                                                     Draft
                                                     {{-- {{$item->status}} --}}
                                                 @endif
-
                                             </td>
                                         </tr>
                                     @endforeach
@@ -166,15 +171,21 @@
                                             <td>{{$item->perihal}}</td>
                                             <td>{{$item->dimintaOleh() ?? 'N//A'}}</td>
                                             <td>
-                                                @if ($item->status == 'diproses')
+                                                @if ($item->status == 'Diproses')
                                                     <div class="avatar-sm ">
                                                         <div class="avatar-title bg-diproses rounded-circle font-size-12">
 
                                                         </div>
                                                     </div>
-                                                @elseif ($item->status == 'Pesanan Siap' || $item->status == 'Barang Diterima')
+                                                @elseif ($item->status == 'Disetujui')
                                                     <div class="avatar-sm ">
                                                         <div class="avatar-title bg-disetujui rounded-circle font-size-12">
+
+                                                        </div>
+                                                    </div>
+                                                @elseif ($item->status == 'Selesai')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-selesai rounded-circle font-size-12">
 
                                                         </div>
                                                     </div>

@@ -97,20 +97,15 @@
                                             @endif
                                         @else
                                             @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
-                                                     <button class="btn btn-lg btn-info " disabled >
-                                                    <i class="fa fa-truck"></i>
-                                                    DIJEMPUT KURIR</button>
+                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
+                                                <i class="fa fa-check"></i>
+                                                TERIMA BARANG</button>
                                             @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
                                                 <button class="btn btn-lg btn-success " disabled>
                                                     <i class="fa fa-check"></i>
                                                     BARANG SUDAH DITERIMA</button>
                                             @else
-                                                <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
-                                                        <i class="fa fa-truck"></i>
-                                                        PILIH KURIR</button>
-                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
-                                                <i class="fa fa-check"></i>
-                                                TERIMA BARANG</button>
+
                                             @endif
 
                                         @endif
@@ -383,8 +378,6 @@
                                                                 <span class="d-block mb-2">Keterangan :</span>
                                                                 <span>{{$appvs->keterangan}}</span>
 
-
-
                                                         </div>
                                                     </div>
 
@@ -454,7 +447,7 @@
 
                     </button>
                 </div>
-                <form action="{{route('approval.terima-barang',$data->id)}}" method="post">
+                <form action="{{route('approval.terima-barang-by-kurir',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
@@ -468,42 +461,6 @@
                         <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">TERIMA BARANG</button>
                     </div>
                 </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <!-- sample modal content -->
-    <div id="pilihKurir" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Silahkan Pilih Kurir</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form  action="{{route('approval.kirim-kurir',$data->id)}}" method="post">
-                        @csrf
-                        <div class="form-group mb-2">
-                            <label for="">Pilih Kurir :</label>
-                            <select name="kurir_id" class="form-select" val>
-                                @foreach ($kurir as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Keterangan :</label>
-                           <textarea name="keterangan" class="form-control" id="" cols="30" rows="3"></textarea>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">KIRIM KURIR</button>
-                        </div>
-                    </form>
-                </div>
-
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

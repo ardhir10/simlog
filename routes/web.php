@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak-nota-dinas/{id}', 'PermintaanBarangController@pdfNotaDinas')->name('nota-dinas');
         Route::get('/cetak-nota-upp3/{id}', 'PermintaanBarangController@pdfUpp3')->name('upp3');
         Route::get('/cetak-nota-upp4/{id}', 'PermintaanBarangController@pdfUpp4')->name('upp4');
+        Route::get('/cetak-bast/{id}', 'PermintaanBarangController@pdfBast')->name('bast');
     });
 
     Route::prefix('approval')->name('approval.')->group(function () {
@@ -65,6 +66,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengelola-gudang-siap/{id}', 'ApprovalController@pengelolaGudangSiap')->name('pengelola-gudang-siap');
 
         Route::post('/terima-barang/{id}', 'ApprovalController@terimaBarang')->name('terima-barang');
+        Route::post('/kirim-kurir/{id}', 'ApprovalController@kirimKurir')->name('kirim-kurir');
+        Route::post('/terima-barang-by-kurir/{id}', 'ApprovalController@terimaBarangByKurir')->name('terima-barang-by-kurir');
 
         Route::post('/serahkan-barang/{id}', 'ApprovalController@serahkanBarang')->name('serahkan-barang');
         Route::post('/lapor/{id}', 'ApprovalController@lapor')->name('lapor');

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{$data->nomor_nota_dinas}} (Nota Dinas)</title>
+    <title>{{$data->nomor_upp4}} (Nomor UPP4)</title>
     <style>
         .title{
             /* margin-top: -10px; */
@@ -152,8 +152,8 @@
 
             <div class="title" >
                 <div style="text-align: center;">
-                    <span style="font-weight:bold;display:block;">BON PERMINTAAN BARANG PERSEDIAAN</span>
-                    <span style="font-weight:bold;">{{$data->nomor_upp3}}</span>
+                    <span style="font-weight:bold;display:block;">BERITA ACARA SERAH TERIMA BARANG</span>
+                    <span style="font-weight:bold;">{{$data->nomor_bast}} / {{$data->nomor_upp4}}</span>
 
                 </div>
             </div>
@@ -161,20 +161,57 @@
                 <div>
                     <table style="width: 100%">
                         <tr>
-                            <td width="50px">Dimintai Oleh</td>
-                            <td style="width: 1%">:</td>
-                            <td> {{$data->dimintaOleh() ?? null}}</td>
+                            <td>Pada Hari ini Tanggal {{date('Y-m-d',strtotime($data->bast_at))}} Pukul {{date('H:i:s',strtotime($data->bast_at))}}, telah dilakukan serah terima barang yang tercantum pada Surat Berita Acara Serah Terima Barang ini, yang dilakukan oleh , </td>
                         </tr>
+                    </table>
+                    <br>
+                    <table style="width: 100%">
                         <tr>
-                            <td width="50px">Bagian/Bidang</td>
-                            <td style="width: 1%">:</td>
-                            <td> {{$data->bagianBidang()}}</td>
+                            <td style="width: 50%">
+                                <table>
+                                    <tr>
+                                        <td colspan="3" width="50px" style="font-weight:bold;">Pihak Pertama</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Nama
+                                        </td>
+                                        <td>:</td>
+                                        <td>{{$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->user->name ?? 0}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Jabatan
+                                        </td>
+                                        <td>:</td>
+                                        <td>Pengelola Gudang</td>
+                                    </tr>
+                                </table>
+                            </td style="width: 50%">
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td colspan="3" width="50px" style="font-weight:bold;">Pihak Kedua</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Nama
+                                        </td>
+                                        <td>:</td>
+                                        <td>{{$data->approvals->where('type','Barang Telah diterima')->first()->user->name ??''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Jabatan
+                                        </td>
+                                        <td>:</td>
+                                        <td>{{$data->approvals->where('type','Barang Telah diterima')->first()->user->role->name ?? ''}}</td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
-                        <tr>
-                            <td width="50px">Tanggal </td>
-                            <td style="width: 1%">:</td>
-                            <td> {{date('d-m-Y H:i:s',strtotime($data->tanggal_permintaan)) }}</td>
-                        </tr>
+
+
                     </table>
                 </div>
 
@@ -204,7 +241,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $jumlah = 0;
+                                    $jumlah_disetujui = 0;
+                                @endphp
                                 @foreach ($data->barang_diminta as $item)
+                                @php
+                                    $jumlah +=$item->jumlah;
+                                    $jumlah_disetujui +=$item->jumlah_disetujui;
+                                @endphp
                                     <tr>
                                         <td style="width: 20px">{{$loop->iteration}}</td>
                                         <td style="width: 265px">{{$item->barang->nama_barang ?? null}}</td>
@@ -215,6 +260,42 @@
                                         <td>{{$item->barang->satuan->nama_satuan ?? null}}</td>
                                     </tr>
                                 @endforeach
+                                {{-- <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="white-space: nowrap"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="white-space: nowrap"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="white-space: nowrap"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr> --}}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="white-space: nowrap">Jumlah Barang</td>
+                                    <td>{{$jumlah}}</td>
+                                    <td>{{$jumlah_disetujui}}</td>
+                                    <td></td>
+                                </tr>
                                 {{-- @foreach ($data->barang_diminta as $item)
                                     <tr>
                                         <td style="width: 20px">{{$loop->iteration}}</td>
@@ -363,33 +444,20 @@
         <div class="footer">
             <table style="">
                 <tr>
+
                     <td style="width: auto;padding-right:10px;" width="auto">
-                        <div style="text-align: center;">
+                        <div style="text-align: center;display: block;">
                             <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Diminta Oleh</span>
+                                <span style="font-size: 12px;">Dikeluarkan Oleh</span>
                             </div>
-                            {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                            <span style="display: block;font-size: 12px;">{{$data->user->name ?? '-'}}</span>
-                            <span style="display: block;font-size: 12px;">{{$data->user->role->name ?? '-'}}</span>
-                            <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
-                        </div>
-                    </td>
-                    <td style="width: auto;padding-right:10px;">
-                        <div style="text-align: center;">
-                            <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Disetujui Oleh</span>
-                            </div>
-
-                            @if ($data->approvals->where('type','Disetujui Kadisnav')->first())
-                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Disetujui Kadisnav')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                                <span style="display: block;font-size: 12px;">Kepala Distrik</span>
-                                <span style="display: block;font-size: 12px;">Navigasi</span>
-                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Disetujui Kadisnav')->first()->timestamp ?? '-'}}</span>
+                            @if ($data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first())
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">Pengelola Gudang</span>
+                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->timestamp ?? '-'}}</span>
                             @else
                                 <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
                                 {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}
-                                <span style="display: block;font-size: 12px;">Kepala Distrik</span>
-                                <span style="display: block;font-size: 12px;">Navigasi</span>
+                                <span style="display: block;font-size: 12px;">Pengelola Gudang</span>
                                 <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
                             @endif
 
@@ -397,75 +465,22 @@
                     </td>
                     <td style="width: auto;padding-right:10px;">
                         <div style="text-align: center;">
-                            <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Diketahui Oleh</span>
+                            <div style="margin-bottom:18px;display: block;">
+                                <span style="font-size: 12px;">Diterima Oleh</span>
                             </div>
-
-                            @if ($data->approvals->where('type','Disetujui Kabid Logistik')->first())
-                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Disetujui Kabid Logistik')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                                <span style="display: block;font-size: 12px;">Kepala Bidang</span>
-                                <span style="display: block;font-size: 12px;">Logistik</span>
-                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Disetujui Kabid Logistik')->first()->timestamp ?? '-'}}</span>
+                             @if ($data->approvals->where('type','Barang Telah diterima')->first())
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diterima')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">{{$data->approvals->where('type','Barang Telah diterima')->first()->user->name ?? 'N/A'}}</span>
+                                <span style="display: block;font-size: 10px;">{{$data->approvals->where('type','Barang Telah diterima')->first()->timestamp ?? '-'}}</span>
                             @else
                                 <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
-
                                 {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}
-                                <span style="display: block;font-size: 12px;">Kepala Bidang</span>
-                                <span style="display: block;font-size: 12px;">Logistik</span>
+                                <span style="display: block;font-size: 12px;">{{$data->user->name}}</span>
                                 <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
                             @endif
-
                         </div>
                     </td>
 
-                    <td style="width: auto;padding-left:40px;">
-                        <div style="text-align: center;">
-                            <div style="margin-bottom:18px;">
-                                <span style="display: block;font-size: 12px;">Diketahui Oleh</span>
-                            </div>
-                            <div style="">
-                                <table>
-                                    <tr>
-                                        <td style="padding-right: 10px;">
-                                            <div style="text-align: center">
-
-                                                @if ($data->approvals->where('type','Disetujui Kasie Pengadaan')->first())
-                                                    {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Disetujui Kasie Pengadaan')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                                                    <span style="display: block;font-size: 12px;">Kasie</span>
-                                                    <span style="display: block;font-size: 12px;">Pengadaan</span>
-
-                                                    <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Disetujui Kasie Pengadaan')->first()->timestamp ?? '-'}}</span>
-                                                @else
-                                                    <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
-                                                    <span style="display: block;font-size: 12px;">Kasie</span>
-                                                    <span style="display: block;font-size: 12px;">Pengadaan</span>
-                                                    <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="text-align: center">
-                                                 @if ($data->approvals->where('type','Disetujui Bendahara Materil')->first())
-                                                    {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Disetujui Bendahara Materil')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                                                    <span style="display: block;font-size: 12px;">Bendahara</span>
-                                                <span style="display: block;font-size: 12px;">Materil</span>
-
-                                                    <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Disetujui Bendahara Materil')->first()->timestamp ?? '-'}}</span>
-                                                @else
-                                                    <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
-                                                    <span style="display: block;font-size: 12px;">Bendahara</span>
-                                                <span style="display: block;font-size: 12px;">Materil</span>
-                                                    <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
-                                                @endif
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                        </div>
-                    </td>
                 </tr>
             </table>
 
