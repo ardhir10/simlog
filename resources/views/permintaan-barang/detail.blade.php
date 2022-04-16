@@ -88,33 +88,34 @@
                             </div>
                             <div class="col-lg-4 offset-lg-2">
                                 <div class="text-end">
-                                        @if (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
-                                            @if (!$data->laporanDistribusi)
-                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
+                                        @if ($data->lastApproval())
+                                            @if (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
+                                                @if (!$data->laporanDistribusi)
+                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
 
-                                                    <i class="fa fa-file"></i>
-                                                    LAPOR DISTRIBUSI</button>
-                                            @endif
-                                        @else
-                                            @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
-                                                     <button class="btn btn-lg btn-info " disabled >
-                                                    <i class="fa fa-truck"></i>
-                                                    DIJEMPUT KURIR</button>
-                                            @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
-                                                <button class="btn btn-lg btn-success " disabled>
-                                                    <i class="fa fa-check"></i>
-                                                    BARANG SUDAH DITERIMA</button>
+                                                        <i class="fa fa-file"></i>
+                                                        LAPOR DISTRIBUSI</button>
+                                                @endif
                                             @else
-                                                <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
+                                                @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
+                                                        <button class="btn btn-lg btn-info " disabled >
                                                         <i class="fa fa-truck"></i>
-                                                        PILIH KURIR</button>
-                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
-                                                <i class="fa fa-check"></i>
-                                                TERIMA BARANG</button>
+                                                        DIJEMPUT KURIR</button>
+                                                @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
+                                                    <button class="btn btn-lg btn-success " disabled>
+                                                        <i class="fa fa-check"></i>
+                                                        BARANG SUDAH DITERIMA</button>
+                                                @else
+                                                    <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
+                                                            <i class="fa fa-truck"></i>
+                                                            PILIH KURIR</button>
+                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
+                                                    <i class="fa fa-check"></i>
+                                                    TERIMA BARANG</button>
+                                                @endif
+
                                             @endif
-
                                         @endif
-
                                 </div>
                             </div>
                         </div>
@@ -146,19 +147,26 @@
                                                 </div>
 
                                                 @foreach ($data->timeline as $apv)
-                                                    @if ($apv->status == 'done')
-                                                    @php
-                                                    $class = 'event-list';
-                                                    @endphp
-                                                    @elseif ($apv->status == 'reject')
-                                                    @php
-                                                    $class = 'event-list-reject';
-                                                    @endphp
+                                                    @if ($apv->tindak_lanjut == 'TOLAK')
+                                                        @php
+                                                        $class = 'event-list-reject';
+                                                        @endphp
                                                     @else
-                                                    @php
-                                                    $class = 'event-list-pending';
-                                                    @endphp
+                                                        @if ($apv->status == 'done')
+                                                            @php
+                                                            $class = 'event-list';
+                                                            @endphp
+                                                            @elseif ($apv->status == 'reject')
+                                                            @php
+                                                            $class = 'event-list-reject';
+                                                            @endphp
+                                                            @else
+                                                            @php
+                                                            $class = 'event-list-pending';
+                                                            @endphp
+                                                        @endif
                                                     @endif
+
                                                     <div class="swiper-slide" style="">
                                                         <div class="{{$class}} text-start">
                                                             <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
@@ -363,7 +371,7 @@
                             </div>
                         </div>
 
-                        {{-- PERSETUJUAN --}}
+                       {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">
                             <div class="col-lg-12">
@@ -371,26 +379,35 @@
                                     <div class="card-body ">
                                         <h3 class="fw-bold">PERSETUJUAN</h3>
                                         <div class="row ">
-                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN')->where('step','!=',4) as $appvs)
-                                                <div class="col-lg-12">
-                                                    <div class="card" style="border: 1px solid">
-                                                        <div class="card-body p-4">
-
-                                                            <p class="text-muted">
-                                                                {{date('d F T',strtotime($appvs->timestamp))}} ||
-                                                                {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                                <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
-                                                                <span class="d-block mb-2">Keterangan :</span>
-                                                                <span>{{$appvs->keterangan}}</span>
-
-
-
+                                            @foreach ($data->approvals as $appvs)
+                                                @if ($appvs->kategori == 'PERSETUJUAN')
+                                                    <div class="col-lg-12">
+                                                        <div class="card" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-
-                                                </div>
+                                                @elseif ($appvs->kategori == 'DISPOSISI')
+                                                    <div class="col-lg-12">
+                                                        <div class="card bg-warning" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    <span class="d-block mb-2">Disposisi Kepada {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             @endforeach
-
                                         </div>
                                     </div>
                                 </div>
@@ -488,7 +505,7 @@
                         <div class="form-group mb-2">
                             <label for="">Pilih Kurir :</label>
                             <select name="kurir_id" class="form-select" val>
-                                @foreach ($kurir as $item)
+                                @foreach ($kurir ?? [] as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>

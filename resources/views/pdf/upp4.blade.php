@@ -434,9 +434,9 @@
                                 <span style="font-size: 12px;">Diterima Oleh</span>
                             </div>
                              @if ($data->approvals->where('type','Barang Telah diterima')->first())
-                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
-                                <span style="display: block;font-size: 12px;">{{$data->user->name}}</span>
-                                <span style="display: block;font-size: 10px;" >{{$data->approvals->where('type','Barang Telah diserahkan Pengelola Gudang')->first()->timestamp ?? '-'}}</span>
+                                {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->approvals->where('type','Barang Telah diterima')->first()->approve_by_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
+                                <span style="display: block;font-size: 12px;">{{$data->approvals->where('type','Barang Telah diterima')->first()->user->name ?? 'N/A'}}</span>
+                                <span style="display: block;font-size: 10px;">{{$data->approvals->where('type','Barang Telah diterima')->first()->timestamp ?? '-'}}</span>
                             @else
                                 <img src="{{asset('images/icon/nay.png')}}" height="72" alt="">
                                 {{-- {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!} --}}

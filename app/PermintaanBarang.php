@@ -34,6 +34,20 @@ class PermintaanBarang extends Model
             ->orderBy('id','desc')
             ->first();
     }
+    public function isNeedApprove(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','APPROVAL')
+            ->where('status', '!=', 'done')
+            ->orderBy('id','desc')
+            ->first();
+    }
+    public function isNeedApproveDisposisi(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','DISPOSISI')
+            ->where('status','!=','done')
+            ->orderBy('id','desc')
+            ->first();
+    }
     public function isTindakLanjut($step = 1){
         return $process = ApprovalProcess::where('step','>',$step)
             ->orderBy('id','desc')

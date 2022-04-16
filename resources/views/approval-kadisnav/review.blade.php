@@ -107,7 +107,7 @@
                                         @else
                                             <h1 class="text-danger">DITOLAK</h1>
                                         @endif
-                                        <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button>
+                                        {{-- <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button> --}}
                                     @endif
 
                                 </div>
@@ -142,19 +142,26 @@
                                             </div>
 
                                             @foreach ($data->timeline as $apv)
-                                                @if ($apv->status == 'done')
-                                                @php
-                                                $class = 'event-list';
-                                                @endphp
-                                                @elseif ($apv->status == 'reject')
-                                                @php
-                                                $class = 'event-list-reject';
-                                                @endphp
+                                                @if ($apv->tindak_lanjut == 'TOLAK')
+                                                    @php
+                                                    $class = 'event-list-reject';
+                                                    @endphp
                                                 @else
-                                                @php
-                                                $class = 'event-list-pending';
-                                                @endphp
+                                                    @if ($apv->status == 'done')
+                                                        @php
+                                                        $class = 'event-list';
+                                                        @endphp
+                                                        @elseif ($apv->status == 'reject')
+                                                        @php
+                                                        $class = 'event-list-reject';
+                                                        @endphp
+                                                        @else
+                                                        @php
+                                                        $class = 'event-list-pending';
+                                                        @endphp
+                                                    @endif
                                                 @endif
+
                                                 <div class="swiper-slide" style="">
                                                     <div class="{{$class}} text-start">
                                                         <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
@@ -357,7 +364,7 @@
                             </div>
                         </div>
 
-                        {{-- PERSETUJUAN --}}
+                       {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">
                             <div class="col-lg-12">
@@ -365,33 +372,37 @@
                                     <div class="card-body ">
                                         <h3 class="fw-bold">PERSETUJUAN</h3>
                                         <div class="row ">
-                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN')->where('step','!=',4) as $appvs)
-                                                <div class="col-lg-12">
-                                                    <div class="card" style="border: 1px solid">
-                                                        <div class="card-body p-4">
-                                                            <p class="text-muted">
-                                                                {{date('d F T',strtotime($appvs->timestamp))}} ||
-                                                                {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                            @if ($appvs->role_to_name=='Kepala Distrik Navigasi')
-                                                                <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
-                                                                <span class="d-block mb-2">Keterangan :</span>
-                                                                <span>{{$appvs->keterangan}}</span>
-
-                                                            @elseif($appvs->step == 5)
-                                                                <span class="d-block mb-2">Pengelola Gudang Menyerahkan Barang</span>
-                                                            @elseif($appvs->step == 6)
-                                                                <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
-                                                            @else
-                                                                <span class="d-block mb-2">Pesanan sudah disiapkan  {{$appvs->role_to_name}}</span>
-                                                                <span class="d-block mb-2">Keterangan :</span>
-                                                                <span>{{$appvs->keterangan}}</span>
-                                                            @endif
+                                            @foreach ($data->approvals as $appvs)
+                                                @if ($appvs->kategori == 'PERSETUJUAN')
+                                                    <div class="col-lg-12">
+                                                        <div class="card" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    {{-- <span class="fw-bold d-block">Dari : {{$appvs->user->name ?? 'N/A'}} ({{$appvs->user->role->name ?? 'N/A'}})</span> --}}
+                                                                    {{-- <span class="fw-bold d-block">Ke : {{$appvs->role_to_name ?? 'N/A'}} </span> --}}
+                                                                    <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-
-                                                </div>
+                                                @elseif ($appvs->kategori == 'DISPOSISI')
+                                                    <div class="col-lg-12">
+                                                        <div class="card bg-warning" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    <span class="d-block mb-2">Disposisi Kepada {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             @endforeach
-
                                         </div>
                                     </div>
                                 </div>

@@ -120,7 +120,7 @@
 
                                 @if ((Auth::user()->role->type == 1) || (Auth::user()->role->type == 3))
                                     @foreach ($permintaan_barang as $item)
-                                        <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('approval.review',$item->id) : ''}}'>
+                                        <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('approval.review',$item->id) : route('permintaan-barang.create')}}'>
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$item->nomor_nota_dinas}}
                                                 @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
@@ -150,6 +150,13 @@
 
                                                         </div>
                                                     </div>
+                                                @elseif ($item->status == 'Ditolak')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-ditolak rounded-circle font-size-12">
+
+                                                        </div>
+                                                    </div>
+
                                                 @else
                                                     Draft
                                                     {{-- {{$item->status}} --}}
@@ -186,6 +193,12 @@
                                                 @elseif ($item->status == 'Selesai')
                                                     <div class="avatar-sm ">
                                                         <div class="avatar-title bg-selesai rounded-circle font-size-12">
+
+                                                        </div>
+                                                    </div>
+                                                @elseif ($item->status == 'Ditolak')
+                                                    <div class="avatar-sm ">
+                                                        <div class="avatar-title bg-ditolak rounded-circle font-size-12">
 
                                                         </div>
                                                     </div>

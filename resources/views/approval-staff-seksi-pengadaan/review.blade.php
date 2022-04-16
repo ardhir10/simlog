@@ -92,9 +92,9 @@
                                     <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
                                     <span class="d-block">Tanggal Permintaan :
                                         {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
-                                    </div>
                                 </div>
-                                <div class="col-lg-6">
+                            </div>
+                             <div class="col-lg-6">
                                     @if (($data->isNeedApprove()->role_to_name ?? null) == Auth::user()->role->name ||
                                     ($data->isNeedApproveDisposisi()->role_to_name ?? null) == Auth::user()->role->name
                                     )
@@ -130,78 +130,49 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       <div class="swiper-wrapper">
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Diajukan</h5>
-                                                    <p class="text-muted">
-                                                        {{date('d F T',strtotime($data->tanggal_permintaan))}} ||
-                                                        {{date('H:i:s',strtotime($data->tanggal_permintaan))}}</p>
+                                        <div class="swiper-wrapper">
+                                                <div class="swiper-slide ">
+                                                    <div class="event-list text-start">
+                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Diajukan</h5>
+                                                        <p class="text-muted">
+                                                            {{date('d F T',strtotime($data->tanggal_permintaan))}} ||
+                                                            {{date('H:i:s',strtotime($data->tanggal_permintaan))}}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            @foreach ($data->timeline as $apv)
-                                                @if ($apv->tindak_lanjut == 'TOLAK')
-                                                    @php
-                                                    $class = 'event-list-reject';
-                                                    @endphp
-                                                @else
-                                                    @if ($apv->status == 'done')
-                                                        @php
-                                                        $class = 'event-list';
-                                                        @endphp
-                                                        @elseif ($apv->status == 'reject')
+                                                @foreach ($data->timeline as $apv)
+                                                    @if ($apv->tindak_lanjut == 'TOLAK')
                                                         @php
                                                         $class = 'event-list-reject';
                                                         @endphp
-                                                        @else
-                                                        @php
-                                                        $class = 'event-list-pending';
-                                                        @endphp
+                                                    @else
+                                                        @if ($apv->status == 'done')
+                                                            @php
+                                                            $class = 'event-list';
+                                                            @endphp
+                                                            @elseif ($apv->status == 'reject')
+                                                            @php
+                                                            $class = 'event-list-reject';
+                                                            @endphp
+                                                            @else
+                                                            @php
+                                                            $class = 'event-list-pending';
+                                                            @endphp
+                                                        @endif
                                                     @endif
-                                                @endif
 
-                                                <div class="swiper-slide" style="">
-                                                    <div class="{{$class}} text-start">
-                                                        <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
-                                                        </h5>
-                                                        <p class="text-muted">
-                                                             {{date('d F T',strtotime($apv->timestamp))}} ||
-                                                            {{date('H:i:s',strtotime($apv->timestamp))}}
-                                                            {{-- {{$apv->role_to_name}} --}}
-                                                        </p>
+                                                    <div class="swiper-slide" style="">
+                                                        <div class="{{$class}} text-start">
+                                                            <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
+                                                            </h5>
+                                                            <p class="text-muted">
+                                                                {{date('d F T',strtotime($apv->timestamp))}} ||
+                                                                {{date('H:i:s',strtotime($apv->timestamp))}}
+                                                                {{-- {{$apv->role_to_name}} --}}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endforeach
-
-                                            {{-- <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Disetujui</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diserahkan Kepala
-                                                        Gudang</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Kurir Dalam Perjalanan
-                                                    </h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div>
-                                            <div class="swiper-slide ">
-                                                <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Barang Diterima</h5>
-                                                    <p class="text-muted">-</p>
-                                                </div>
-                                            </div> --}}
-
-                                            <!-- end swiper slide -->
+                                                @endforeach
                                         </div>
 
 
@@ -363,7 +334,7 @@
                             </div>
                         </div>
 
-                        {{-- PERSETUJUAN --}}
+                         {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">
                             <div class="col-lg-12">
@@ -406,6 +377,8 @@
                             </div>
                         </div>
 
+
+
                     </div>
                 </div>
             </div>
@@ -431,7 +404,7 @@
 
                     </button>
                 </div>
-                <form action="{{route('approval.kabid-logistik-setuju',$data->id)}}" method="post">
+                <form action="{{route('approval.staff-seksi-pengadaan-setuju',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
@@ -450,7 +423,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!-- sample modal content -->
+    <!-- MODAL DISPOSISI -->
     <div id="disposisiModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -468,7 +441,6 @@
                         <div class="form-group mb-3">
                             <label for="">Disposisi Ke :</label>
                             <select name="disposisi_ke" id="" class="form-select">
-                                <option value="Kepala Distrik Navigasi">Kepala Distrik Navigasi</option>
                                 <option value="Kasie Pengadaan">Kasie Pengadaan</option>
                             </select>
                         </div>
@@ -486,31 +458,6 @@
     </div><!-- /.modal -->
 
 
-     <!-- Modal Serahkan Barang -->
-    <div id="modalSerahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Serahkan Barang</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                    </button>
-                </div>
-                <form action="{{route('approval.serahkan-barang',$data->id)}}" method="post">
-                    @csrf
-
-                    <div class="modal-body">
-                        <p class="text-center">Dengan menekan tombol ini maka barang akan diserahkan ke peminta </p>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">SERAHKAN BARANG</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 
 </div>

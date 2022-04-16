@@ -32,7 +32,8 @@ class PermintaanBarangController extends Controller
         else if (
             (Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
             (Auth::user()->role->name ?? null) == 'Kasie Pengadaan' ||
-            (Auth::user()->role->name ?? null) == 'Bendahara Materil'
+            (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
+            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan'
             ) {
             $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
                 ->get();
@@ -146,6 +147,7 @@ class PermintaanBarangController extends Controller
                         ->orwhere('step', 1);
                 })
                 ->orwhere('kategori', 'PERSETUJUAN')
+                ->orwhere('kategori', 'DISPOSISI')
                 ->orderBy('id', 'asc');
             }])
             ->with(["approvals" => function ($query) {
