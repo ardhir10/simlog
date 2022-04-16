@@ -103,15 +103,17 @@
                                                         DIJEMPUT KURIR</button>
                                                 @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
                                                     <button class="btn btn-lg btn-success " disabled>
-                                                        <i class="fa fa-check"></i>
-                                                        BARANG SUDAH DITERIMA</button>
-                                                @else
-                                                    <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
-                                                            <i class="fa fa-truck"></i>
-                                                            PILIH KURIR</button>
-                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
                                                     <i class="fa fa-check"></i>
-                                                    TERIMA BARANG</button>
+                                                    BARANG SUDAH DITERIMA</button>
+                                                @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diserahkan Pengelola Gudang')
+                                                    <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
+                                                        <i class="fa fa-truck"></i>
+                                                        PILIH KURIR</button>
+                                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
+                                                            <i class="fa fa-check"></i>
+                                                            TERIMA BARANG</button>
+                                                @else
+                                                    <h1 class="text-warning">SEDANG DIPROSES</h1>
                                                 @endif
 
                                             @endif
