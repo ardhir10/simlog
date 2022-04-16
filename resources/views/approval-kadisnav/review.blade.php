@@ -102,9 +102,9 @@
                                         <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">TINDAK LANJUT</button>
                                         <span class="d-block">Anda Belum memberikan tindak lanjut terhadap Permintaan Barang ini. Harap berikan tindak lanjut dengan menekan tombol tindak lanjut diatas.</span>
                                     @else
-                                        @if (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'SETUJUI')
-                                            <h1 class="text-success">DISETUJUI</h1>
-                                        @else
+                                        @if (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'SETUJUI' || optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'UPDATE')
+                                        <h1 class="text-success">DISETUJUI</h1>
+                                        @elseif (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'TOLAK')
                                             <h1 class="text-danger">DITOLAK</h1>
                                         @endif
                                         {{-- <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button> --}}
@@ -425,7 +425,7 @@
 <div>
     <!-- sample modal content -->
     <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Tindak Lanjut</h5>
@@ -433,17 +433,44 @@
 
                     </button>
                 </div>
+
                 <form action="{{route('approval.tindak-lanjut',$data->id)}}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-2">
                             <label for=""></label>
-                            <select name="tindak_lanjut" class="form-select" id="">
+                            <select name="tindak_lanjut" class="form-select" id="tidakLanjut">
                                 <option value="SETUJUI">SETUJUI</option>
                                 <option value="TOLAK">TOLAK</option>
                                 <option value="DISPOSISI">DISPOSISI</option>
                                 <option value="UPDATE">UPDATE</option>
                             </select>
+                        </div>
+                        <div class="table-responsive d-none" id="updateJumlahBarang">
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>nama Barang</th>
+                                        <th>Kode Barang</th>
+                                        <th>Jumah</th>
+                                        <th>Jumlah DIsetujui</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data->barang_diminta as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->barang->nama_barang?? 'N/A'}}</td>
+                                            <td>{{$item->barang->kode_barang?? 'N/A'}}</td>
+                                            <td>{{$item->jumlah}}</td>
+                                            <td><input name="jumlah_disetujui[{{$item->id}}]" type="number" step="0.01" value="{{$item->jumlah}}"></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+
                         </div>
                         <div class="form-group">
                             <label for="">Keterangan</label>
@@ -513,6 +540,13 @@
 
     });
 
+    $('#tidakLanjut').on('change',function(){
+        if(this.value =='UPDATE'){
+            $('#updateJumlahBarang').removeClass('d-none');
+        }else{
+            $('#updateJumlahBarang').addClass('d-none');
+        }
+    })
     $(".clickable-row").click(function () {
         window.location = $(this).data("href");
     });

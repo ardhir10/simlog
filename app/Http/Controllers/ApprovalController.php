@@ -116,8 +116,7 @@ class ApprovalController extends Controller
 
 
 
-
-            if ($request->tindak_lanjut == 'SETUJUI') {
+            if ($request->tindak_lanjut == 'SETUJUI' || $request->tindak_lanjut == "UPDATE") {
                 // PERSETUJUAN PROCESS
                 $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
                 $dataPersetujuan['permintaan_barang_id'] = $id;
@@ -149,14 +148,15 @@ class ApprovalController extends Controller
 
                 // Udate Barang Diminta Sesuai Request
                 $barangDiminta = $permintaanBarang->barang_diminta;
-                foreach ($barangDiminta as $key => $value) {
-                    PermintaanBarangDetail::where('id',$value->id)
-                        ->update(['jumlah_disetujui'=>$value->jumlah]);
 
-                    // GENERATE UPP4
-                    PermintaanBarang::where('id',$id)
-                        ->update(['nomor_upp4'=>$this->generateNomorUpp4($permintaanBarang->nomor_nota_dinas)]);
+                foreach ($request->jumlah_disetujui as $key => $value) {
+                    PermintaanBarangDetail::where('id', $key)
+                        ->update(['jumlah_disetujui'=>$value]);
+
                 }
+                // GENERATE UPP4
+                PermintaanBarang::where('id',$id)
+                    ->update(['nomor_upp4'=>$this->generateNomorUpp4($permintaanBarang->nomor_nota_dinas)]);
                 $dataApproval['type'] = 'Menunggu Persetujuan Kabid Logistik';
                 $dataApproval['status'] = '';
 
@@ -167,7 +167,7 @@ class ApprovalController extends Controller
                 $dataApproval['approve_by_id'] = Auth::user()->id;
                 $dataApproval['kategori'] = 'APPROVAL';
                 ApprovalProcess::create($dataApproval);
-            } if ($request->tindak_lanjut == 'TOLAK') {
+            }else if ($request->tindak_lanjut == 'TOLAK') {
                 // APPROVAL PROCESS
                 $dataApproval['timestamp'] = date('Y-m-d H:i:s');
                 $dataApproval['permintaan_barang_id'] = $id;
