@@ -69,7 +69,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="{{asset('assets/images/icon/kemenhub.png')}}" height="130px" alt=""></td>
+                    <img src="https://simlog.disnavpriok.id/assets/images/icon/kemenhub.png" height="130px" alt=""></td>
                 </td>
                 <td style="vertical-align: top;">
                     <div style="padding-left:20px;width:100%">
@@ -433,7 +433,6 @@
                             <div style="margin-bottom:18px;">
                                 <span style="display: block;font-size: 12px;">Diterima Oleh</span>
                             </div>
-                            {{-- <img src="{{asset('images/icon/nay.png')}}" height="72" alt=""> --}}
                             {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->user_id ?? 0), 'QRCODE',2.5,2.5) . '" alt="barcode"   />' !!}
 
                             <span style="display: block;font-size: 12px;">{{$data->user->name ?? '-'}}</span>
