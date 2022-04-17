@@ -17,12 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/getdashboard/{id}/{type}', 'ApiSbnpController@getDashboard')->name('api.sbnp');
+Route::post('/v1/nilai-barang-masuk', 'ApiDashboardController@nilaiBarangMasuk')->name('api.nilai-barang-masuk');
+Route::post('/v1/nilai-barang-keluar', 'ApiDashboardController@nilaiBarangKeluar')->name('api.nilai-barang-keluar');
+Route::post('/v1/nilai-saldo-barang', 'ApiDashboardController@saldoBarang')->name('api.saldo-barang');
+Route::post('/v1/permintaan-disetujui', 'ApiDashboardController@permintaanDisetujui')->name('api.permintaan-disetujui');
+Route::post('/v1/permintaan-ditolak', 'ApiDashboardController@permintaanDitolak')->name('api.permintaan-ditolak');
+Route::post('/v1/permintaan-dalamproses', 'ApiDashboardController@permintaanDalamproses')->name('api.permintaan-dalamproses');
+Route::post('/v1/nilai-distribusi', 'ApiDashboardController@nilaiDistribusi')->name('api.nilai-distribusi');
+Route::post('/v1/nilai-belum-distribusi', 'ApiDashboardController@nilaiBelumDistribusi')->name('api.nilai-belumdistribusi');
 
-// Integration API
-Route::post('/v1/get-sbnp', 'ApiAtonrepController@getSbnp')->name('api-atonrep.sbnp');
-Route::get('/v1/get-secret', 'ApiAtonrepController@getSecret')->name('api-atonrep.getSecret');
 
-Route::patch('/v1/get-sbnp-detail', 'ApiAtonrepController@getSbnpDetail')->name('api-atonrep.sbnp-detail');
 
 

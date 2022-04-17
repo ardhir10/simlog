@@ -483,7 +483,7 @@
                         <div class="form-group mb-3">
                             <label for="">Disposisi Ke :</label>
                             <select name="disposisi_ke" id="" class="form-select">
-                                <option value="Kabid Logistik">Kabid Logistik</option>
+                                <option value="Kabid Operasi">Kabid Operasi</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -514,7 +514,7 @@
 
                     <div class="modal-body">
                         {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
-                        <input type="hidden" name="role_to_name" value="Kabid Logistik">
+                        <input type="hidden" name="role_to_name" value="Kabid Operasi">
                         <div class="form-group">
                             <label for="">Keterangan</label>
                             <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>

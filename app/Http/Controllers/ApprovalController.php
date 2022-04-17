@@ -33,7 +33,16 @@ class ApprovalController extends Controller
             (Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
             (Auth::user()->role->name ?? null) == 'Kasie Pengadaan' ||
             (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
-            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan'
+            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Inventaris' ||
+            (Auth::user()->role->name ?? null) == 'Kabid Operasi' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Program' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Sarpras' ||
+            (Auth::user()->role->name ?? null) == 'Kabag Tata Usaha' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Kepeg & Umum' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Keuangan'
+
+
 
 
             ) {
@@ -81,10 +90,28 @@ class ApprovalController extends Controller
             return view('approval-kadisnav.review', $data);
         }else if (Auth::user()->role->name == 'Kabid Logistik') {
             return view('approval-kabid-logistik.review', $data);
-        } else if (Auth::user()->role->name == 'Pengelola Gudang') {
+        } else if (Auth::user()->role->name == 'Kabid Operasi') {
+            return view('approval-kabid-operasi.review', $data);
+        } else if (Auth::user()->role->name == 'Kasie Program') {
+            return view('approval-kasie-program.review', $data);
+        } else if (Auth::user()->role->name == 'Kasie Sarpras') {
+            return view('approval-kasie-sarpras.review', $data);
+        }
+
+         else if (Auth::user()->role->name == 'Kabag Tata Usaha') {
+            return view('approval-kabag-tata-usaha.review', $data);
+        } else if (Auth::user()->role->name == 'Kasie Kepeg & Umum') {
+            return view('approval-kasie-kepeg-umum.review', $data);
+        } else if (Auth::user()->role->name == 'Kasie Keuangan') {
+            return view('approval-kasie-kepeg-umum.review', $data);
+        }
+
+         else if (Auth::user()->role->name == 'Pengelola Gudang') {
             return view('approval-kepala-gudang.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Pengadaan') {
             return view('approval-kasie-pengadaan.review', $data);
+        } else if (Auth::user()->role->name == 'Kasie Inventaris') {
+            return view('approval-kasie-inventaris.review', $data);
         } else if (Auth::user()->role->name == 'Bendahara Materil') {
             return view('approval-bendahara-materil.review', $data);
         } else if (Auth::user()->role->name == 'Staff Seksi Pengadaan') {
@@ -136,6 +163,8 @@ class ApprovalController extends Controller
                 $dataPersetujuan['tindak_lanjut'] = $request->tindak_lanjut;
                 $dataPersetujuan['approve_by_id'] = Auth::user()->id;
                 $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+                $dataPersetujuan['from_kadisnav'] = 'SETUJUI';
+
                 ApprovalProcess::create($dataPersetujuan);
 
 
@@ -147,8 +176,6 @@ class ApprovalController extends Controller
                 $dataApproval['role_to_name'] = 'Kabid Logistik';
 
                 // Udate Barang Diminta Sesuai Request
-                $barangDiminta = $permintaanBarang->barang_diminta;
-
                 foreach ($request->jumlah_disetujui as $key => $value) {
                     PermintaanBarangDetail::where('id', $key)
                         ->update(['jumlah_disetujui'=>$value]);
@@ -166,7 +193,12 @@ class ApprovalController extends Controller
                 $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
                 $dataApproval['approve_by_id'] = Auth::user()->id;
                 $dataApproval['kategori'] = 'APPROVAL';
+                $dataApproval['from_kadisnav'] = 'SETUJUI';
+
                 ApprovalProcess::create($dataApproval);
+                DB::commit();
+                return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil disetujui !']);
+
             }else if ($request->tindak_lanjut == 'TOLAK') {
                 // APPROVAL PROCESS
                 $dataApproval['timestamp'] = date('Y-m-d H:i:s');
@@ -185,12 +217,48 @@ class ApprovalController extends Controller
                 $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
                 $dataApproval['approve_by_id'] = Auth::user()->id;
                 $dataApproval['kategori'] = 'APPROVAL';
+                $dataPersetujuan['from_kadisnav'] = 'TOLAK';
+
                 ApprovalProcess::create($dataApproval);
 
                 PermintaanBarang::where('id',$id)
                         ->update(['status'=>'Ditolak']);
                 DB::commit();
                 return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil ditolak !']);
+            } else if ($request->tindak_lanjut == 'DISPOSISI') {
+
+                // update approval sebelumnya
+                ApprovalProcess::where('permintaan_barang_id', $id)
+                    ->where(function ($q) {
+                        $q->where('kategori', 'APPROVAL')
+                            ->orWhere('kategori', 'DISPOSISI');
+                    })
+                    ->orderBy('id', 'desc')
+                    ->first()
+                    ->update([
+                        'status' => 'done',
+                        'tindak_lanjut' => null,
+                        'approve_by_id' => Auth::user()->id,
+                        'keterangan' => $request->keterangan
+                    ]);
+
+
+                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                $dataPersetujuan['permintaan_barang_id'] = $id;
+                $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+                $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                $dataPersetujuan['role_to_name'] = $request->disposisi_ke ?? '';
+                $dataPersetujuan['type'] = Auth::user()->role->name . ' Meminta Disposisi';
+                $dataPersetujuan['status'] = '';
+                $dataPersetujuan['step'] = 0;
+                $dataPersetujuan['keterangan'] = $request->keterangan;
+                $dataPersetujuan['tindak_lanjut'] = 'DISPOSISI';
+                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                $dataPersetujuan['kategori'] = 'DISPOSISI';
+                $dataPersetujuan['from_kadisnav'] = 'DISPOSISI';
+                $approval =ApprovalProcess::create($dataPersetujuan);
+                DB::commit();
+                return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil di Disposisi !']);
 
             } else {
                 dd('NOT YET AVAILABLE !');
@@ -198,8 +266,6 @@ class ApprovalController extends Controller
 
 
 
-            DB::commit();
-            return redirect()->route('approval.review',$permintaanBarang->id)->with(['success' => 'Data Berhasil diajukan !']);
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('approval.review',$permintaanBarang->id)->with(['failed' => $th->getMessage()]);
@@ -218,6 +284,7 @@ class ApprovalController extends Controller
             ->where('role_to_name', 'Kasie Pengadaan')
             ->where('status','done')
             ->where('kategori','PERSETUJUAN')
+            ->where('from_kadisnav', '!=', 'DISPOSISI')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -311,6 +378,77 @@ class ApprovalController extends Controller
             return redirect()->route('approval.review', $permintaanBarang->id)->with(['failed' => $th->getMessage()]);
         }
     }
+    public function kabidLogistikSetujuDisposisiKadisnav(Request $request, $id)
+    {
+        $permintaanBarang = PermintaanBarang::find($id);
+
+        try {
+            DB::beginTransaction();
+
+
+
+            // update approval sebelumnya
+            ApprovalProcess::where('permintaan_barang_id', $id)
+            ->where(function ($q) {
+                $q->where('kategori', 'APPROVAL')
+                    ->orWhere('kategori', 'DISPOSISI');
+            })
+            ->orderBy('id', 'desc')
+            ->first()
+            ->update([
+                'status' => 'done',
+                'tindak_lanjut' => 'DISPOSISI',
+                'approve_by_id' => Auth::user()->id,
+                'keterangan' => $request->keterangan
+            ]);
+
+
+
+                // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KASIE PENGADAAN
+                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                $dataPersetujuan['permintaan_barang_id'] = $id;
+                $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+                $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
+                $dataPersetujuan['type'] = 'Disetujui '. Auth::user()->role->name;
+                $dataPersetujuan['status'] = 'done';
+                $dataPersetujuan['step'] = 0;
+                $dataPersetujuan['keterangan'] = $request->keterangan;
+                $dataPersetujuan['tindak_lanjut'] = null;
+                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+                $dataPersetujuan['from_kadisnav'] = $permintaanBarang->fromKadisnav();
+                ApprovalProcess::create($dataPersetujuan);
+
+
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['permintaan_barang_id'] = $id;
+                $dataApproval['user_peminta_id'] = $permintaanBarang->user_id;
+                $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                $dataApproval['role_to_name'] = 'Kepala Distrik Navigasi' ?? '';
+                $dataApproval['type'] = 'Menunggu Persetujuan Kepala Distrik Navigasi';
+                $dataApproval['status'] = '';
+                $dataApproval['step'] = 0;
+                $dataApproval['keterangan'] = $request->keterangan;
+                $dataApproval['tindak_lanjut'] = 'DISPOSISI';
+                $dataApproval['approve_by_id'] = 0;
+                $dataApproval['kategori'] = 'APPROVAL';
+                $dataApproval['from_kadisnav'] = $permintaanBarang->fromKadisnav();
+
+                ApprovalProcess::create($dataApproval);
+
+
+
+
+
+
+            DB::commit();
+            return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil Disetujui !']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('approval.review', $permintaanBarang->id)->with(['failed' => $th->getMessage()]);
+        }
+    }
 
     public function kabidLogistikDisposisi(Request $request, $id)
     {
@@ -347,6 +485,7 @@ class ApprovalController extends Controller
             $dataPersetujuan['tindak_lanjut'] = 'DISPOSISI';
             $dataPersetujuan['approve_by_id'] = Auth::user()->id;
             $dataPersetujuan['kategori'] = 'DISPOSISI';
+            $dataPersetujuan['from_kadisnav'] = $permintaanBarang->fromKadisnav();
             ApprovalProcess::create($dataPersetujuan);
 
 
@@ -468,6 +607,78 @@ class ApprovalController extends Controller
         }
     }
 
+    public function kasiePengadaanSetujuDisposisiKadisnav(Request $request, $id)
+    {
+        $permintaanBarang = PermintaanBarang::find($id);
+
+        try {
+            DB::beginTransaction();
+
+
+
+            // update approval sebelumnya
+            ApprovalProcess::where('permintaan_barang_id', $id)
+                ->where(function ($q) {
+                    $q->where('kategori', 'APPROVAL')
+                    ->orWhere('kategori', 'DISPOSISI');
+                })
+                ->orderBy('id', 'desc')
+                ->first()
+                ->update([
+                    'status' => 'done',
+                    'tindak_lanjut' => 'DISPOSISI',
+                    'approve_by_id' => Auth::user()->id,
+                    'keterangan' => $request->keterangan
+                ]);
+
+
+
+            // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KASIE PENGADAAN
+            $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+            $dataPersetujuan['permintaan_barang_id'] = $id;
+            $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+            $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+            $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
+            $dataPersetujuan['type'] = 'Disetujui '.Auth::user()->role->name;
+            $dataPersetujuan['status'] = 'done';
+            $dataPersetujuan['step'] = 0;
+            $dataPersetujuan['keterangan'] = $request->keterangan;
+            $dataPersetujuan['tindak_lanjut'] = null;
+            $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+            $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+            $dataPersetujuan['from_kadisnav'] = $permintaanBarang->fromKadisnav();
+            ApprovalProcess::create($dataPersetujuan);
+
+
+            $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+            $dataApproval['permintaan_barang_id'] = $id;
+            $dataApproval['user_peminta_id'] = $permintaanBarang->user_id;
+            $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+            $dataApproval['role_to_name'] = $request->role_to_name ?? '';
+            $dataApproval['type'] = 'Menunggu Persetujuan '. $request->role_to_name;
+            $dataApproval['status'] = '';
+            $dataApproval['step'] = 0;
+            $dataApproval['keterangan'] = $request->keterangan;
+            $dataApproval['tindak_lanjut'] = 'DISPOSISI';
+            $dataApproval['approve_by_id'] = 0;
+            $dataApproval['kategori'] = 'APPROVAL';
+            $dataApproval['from_kadisnav'] = $permintaanBarang->fromKadisnav();
+
+            ApprovalProcess::create($dataApproval);
+
+
+
+
+
+
+            DB::commit();
+            return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil Disetujui !']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('approval.review', $permintaanBarang->id)->with(['failed' => $th->getMessage()]);
+        }
+    }
+
     public function bendaharaMaterilSetuju(Request $request, $id)
     {
         $permintaanBarang = PermintaanBarang::find($id);
@@ -537,6 +748,7 @@ class ApprovalController extends Controller
         ->where('role_to_name', 'Kasie Pengadaan')
         ->where('status', 'done')
         ->where('kategori', 'PERSETUJUAN')
+        ->where('from_kadisnav','!=', 'DISPOSISI')
         ->orderBy('id', 'desc')
             ->first();
 

@@ -437,13 +437,21 @@
                 <form action="{{route('approval.tindak-lanjut',$data->id)}}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-4">
                             <label for=""></label>
                             <select name="tindak_lanjut" class="form-select" id="tidakLanjut">
                                 <option value="SETUJUI">SETUJUI</option>
                                 <option value="TOLAK">TOLAK</option>
                                 <option value="DISPOSISI">DISPOSISI</option>
                                 <option value="UPDATE">UPDATE</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4 d-none" id="disposisiKe">
+                            <label for="">Disposisi Ke :</label>
+                            <select name="disposisi_ke" class="form-select" >
+                                <option value="Kabid Logistik">Kabid Logistik</option>
+                                <option value="Kabid Operasi">Kabid Operasi</option>
+                                <option value="Kabag Tata Usaha">Kabag Tata Usaha</option>
                             </select>
                         </div>
                         <div class="table-responsive d-none" id="updateJumlahBarang">
@@ -545,6 +553,11 @@
             $('#updateJumlahBarang').removeClass('d-none');
         }else{
             $('#updateJumlahBarang').addClass('d-none');
+        }
+        if(this.value =='DISPOSISI'){
+            $('#disposisiKe').removeClass('d-none');
+        }else{
+            $('#disposisiKe').addClass('d-none');
         }
     })
     $(".clickable-row").click(function () {

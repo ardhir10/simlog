@@ -92,14 +92,14 @@
                                     <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
                                     <span class="d-block">Tanggal Permintaan :
                                         {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-lg-6">
+                                <div class="col-lg-6">
                                     @if (($data->isNeedApprove()->role_to_name ?? null) == Auth::user()->role->name ||
                                     ($data->isNeedApproveDisposisi()->role_to_name ?? null) == Auth::user()->role->name
                                     )
-                                        @if ($data->fromKadisnav() == 'DISPOSISI')
+                                        {{-- JIKA DISPOSISI DARI KADISNAV --}}
+                                        @if (($data->fromKadisnav()) == 'DISPOSISI' )
                                                 <div class="text-end">
                                                     <button class="btn btn-lg btn-warning " data-bs-toggle="modal" data-bs-target="#disposisiFromKadisnavModal">
                                                     <i class="fas fa-comments"></i>
@@ -111,16 +111,15 @@
                                         @else
                                             <div class="text-end">
                                                 <button class="btn btn-lg btn-warning " data-bs-toggle="modal" data-bs-target="#disposisiModal">
-                                                    <i class="fas fa-comments"></i>
-                                                    DISPOSISI</button>
+                                                <i class="fas fa-comments"></i>
+                                                DISPOSISI</button>
                                                 <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">
                                                     <i class="fa fa-check"></i>
                                                     SETUJU</button>
                                             </div>
                                         @endif
-
                                     @endif
-                            </div>
+                                </div>
 
 
                         </div>
@@ -142,7 +141,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="swiper-wrapper">
+                                       <div class="swiper-wrapper">
                                             <div class="swiper-slide ">
                                                 <div class="event-list text-start">
                                                     <h5 class="font-size-14 mb-1 fw-bold mt-3">Permintaan Diajukan</h5>
@@ -418,9 +417,6 @@
                             </div>
                         </div>
 
-
-
-
                     </div>
                 </div>
             </div>
@@ -446,7 +442,7 @@
 
                     </button>
                 </div>
-                <form action="{{route('approval.kasie-pengadaan-setuju',$data->id)}}" method="post">
+                <form action="{{route('approval.kabid-logistik-setuju',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
@@ -465,8 +461,10 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-     <!-- sample modal content -->
-    <div id="disposisiFromKadisnavModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+
+    <!-- sample modal content -->
+    <div id="disposisiModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -483,7 +481,43 @@
                         <div class="form-group mb-3">
                             <label for="">Disposisi Ke :</label>
                             <select name="disposisi_ke" id="" class="form-select">
-                                <option value="Kabid Logistik">Kabid Logistik</option>
+                                <option value="Kepala Distrik Navigasi">Kepala Distrik Navigasi</option>
+                                <option value="Kasie Pengadaan">Kasie Pengadaan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- sample modal content -->
+    <div id="disposisiFromKadisnavModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">DISPOSISI PERMINTAAN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                    </button>
+                </div>
+                <form action="{{route('approval.kabid-logistik-disposisi',$data->id)}}" method="post">
+                    @csrf
+
+                    <div class="modal-body">
+
+                        <div class="form-group mb-3">
+                            <label for="">Disposisi Ke :</label>
+                           <select name="disposisi_ke" id="" class="form-select">
+                                <option value="Kasie Kepeg & Umum">Kasie Kepeg & Umum</option>
+                                <option value="Kasie Keuangan">Kasie Keuangan</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -509,12 +543,12 @@
 
                     </button>
                 </div>
-                <form action="{{route('approval.kasie-pengadaan-setuju-disposisi-kadisnav',$data->id)}}" method="post">
+                <form action="{{route('approval.kabid-logistik-setuju-disposisi-kadisnav',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
                         {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
-                        <input type="hidden" name="role_to_name" value="Kabid Logistik">
+
                         <div class="form-group">
                             <label for="">Keterangan</label>
                             <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
@@ -528,43 +562,32 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!-- MODAL DISPOSISI -->
-    <div id="disposisiModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+     <!-- Modal Serahkan Barang -->
+    <div id="modalSerahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">DISPOSISI PERMINTAAN</h5>
+                    <h5 class="modal-title" id="myModalLabel">Serahkan Barang</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
-                <form action="{{route('approval.kabid-logistik-disposisi',$data->id)}}" method="post">
+                <form action="{{route('approval.serahkan-barang',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
+                        <p class="text-center">Dengan menekan tombol ini maka barang akan diserahkan ke peminta </p>
 
-                        <div class="form-group mb-3">
-                            <label for="">Disposisi Ke :</label>
-                            <select name="disposisi_ke" id="" class="form-select">
-                                <option value="Kabid Logistik">Kabid Logistik</option>
-                                <option value="Bendahara Materil">Bendahara Materil</option>
-                                <option value="Staff Seksi Pengadaan">Staff Seksi Pengadaan</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Keterangan</label>
-                            <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">SERAHKAN BARANG</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-
 
 
 </div>

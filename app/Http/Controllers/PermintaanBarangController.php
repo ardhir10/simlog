@@ -33,7 +33,14 @@ class PermintaanBarangController extends Controller
             (Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
             (Auth::user()->role->name ?? null) == 'Kasie Pengadaan' ||
             (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
-            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan'
+            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Inventaris' ||
+            (Auth::user()->role->name ?? null) == 'Kabid Operasi' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Program' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Sarpras' ||
+            (Auth::user()->role->name ?? null) == 'Kabag Tata Usaha' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Kepeg & Umum' ||
+            (Auth::user()->role->name ?? null) == 'Kasie Keuangan'
             ) {
             $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
                 ->get();

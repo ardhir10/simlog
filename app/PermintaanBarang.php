@@ -28,6 +28,12 @@ class PermintaanBarang extends Model
             ->first();
         }
     }
+    public function fromKadisnav(){
+        return $process = ApprovalProcess::where('permintaan_barang_id', $this->id)
+            ->where('from_kadisnav', '!=', null)
+            ->orderBy('id', 'desc')
+            ->first()->from_kadisnav ?? null;
+    }
     public function lastApproval(){
             return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
             ->where('kategori','PERSETUJUAN')

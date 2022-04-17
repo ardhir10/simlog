@@ -62,9 +62,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengelola-gudang-setuju/{id}', 'ApprovalController@pengelolaGudangsetuju')->name('pengelola-gudang-setuju');
 
         Route::post('/kabid-logistik-setuju/{id}', 'ApprovalController@kabidLogistikSetuju')->name('kabid-logistik-setuju');
+        Route::post('/kabid-logistik-setuju-disposisi-kadisnav/{id}', 'ApprovalController@kabidLogistikSetujuDisposisiKadisnav')->name('kabid-logistik-setuju-disposisi-kadisnav');
         Route::post('/kabid-logistik-disposisi/{id}', 'ApprovalController@kabidLogistikDisposisi')->name('kabid-logistik-disposisi');
 
         Route::post('/kasie-pengadaan-setuju/{id}', 'ApprovalController@kasiePengadaanSetuju')->name('kasie-pengadaan-setuju');
+        Route::post('/kasie-pengadaan-setuju-disposisi-kadisnav/{id}', 'ApprovalController@kasiePengadaanSetujuDisposisiKadisnav')->name('kasie-pengadaan-setuju-disposisi-kadisnav');
         Route::post('/bendahara-materil-setuju/{id}', 'ApprovalController@bendaharaMaterilSetuju')->name('bendahara-materil-setuju');
         Route::post('/staff-seksi-pengadaan-setuju/{id}', 'ApprovalController@staffSeksiPengadaanSetuju')->name('staff-seksi-pengadaan-setuju');
         Route::post('/pengelola-gudang-siap/{id}', 'ApprovalController@pengelolaGudangSiap')->name('pengelola-gudang-siap');

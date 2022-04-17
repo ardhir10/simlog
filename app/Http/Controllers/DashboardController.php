@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\BarangKeluar;
+use App\BarangMasuk;
+use App\BarangPersediaan;
 use App\LaporanPengawasan;
 use App\MenaraSuar;
 use App\PelampungSuar;
@@ -20,7 +23,32 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
+        $dataChart = BarangPersediaan::distinct('kategori_barang_id')->get();
 
+        $kategori = [];
+        $saldo = [];
+        foreach ($dataChart as $key => $dc) {
+            $barangMasuk = BarangMasuk::where('barang_id', $dc->id)->get();
+            $barangKeluar = BarangKeluar::where('barang_keluar_id', $dc->id)->get();
+
+
+            $totalBarangMasuk = 0;
+            foreach ($barangMasuk as $key => $value) {
+                $totalBarangMasuk += $value->harga_perolehan * $value->jumlah;
+            }
+
+            $totalBarangKeluar = 0;
+            foreach ($barangKeluar as $key => $value) {
+                $totalBarangKeluar += $value->harga_perolehan * $value->jumlah;
+            }
+            $total = $totalBarangMasuk - $totalBarangKeluar;
+
+            $saldo[] = $total;
+            $kategori[] = $dc->kategori_barang->nama_kategori;
+        }
+
+        $data['kategori']= $kategori;
+        $data['saldo']= $saldo;
 
 
 
@@ -63,7 +91,6 @@ class DashboardController extends Controller
                 }
                 $dataBulan[] = date('Y-') .date('m-').$i;
             }
-
         }
 
 
