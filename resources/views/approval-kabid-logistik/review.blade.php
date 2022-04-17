@@ -491,7 +491,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN DISPOSISI</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -526,7 +526,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN SETUJUI</button>
+                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">LANJUTKAN DISPOSISI</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->

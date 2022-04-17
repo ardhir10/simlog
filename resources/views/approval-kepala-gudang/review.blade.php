@@ -445,7 +445,7 @@
                     @csrf
 
                     <div class="modal-body">
-                        {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
+                        <p class="text-center">Dengan menekan tombol ini , maka Pengelola Gudang Telah memastikan barang yang diminta telah disiapkan dan siap untuk diambil oleh Kurir/Pengguna </p>
 
                         <div class="form-group">
                             <label for="">Keterangan</label>
@@ -475,7 +475,7 @@
                     @csrf
 
                     <div class="modal-body">
-                        <p class="text-center">Dengan menekan tombol ini maka barang akan diserahkan ke peminta </p>
+                        <p class="text-center">Dengan menekan tombol ini , maka pengelola gudang mengkonfirmasi bahwa barang telah diserahkan kepada Kurir/Pengguna </p>
 
 
                     </div>

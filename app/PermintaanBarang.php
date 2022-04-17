@@ -120,6 +120,7 @@ class PermintaanBarang extends Model
 
         return $kode;
     }
+
     public function bagianBidang(){
         $roleName = $this->user->role->name ?? null;
         if (
@@ -147,6 +148,40 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Inventaris'
         ) {
             $kode = 'Bidang Logistik';
+        } else {
+            $kode = 'NONUSER';
+        }
+
+        return $kode;
+    }
+    public function kepalaBagiannya()
+    {
+        $roleName = $this->user->role->name ?? null;
+        if (
+            $roleName == 'Kepala Distrik Navigasi' ||
+            $roleName == 'Kabag Tata Usaha' ||
+            $roleName == 'Subbag Kepegawaian dan Umum' ||
+            $roleName == 'Subbag Keuangan'
+        ) {
+            $kode = User::where('role_id', 33)->first();
+        } else if (
+            $roleName == 'Kabid Operasi' ||
+            $roleName == 'Seksi Program' ||
+            $roleName == 'Seksi Sarana Prasarana' ||
+            $roleName == 'Nakhoda' ||
+            $roleName == 'Kepala VTS' ||
+            $roleName == 'Kepala SROP' ||
+            $roleName == 'Kepala Kelompok Pengamatan Laut' ||
+            $roleName == 'Kepala Kelompok Bengkel' ||
+            $roleName == 'Kepala Kelompok SBNP'
+        ) {
+            $kode = User::where('role_id', 34)->first();
+        } else if (
+            $roleName == 'Kabid Logistik' ||
+            $roleName == 'Seksi Pengadaan' ||
+            $roleName == 'Seksi Inventaris'
+        ) {
+            $kode = User::where('role_id', 35)->first();
         } else {
             $kode = 'NONUSER';
         }

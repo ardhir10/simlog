@@ -167,7 +167,7 @@ class ApiDashboardController extends Controller
         $total =0;
         foreach ($permintaanBarang as $key => $value) {
             foreach ($value->barang_diminta as $key => $v) {
-                $total += $v->jumlah;
+                $total += 1;
             }
         }
         $data['total'] = $total;
@@ -192,7 +192,7 @@ class ApiDashboardController extends Controller
         $total = 0;
         foreach ($permintaanBarang as $key => $value) {
             foreach ($value->barang_diminta as $key => $v) {
-                $total += $v->jumlah;
+                $total += 1;
             }
         }
         $data['total'] = $total;

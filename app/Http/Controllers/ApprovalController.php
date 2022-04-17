@@ -284,9 +284,15 @@ class ApprovalController extends Controller
             ->where('role_to_name', 'Kasie Pengadaan')
             ->where('status','done')
             ->where('kategori','PERSETUJUAN')
-            ->where('from_kadisnav', '!=', 'DISPOSISI')
+            ->where(function($q){
+                $q->where('from_kadisnav', 'not like', 'DISPOSISI')
+                ->orwhereNull('from_kadisnav');
+            })
             ->orderBy('id', 'desc')
             ->first();
+
+
+
 
             // update approval sebelumnya
             ApprovalProcess::where('permintaan_barang_id', $id)
@@ -748,7 +754,10 @@ class ApprovalController extends Controller
         ->where('role_to_name', 'Kasie Pengadaan')
         ->where('status', 'done')
         ->where('kategori', 'PERSETUJUAN')
-        ->where('from_kadisnav','!=', 'DISPOSISI')
+            ->where(function ($q) {
+                $q->where('from_kadisnav', 'not like', 'DISPOSISI')
+                    ->orwhereNull('from_kadisnav');
+            })
         ->orderBy('id', 'desc')
             ->first();
 

@@ -471,7 +471,7 @@
 
                     <div class="modal-body">
                         <p class="text-center">
-                            Dengan menekan tombol lanjutkan , anda sebagai Perminta barang melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
+                            Dengan menekan tombol lanjutkan , anda sebagai Kurir melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
                         </p>
 
 
