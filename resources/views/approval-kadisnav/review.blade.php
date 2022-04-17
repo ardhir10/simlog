@@ -102,12 +102,12 @@
                                         <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">TINDAK LANJUT</button>
                                         <span class="d-block">Anda Belum memberikan tindak lanjut terhadap Permintaan Barang ini. Harap berikan tindak lanjut dengan menekan tombol tindak lanjut diatas.</span>
                                     @else
-                                        @if (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'SETUJUI')
-                                            <h1 class="text-success">DISETUJUI</h1>
-                                        @else
+                                        @if (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'SETUJUI' || optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'UPDATE')
+                                        <h1 class="text-success">DISETUJUI</h1>
+                                        @elseif (optional($data->lastProcess(Auth::user()->role->name))->tindak_lanjut == 'TOLAK')
                                             <h1 class="text-danger">DITOLAK</h1>
                                         @endif
-                                        <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button>
+                                        {{-- <button class="btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#myModalUpdate" disabled>EDIT TINDAK LANJUT</button> --}}
                                     @endif
 
                                 </div>
@@ -142,19 +142,26 @@
                                             </div>
 
                                             @foreach ($data->timeline as $apv)
-                                                @if ($apv->status == 'done')
-                                                @php
-                                                $class = 'event-list';
-                                                @endphp
-                                                @elseif ($apv->status == 'reject')
-                                                @php
-                                                $class = 'event-list-reject';
-                                                @endphp
+                                                @if ($apv->tindak_lanjut == 'TOLAK')
+                                                    @php
+                                                    $class = 'event-list-reject';
+                                                    @endphp
                                                 @else
-                                                @php
-                                                $class = 'event-list-pending';
-                                                @endphp
+                                                    @if ($apv->status == 'done')
+                                                        @php
+                                                        $class = 'event-list';
+                                                        @endphp
+                                                        @elseif ($apv->status == 'reject')
+                                                        @php
+                                                        $class = 'event-list-reject';
+                                                        @endphp
+                                                        @else
+                                                        @php
+                                                        $class = 'event-list-pending';
+                                                        @endphp
+                                                    @endif
                                                 @endif
+
                                                 <div class="swiper-slide" style="">
                                                     <div class="{{$class}} text-start">
                                                         <h5 class="font-size-14 mb-1 fw-bold mt-3">{{$apv->type}}
@@ -333,13 +340,31 @@
                                                     </div>
                                                 </div>
                                             @endif
+                                             @if ($data->nomor_bast)
+                                                <div class="col-lg-3">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <img height="65" src="{{asset('assets/images/icon/file.png')}}"
+                                                                alt="">
+                                                        </div>
+                                                        <div>
+                                                            <span class="d-block"
+                                                                style="font-size:20px;font-weight:bold;">BAST</span>
+                                                            <a href="{{route('permintaan-barang.upp4',$data->id)}}"
+                                                                target="_blank">
+                                                                <button class="btn btn-sm btn-success">Download</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- PERSETUJUAN --}}
+                       {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">
                             <div class="col-lg-12">
@@ -347,33 +372,37 @@
                                     <div class="card-body ">
                                         <h3 class="fw-bold">PERSETUJUAN</h3>
                                         <div class="row ">
-                                            @foreach ($data->approvals->where('kategori','PERSETUJUAN')->where('step','!=',4) as $appvs)
-                                                <div class="col-lg-12">
-                                                    <div class="card" style="border: 1px solid">
-                                                        <div class="card-body p-4">
-                                                            <p class="text-muted">
-                                                                {{date('d F T',strtotime($appvs->timestamp))}} ||
-                                                                {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                            @if ($appvs->role_to_name=='Kepala Distrik Navigasi')
-                                                                <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
-                                                                <span class="d-block mb-2">Keterangan :</span>
-                                                                <span>{{$appvs->keterangan}}</span>
-
-                                                            @elseif($appvs->step == 5)
-                                                                <span class="d-block mb-2">Kepala Gudang Menyerahkan Barang</span>
-                                                            @elseif($appvs->step == 6)
-                                                                <span class="d-block mb-2">Barang Diterima Oleh {{$data->user->name}}</span>
-                                                            @else
-                                                                <span class="d-block mb-2">Pesanan sudah disiapkan  {{$appvs->role_to_name}}</span>
-                                                                <span class="d-block mb-2">Keterangan :</span>
-                                                                <span>{{$appvs->keterangan}}</span>
-                                                            @endif
+                                            @foreach ($data->approvals as $appvs)
+                                                @if ($appvs->kategori == 'PERSETUJUAN')
+                                                    <div class="col-lg-12">
+                                                        <div class="card" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    {{-- <span class="fw-bold d-block">Dari : {{$appvs->user->name ?? 'N/A'}} ({{$appvs->user->role->name ?? 'N/A'}})</span> --}}
+                                                                    {{-- <span class="fw-bold d-block">Ke : {{$appvs->role_to_name ?? 'N/A'}} </span> --}}
+                                                                    <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-
-                                                </div>
+                                                @elseif ($appvs->kategori == 'DISPOSISI')
+                                                    <div class="col-lg-12">
+                                                        <div class="card bg-warning" style="border: 1px solid">
+                                                            <div class="card-body p-4">
+                                                                <p class="text-muted">
+                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    <span class="d-block mb-2">Disposisi Kepada {{$appvs->role_to_name}}</span>
+                                                                    <span class="d-block mb-2">Keterangan :</span>
+                                                                    <span>{{$appvs->keterangan}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             @endforeach
-
                                         </div>
                                     </div>
                                 </div>
@@ -396,7 +425,7 @@
 <div>
     <!-- sample modal content -->
     <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Tindak Lanjut</h5>
@@ -404,17 +433,52 @@
 
                     </button>
                 </div>
+
                 <form action="{{route('approval.tindak-lanjut',$data->id)}}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-4">
                             <label for=""></label>
-                            <select name="tindak_lanjut" class="form-select" id="">
+                            <select name="tindak_lanjut" class="form-select" id="tidakLanjut">
                                 <option value="SETUJUI">SETUJUI</option>
                                 <option value="TOLAK">TOLAK</option>
-                                <option value="REVIEW">REVIEW</option>
+                                <option value="DISPOSISI">DISPOSISI</option>
                                 <option value="UPDATE">UPDATE</option>
                             </select>
+                        </div>
+                        <div class="form-group mb-4 d-none" id="disposisiKe">
+                            <label for="">Disposisi Ke :</label>
+                            <select name="disposisi_ke" class="form-select" >
+                                <option value="Kabid Logistik">Kabid Logistik</option>
+                                <option value="Kabid Operasi">Kabid Operasi</option>
+                                <option value="Kabag Tata Usaha">Kabag Tata Usaha</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive d-none" id="updateJumlahBarang">
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>nama Barang</th>
+                                        <th>Kode Barang</th>
+                                        <th>Jumah</th>
+                                        <th>Jumlah DIsetujui</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data->barang_diminta as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->barang->nama_barang?? 'N/A'}}</td>
+                                            <td>{{$item->barang->kode_barang?? 'N/A'}}</td>
+                                            <td>{{$item->jumlah}}</td>
+                                            <td><input name="jumlah_disetujui[{{$item->id}}]" type="number" step="0.01" value="{{$item->jumlah}}"></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+
                         </div>
                         <div class="form-group">
                             <label for="">Keterangan</label>
@@ -484,6 +548,18 @@
 
     });
 
+    $('#tidakLanjut').on('change',function(){
+        if(this.value =='UPDATE'){
+            $('#updateJumlahBarang').removeClass('d-none');
+        }else{
+            $('#updateJumlahBarang').addClass('d-none');
+        }
+        if(this.value =='DISPOSISI'){
+            $('#disposisiKe').removeClass('d-none');
+        }else{
+            $('#disposisiKe').addClass('d-none');
+        }
+    })
     $(".clickable-row").click(function () {
         window.location = $(this).data("href");
     });

@@ -6356,6 +6356,53 @@ body[data-layout-mode=dark] .hori-timeline .event-list-pending:after {
 }
 /* =========== EVENT LIST PENDING */
 
+/* =========== EVENT LIST REJECT */
+.hori-timeline .event-list-reject {
+    position: relative;
+    text-align: center;
+    padding: 24px
+}
+
+.hori-timeline .event-list-reject::before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    left: 0;
+    top: 7px;
+    background-color: #DD132D
+}
+
+.hori-timeline .event-list-reject:after {
+    content: "";
+    position: absolute;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: #DD132D;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    top: -7px !important;
+    left: 7% !important;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    display: block
+}
+
+body[data-layout-mode=dark] .hori-timeline .event-list-reject:after {
+    border: 5px solid rgba(4, 58, 90, .8)
+}
+.hori-timeline.timeline-card .event-list-reject::after {
+    display: none
+}
+
+.hori-timeline.timeline-card .event-list-reject::before {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: -1
+}
+/* =========== EVENT LIST REJECT */
+
 .hori-timeline .swiper-button-next:after,
 .hori-timeline .swiper-button-prev:after {
     font-size: 16px
@@ -6566,8 +6613,8 @@ body[data-layout-mode=dark] .hori-timeline .event-list-pending:after {
     left: -55px
 }
 
-[dir=rtl] .hori-timeline .swiper-wrapper {
-    direction: rtl
+[dir=ltr] .hori-timeline .swiper-wrapper {
+    direction: ltr
 }
 
 @media (min-width:768px) {

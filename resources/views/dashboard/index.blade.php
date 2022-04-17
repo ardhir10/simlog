@@ -145,29 +145,65 @@
                 <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
                     <div class="card-body p-3">
                         <div class="d-block mb-3">
-                            <h3 class="text-dashboard fw-bolder">Nilai Barang Masuk</h3>
+                            <h5 class="text-dashboard fw-bolder">Nilai Barang Masuk</h5>
                             <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;">365.000.000</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBarangMasuk">-</span>
                         </div>
                         <div class="d-block text-end">
                             <div class="form-group">
-                                <select name="" class="" id="">
-                                    <option value="">Januari</option>
-                                    <option value="">Februari</option>
-                                    <option value="">Maret</option>
-                                    <option value="">April</option>
-                                    <option value="">Mei</option>
-                                    <option value="">Juni</option>
-                                    <option value="">Juli</option>
-                                    <option value="">Agustus</option>
-                                    <option value="">September</option>
-                                    <option value="">Oktober</option>
-                                    <option value="">November</option>
-                                    <option value="">Desember</option>
+                                <select name="" class="barangmasuk-daterange" id="barangMasukBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
                                 </select>
-                                <select name="" class="form-sekect" id="">
-                                    <option value="">2022</option>
-                                    <option value="">2021</option>
+                                <select name="" class="barangmasuk-daterange" id="barangMasukTahun">
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h5 class="text-dashboard fw-bolder">Nilai Barang Keluar</h5>
+                            <span>IDR</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBarangKeluar">-</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="barangkeluar-daterange" id="barangKeluarBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                                <select name="" class="barangkeluar-daterange" id="barangKeluarTahun">
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
                                 </select>
 
                             </div>
@@ -179,29 +215,30 @@
                 <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
                     <div class="card-body p-3">
                         <div class="d-block mb-3">
-                            <h3 class="text-dashboard fw-bolder">Nilai Barang Keluar</h3>
+                            <h5 class="text-dashboard fw-bolder">Saldo Barang Persediaan</h5>
                             <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;">180.330.750</span>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiSaldoBarang">-</span>
                         </div>
                         <div class="d-block text-end">
                             <div class="form-group">
-                                <select name="" class="" id="">
-                                    <option value="">Januari</option>
-                                    <option value="">Februari</option>
-                                    <option value="">Maret</option>
-                                    <option value="">April</option>
-                                    <option value="">Mei</option>
-                                    <option value="">Juni</option>
-                                    <option value="">Juli</option>
-                                    <option value="">Agustus</option>
-                                    <option value="">September</option>
-                                    <option value="">Oktober</option>
-                                    <option value="">November</option>
-                                    <option value="">Desember</option>
+                                <select name="" class="saldobarang-daterange" id="saldoBarangBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
                                 </select>
-                                <select name="" class="form-sekect" id="">
-                                    <option value="">2022</option>
-                                    <option value="">2021</option>
+                                <select name="" class="saldobarang-daterange" id="saldoBarangTahun">
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
                                 </select>
 
                             </div>
@@ -209,40 +246,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
-                    <div class="card-body p-3">
-                        <div class="d-block mb-3">
-                            <h3 class="text-dashboard fw-bolder">Saldo Barang Persediaan</h3>
-                            <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;">976.489.000</span>
-                        </div>
-                        <div class="d-block text-end">
-                            <div class="form-group">
-                                <select name="" class="" id="">
-                                    <option value="">Januari</option>
-                                    <option value="">Februari</option>
-                                    <option value="">Maret</option>
-                                    <option value="">April</option>
-                                    <option value="">Mei</option>
-                                    <option value="">Juni</option>
-                                    <option value="">Juli</option>
-                                    <option value="">Agustus</option>
-                                    <option value="">September</option>
-                                    <option value="">Oktober</option>
-                                    <option value="">November</option>
-                                    <option value="">Desember</option>
-                                </select>
-                                <select name="" class="form-sekect" id="">
-                                    <option value="">2022</option>
-                                    <option value="">2021</option>
-                                </select>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="row">
@@ -260,72 +264,161 @@
                     <div class="col-lg-12">
                         <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
                             <div class="card-body p-3">
-                                <div class="d-block mb-1">
-                                    <h3 class="text-dashboard fw-bolder">Permintaan Disetujui</h3>
-                                    <span style="font-size: 4vw;font-weight:bold;">34</span>
+                                <div class="d-block mb-3">
+                                    <h5 class="text-dashboard fw-bolder">Permintaan Disetujui</h5>
+                                    <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDisetujui">-</span>
                                 </div>
                                 <div class="d-block text-end">
                                     <div class="form-group">
-                                        <select name="" class="" id="">
-                                            <option value="">Januari</option>
-                                            <option value="">Februari</option>
-                                            <option value="">Maret</option>
-                                            <option value="">April</option>
-                                            <option value="">Mei</option>
-                                            <option value="">Juni</option>
-                                            <option value="">Juli</option>
-                                            <option value="">Agustus</option>
-                                            <option value="">September</option>
-                                            <option value="">Oktober</option>
-                                            <option value="">November</option>
-                                            <option value="">Desember</option>
+                                        <select name="" class="permintaandisetujui-daterange" id="permintaanDisetujuiBulan">
+                                            <option value="all">All</option>
+                                            <option value="01">Januari</option>
+                                            <option value="02">Februari</option>
+                                            <option value="03">Maret</option>
+                                            <option value="04">April</option>
+                                            <option value="05">Mei</option>
+                                            <option value="06">Juni</option>
+                                            <option value="07">Juli</option>
+                                            <option value="08">Agustus</option>
+                                            <option value="09">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
                                         </select>
-                                        <select name="" class="form-sekect" id="">
-                                            <option value="">2022</option>
-                                            <option value="">2021</option>
+                                        <select name="" class="permintaandisetujui-daterange" id="permintaanDisetujuiTahun">
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
                                         </select>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                     <div class="col-lg-12">
-                        <div class="card bg-danger text-white" style="border:1px solid;">
+                        <div class="card bg-danger text-dashboard" style="border:1px solid;">
                             <div class="card-body p-3">
-                                <div class="d-block mb-1">
-                                    <h3 class="text-white fw-bolder">Permintaan Ditolak</h3>
-                                    <span style="font-size: 4vw;font-weight:bold;">11</span>
+                                <div class="d-block mb-3">
+                                    <h5 class="text-dashboard fw-bolder">Permintaan Ditolak</h5>
+                                    <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDitolak">-</span>
                                 </div>
                                 <div class="d-block text-end">
                                     <div class="form-group">
-                                        <select name="" class="" id="">
-                                            <option value="">Januari</option>
-                                            <option value="">Februari</option>
-                                            <option value="">Maret</option>
-                                            <option value="">April</option>
-                                            <option value="">Mei</option>
-                                            <option value="">Juni</option>
-                                            <option value="">Juli</option>
-                                            <option value="">Agustus</option>
-                                            <option value="">September</option>
-                                            <option value="">Oktober</option>
-                                            <option value="">November</option>
-                                            <option value="">Desember</option>
+                                        <select name="" class="permintaanditolak-daterange" id="permintaanDitolakBulan">
+                                            <option value="all">All</option>
+                                            <option value="01">Januari</option>
+                                            <option value="02">Februari</option>
+                                            <option value="03">Maret</option>
+                                            <option value="04">April</option>
+                                            <option value="05">Mei</option>
+                                            <option value="06">Juni</option>
+                                            <option value="07">Juli</option>
+                                            <option value="08">Agustus</option>
+                                            <option value="09">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
                                         </select>
-                                        <select name="" class="form-sekect" id="">
-                                            <option value="">2022</option>
-                                            <option value="">2021</option>
+                                        <select name="" class="permintaanditolak-daterange" id="permintaanDitolakTahun">
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
                                         </select>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-4">
+                            <h5 class="text-dashboard fw-bolder">Permintaan Dalam Proses</h5>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDalamproses">-</span>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h5 class="text-dashboard fw-bolder">Barang Yang Telah Didistribusikan</h5>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiDistribusi">-</span>
+                            <span>Item Barang</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="distribusi-daterange" id="distribusiBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                                <select name="" class="distribusi-daterange" id="distribusiTahun">
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card bg-warning text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <div class="d-block mb-3">
+                            <h5 class="text-dashboard fw-bolder">Barang Yang Belum Didistribusikan</h5>
+                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBelumDistribusi">-</span>
+                            <span>Item Barang</span>
+                        </div>
+                        <div class="d-block text-end">
+                            <div class="form-group">
+                                <select name="" class="belumdistribusi-daterange" id="belumdistribusiBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                                <select name="" class="belumdistribusi-daterange" id="belumdistribusiTahun">
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     @endsection
@@ -352,14 +445,17 @@
         option = {
         xAxis: {
             type: 'category',
-            data: ['Bahan Baku', 'Suku Cadang', 'Komaliwan', 'Berjaga-Jga', 'Lain-Lain']
+            data: @json($kategori)
         },
         yAxis: {
             type: 'value'
         },
+        tooltip:{
+          show:true
+        },
         series: [
             {
-            data: [380000000, 600000000, 560000000, 690000000, 600000000],
+            data: @json($saldo),
             type: 'bar'
             }
         ]
@@ -368,6 +464,113 @@
         option && myChart.setOption(option);
 
 
+        $('.barangmasuk-daterange').on('change',function(){
+            getBarangMasuk();
+        })
+        getBarangMasuk()
+        async function getBarangMasuk(){
+            let year = $('#barangMasukTahun').val();
+            let month = $('#barangMasukBulan').val();
+            let resp = await axios.post(@json(route('api.nilai-barang-masuk')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiBarangMasuk').text(resp.data.total)
+        }
+
+        $('.barangkeluar-daterange').on('change',function(){
+            getBarangKeluar();
+        })
+        getBarangKeluar()
+        async function getBarangKeluar(){
+            let year = $('#barangKeluarTahun').val();
+            let month = $('#barangKeluarBulan').val();
+            let resp = await axios.post(@json(route('api.nilai-barang-keluar')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiBarangKeluar').text(resp.data.total)
+        }
+
+
+        $('.saldobarang-daterange').on('change',function(){
+            getSaldoBarang();
+        })
+        getSaldoBarang()
+        async function getSaldoBarang(){
+            let year = $('#saldoBarangTahun').val();
+            let month = $('#saldoBarangBulan').val();
+            let resp = await axios.post(@json(route('api.saldo-barang')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiSaldoBarang').text(resp.data.total)
+        }
+
+
+        $('.permintaandisetujui-daterange').on('change',function(){
+            getPermintaanDisetujui();
+        })
+        getPermintaanDisetujui()
+        async function getPermintaanDisetujui(){
+            let year = $('#permintaanDisetujuiTahun').val();
+            let month = $('#permintaanDisetujuiBulan').val();
+            let resp = await axios.post(@json(route('api.permintaan-disetujui')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiPermintaanDisetujui').text(resp.data.total)
+        }
+
+
+        $('.permintaanditolak-daterange').on('change',function(){
+            getPermintaanDitolak();
+        })
+        getPermintaanDitolak()
+        async function getPermintaanDitolak(){
+            let year = $('#permintaanDitolakTahun').val();
+            let month = $('#permintaanDitolakBulan').val();
+            let resp = await axios.post(@json(route('api.permintaan-ditolak')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiPermintaanDitolak').text(resp.data.total)
+        }
+
+        getPermintaandalamProses()
+        async function getPermintaandalamProses(){
+            let resp = await axios.post(@json(route('api.permintaan-dalamproses')));
+            $('#nilaiPermintaanDalamproses').text(resp.data.total)
+        }
+
+
+        $('.distribusi-daterange').on('change',function(){
+            getDistribusi();
+        })
+        getDistribusi()
+        async function getDistribusi(){
+            let year = $('#distribusiTahun').val();
+            let month = $('#distribusiBulan').val();
+            let resp = await axios.post(@json(route('api.nilai-distribusi')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiDistribusi').text(resp.data.total)
+        }
+
+        $('.belumdistribusi-daterange').on('change',function(){
+            getBelumDistribusi();
+        })
+        getBelumDistribusi()
+        async function getBelumDistribusi(){
+            let year = $('#belumdistribusiTahun').val();
+            let month = $('#belumdistribusiBulan').val();
+            let resp = await axios.post(@json(route('api.nilai-belumdistribusi')),{
+                year:year,
+                month:month
+            });
+            $('#nilaiBelumDistribusi').text(resp.data.total)
+        }
     </script>
 
 

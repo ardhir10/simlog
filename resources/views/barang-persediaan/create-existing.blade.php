@@ -1,22 +1,41 @@
 <div class="row mb-3">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>Kategori Barang</strong></label>
             <select name="kategori_barang_id" class="form-select select2" required>
                 <option value="">-- PILIH KATEGORI BARANG</option>
-                @foreach ($kategori_barang as $item)
-                    <option value="{{$item->id}}">({{$item->kode_kategori}}) {{$item->nama_kategori}} </option>
+                @foreach ($kategori_barang->where('parent_id',null) as $item)
+                    <option value="{{$item->id}}" style="font-weight: bold"><strong>({{$item->kode_kategori}}) {{$item->nama_kategori}} </strong> </option>
+                    @foreach ($kategori_barang->where('parent_id',$item->id) as $item)
+                        <option value="{{$item->id}}">&nbsp;&nbsp;&nbsp;&nbsp;({{$item->kode_kategori}}) {{$item->nama_kategori}} </option>
+                    @endforeach
                 @endforeach
             </select>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for=""><strong>Peruntukkan</strong></label>
+            <select name="sub_sub_kategori" class="form-select select2" required>
+                <option value="01">(01) Umum</option>
+                <option value="02">(02) Tata Usaha</option>
+                <option value="03">(03) Logistik</option>
+                <option value="04">(04) Telkompel</option>
+                <option value="05">(05) KNK</option>
+                <option value="06">(06) SBNP</option>
+                <option value="07">(07) Pengamatan Laut</option>
+                <option value="08">(08) Bengkel</option>
+
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>Nama Barang</strong></label>
             <input type="text" class="form-control" name="nama_barang">
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>kode Barang</strong></label>
             <input type="text" class="form-control" name="kode_barang">
@@ -54,6 +73,7 @@
                 <option value="">-- PILIH SATUAN</option>
                 @foreach ($satuan as $item)
                     <option value="{{$item->id}}">{{$item->nama_satuan}} </option>
+
                 @endforeach
             </select>
         </div>

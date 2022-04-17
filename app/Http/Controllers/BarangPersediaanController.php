@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\BarangMasuk;
 use App\BarangPersediaan;
 use App\KategoriBarang;
 use App\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 
@@ -48,6 +50,7 @@ class BarangPersediaanController extends Controller
         $dataInsert['kategori_barang_id'] = $request->kategori_barang_id;
         $dataInsert['nama_barang'] = $request->nama_barang;
         $dataInsert['kode_barang'] = $request->kode_barang;
+        $dataInsert['sub_sub_kategori'] = $request->sub_sub_kategori;
 
 
 
@@ -79,11 +82,25 @@ class BarangPersediaanController extends Controller
 
         // --- HANDLE PROCESS
         try {
-            BarangPersediaan::create(
+            DB::beginTransaction();
+            $barang = BarangPersediaan::create(
                 $dataInsert
             );
+            BarangMasuk::create([
+                'timestamp' => date('Y-m-d H:i:s'),
+                'barang_id' => $barang->id,
+                'permintaan_id' => 0,
+                'harga_perolehan' => $dataInsert['harga_perolehan'],
+                'jumlah' => $dataInsert['jumlah'] = $request->jumlah,
+                'tahun_perolehan' => $dataInsert['tahun_perolehan'],
+                'sub_sub_kategori' => $dataInsert['sub_sub_kategori'],
+            ]);
+            DB::commit();
+
             return redirect()->route('barang-persediaan.index')->with(['success' => 'Data berhasil dibuat !']);
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             return redirect()->route('barang-persediaan.index')->with(['failed' => $th->getMessage()]);
         }
     }
@@ -97,6 +114,7 @@ class BarangPersediaanController extends Controller
         $dataInsert['kategori_barang_id'] = $request->kategori_barang_id;
         $dataInsert['nama_barang'] = $request->nama_barang;
         $dataInsert['kode_barang'] = $request->kode_barang;
+        $dataInsert['sub_sub_kategori'] = $request->sub_sub_kategori;
 
 
 

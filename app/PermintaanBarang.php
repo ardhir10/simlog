@@ -12,6 +12,9 @@ class PermintaanBarang extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+    public function laporanDistribusi(){
+        return $this->hasOne(LaporanDistribusi::class, 'permintaan_barang_id','id');
+    }
 
     public function lastProcess($role = ''){
         if($role){
@@ -24,6 +27,32 @@ class PermintaanBarang extends Model
             ->orderBy('id','desc')
             ->first();
         }
+    }
+    public function fromKadisnav(){
+        return $process = ApprovalProcess::where('permintaan_barang_id', $this->id)
+            ->where('from_kadisnav', '!=', null)
+            ->orderBy('id', 'desc')
+            ->first()->from_kadisnav ?? null;
+    }
+    public function lastApproval(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','PERSETUJUAN')
+            ->orderBy('id','desc')
+            ->first();
+    }
+    public function isNeedApprove(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','APPROVAL')
+            ->where('status', '!=', 'done')
+            ->orderBy('id','desc')
+            ->first();
+    }
+    public function isNeedApproveDisposisi(){
+            return $process = ApprovalProcess::where('permintaan_barang_id',$this->id)
+            ->where('kategori','DISPOSISI')
+            ->where('status','!=','done')
+            ->orderBy('id','desc')
+            ->first();
     }
     public function isTindakLanjut($step = 1){
         return $process = ApprovalProcess::where('step','>',$step)
@@ -45,7 +74,7 @@ class PermintaanBarang extends Model
         $roleName = $this->user->role->name ?? null;
         if ($roleName == 'Nakhoda') {
             $kode = $this->user->kapalNegara->nama_kapal ?? null;
-        } else if ($roleName == 'Manager VTS') {
+        } else if ($roleName == 'Kepala VTS') {
             $kode = $this->user->vts->nama_stasiun_vts ?? null;
 
         } else if ($roleName == 'Kepala SROP') {
@@ -91,6 +120,7 @@ class PermintaanBarang extends Model
 
         return $kode;
     }
+
     public function bagianBidang(){
         $roleName = $this->user->role->name ?? null;
         if (
@@ -105,7 +135,7 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Program' ||
             $roleName == 'Seksi Sarana Prasarana' ||
             $roleName == 'Nakhoda' ||
-            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala VTS' ||
             $roleName == 'Kepala SROP' ||
             $roleName == 'Kepala Kelompok Pengamatan Laut' ||
             $roleName == 'Kepala Kelompok Bengkel' ||
@@ -118,6 +148,40 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Inventaris'
         ) {
             $kode = 'Bidang Logistik';
+        } else {
+            $kode = 'NONUSER';
+        }
+
+        return $kode;
+    }
+    public function kepalaBagiannya()
+    {
+        $roleName = $this->user->role->name ?? null;
+        if (
+            $roleName == 'Kepala Distrik Navigasi' ||
+            $roleName == 'Kabag Tata Usaha' ||
+            $roleName == 'Subbag Kepegawaian dan Umum' ||
+            $roleName == 'Subbag Keuangan'
+        ) {
+            $kode = User::where('role_id', 33)->first();
+        } else if (
+            $roleName == 'Kabid Operasi' ||
+            $roleName == 'Seksi Program' ||
+            $roleName == 'Seksi Sarana Prasarana' ||
+            $roleName == 'Nakhoda' ||
+            $roleName == 'Kepala VTS' ||
+            $roleName == 'Kepala SROP' ||
+            $roleName == 'Kepala Kelompok Pengamatan Laut' ||
+            $roleName == 'Kepala Kelompok Bengkel' ||
+            $roleName == 'Kepala Kelompok SBNP'
+        ) {
+            $kode = User::where('role_id', 34)->first();
+        } else if (
+            $roleName == 'Kabid Logistik' ||
+            $roleName == 'Seksi Pengadaan' ||
+            $roleName == 'Seksi Inventaris'
+        ) {
+            $kode = User::where('role_id', 35)->first();
         } else {
             $kode = 'NONUSER';
         }
@@ -140,7 +204,7 @@ class PermintaanBarang extends Model
             $roleName == 'Seksi Program' ||
             $roleName == 'Seksi Sarana Prasarana' ||
             $roleName == 'Nakhoda' ||
-            $roleName == 'Manager VTS' ||
+            $roleName == 'Kepala VTS' ||
             $roleName == 'Kepala SROP' ||
             $roleName == 'Kepala Kelompok Pengamatan Laut' ||
             $roleName == 'Kepala Kelompok Bengkel' ||

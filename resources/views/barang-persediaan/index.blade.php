@@ -40,10 +40,10 @@
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Kategori</th>
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Nama Barang</th>
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Kode Barang</th>
-                                <th class="td-head" width="20%">Tahun Perolehan</th>
+                                <th class="td-head" width="20%">Peruntukkan</th>
                                 <th class="td-head" width="20%">Jumlah</th>
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Harga Perolehan</th>
-                                <th class="td-head" width="20%" style="white-space: nowrap;">Masa Simpan</th>
+                                {{-- <th class="td-head" width="20%" style="white-space: nowrap;">Masa Simpan</th> --}}
                                 <th class="td-head" width="20%">Min. Stock</th>
                             </tr>
                         </thead>
@@ -67,10 +67,10 @@
                                 <td>{{$item->kategori_barang->nama_kategori ?? 'Tidak Dalam Kategori'}}</td>
                                 <td>{{$item->nama_barang}}</td>
                                 <td>{{$item->kode_barang}}</td>
-                                <td>{{$item->tahun_perolehan}}</td>
+                                <td>{{$item->sub_sub_kategori}}</td>
                                 <td>{{$item->jumlah}} {{$item->satuan->nama_satuan ?? ''}}</td>
                                 <td>{{$item->mata_uang}} {{number_format($item->harga_perolehan,0,'.',',')}}</td>
-                                <td>{{$item->masa_simpan}} Bulan</td>
+                                {{-- <td>{{$item->masa_simpan}} Bulan</td> --}}
                                 <td>{{$item->jumlah_stok_minimal}} {{$item->satuan->nama_satuan ?? ''}}</td>
 
 

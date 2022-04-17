@@ -1,22 +1,41 @@
 <div class="row mb-3">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>Kategori Barang</strong></label>
+
             <select name="kategori_barang_id" class="form-select select2" required>
                 <option value="">-- PILIH KATEGORI BARANG</option>
-                @foreach ($kategori_barang as $item)
-                    <option {{$data->kategori_barang_id == $item->id ? 'selected=selected':''}} value="{{$item->id}}">({{$item->kode_kategori}}) {{$item->nama_kategori}} </option>
+                @foreach ($kategori_barang->where('parent_id',null) as $item)
+                    <option {{$data->kategori_barang_id == $item->id ? 'selected=selected':''}} value="{{$item->id}}" style="font-weight: bold"><strong>({{$item->kode_kategori}}) {{$item->nama_kategori}} </strong> </option>
+                    @foreach ($kategori_barang->where('parent_id',$item->id) as $item)
+                        <option {{$data->kategori_barang_id == $item->id ? 'selected=selected':''}} value="{{$item->id}}">&nbsp;&nbsp;&nbsp;&nbsp;({{$item->kode_kategori}}) {{$item->nama_kategori}} </option>
+                    @endforeach
                 @endforeach
             </select>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for=""><strong>Peruntukkan</strong></label>
+            <select name="sub_sub_kategori" class="form-select select2" required>
+                <option {{$data->sub_sub_kategori == '01' ? 'selected=selected':''}} value="01">(01) Umum</option>
+                <option {{$data->sub_sub_kategori == '02' ? 'selected=selected':''}} value="02">(02) Tata Usaha</option>
+                <option {{$data->sub_sub_kategori == '03' ? 'selected=selected':''}} value="03">(03) Logistik</option>
+                <option {{$data->sub_sub_kategori == '04' ? 'selected=selected':''}} value="04">(04) Telkompel</option>
+                <option {{$data->sub_sub_kategori == '05' ? 'selected=selected':''}} value="05">(05) KNK</option>
+                <option {{$data->sub_sub_kategori == '06' ? 'selected=selected':''}} value="06">(06) SBNP</option>
+                <option {{$data->sub_sub_kategori == '07' ? 'selected=selected':''}} value="07">(07) Pengamatan Laut</option>
+                <option {{$data->sub_sub_kategori == '08' ? 'selected=selected':''}} value="08">(08) Bengkel</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>Nama Barang</strong></label>
             <input type="text" class="form-control" name="nama_barang" value="{{$data->nama_barang}}">
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label for=""><strong>kode Barang</strong></label>
             <input type="text" class="form-control" name="kode_barang" value="{{$data->kode_barang}}">

@@ -45,7 +45,7 @@
                 @if ((Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
                 (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
                 (Auth::user()->role->name ?? null) == 'Superadmin' ||
-                (Auth::user()->role->name ?? null) == 'Kepala Gudang'
+                (Auth::user()->role->name ?? null) == 'Pengelola Gudang'
                 )
                     <li>
                         <a href="{{route('barang-persediaan.index')}}">
@@ -74,9 +74,10 @@
                 --}}
                 @if ((Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
                     (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
-                    (Auth::user()->role->name ?? null) == 'Kepala Gudang' ||
+                    (Auth::user()->role->name ?? null) == 'Pengelola Gudang' ||
                     (Auth::user()->role->name ?? null) == 'Superadmin' ||
-                    (Auth::user()->role->type ?? null) == 1
+                    (Auth::user()->role->type ?? null) == 1 ||
+                    (Auth::user()->role->type ?? null) == 3
                 )
                     <li>
                         <a href="{{route('approval.index')}}">
@@ -96,7 +97,7 @@
 
                 @if ((Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
                     (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
-                    (Auth::user()->role->name ?? null) == 'Kepala Gudang' ||
+                    (Auth::user()->role->name ?? null) == 'Pengelola Gudang' ||
                     (Auth::user()->role->name ?? null) == 'Superadmin' ||
 
                     (Auth::user()->role->type ?? null) == 1
