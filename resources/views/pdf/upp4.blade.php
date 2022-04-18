@@ -69,7 +69,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="{{asset('assets/images/icon/kemenhub.png')}}" height="130px" alt=""></td>
+                    <img src="https://simlog.disnavpriok.id/assets/images/icon/kemenhub.png" height="130px" alt=""></td>
                 </td>
                 <td style="vertical-align: top;">
                     <div style="padding-left:20px;width:100%">

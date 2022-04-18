@@ -113,12 +113,12 @@ Route::middleware('auth')->group(function () {
 
 
         // ---KATEGORI BARANG
-        Route::get('/kategori-barang', 'KategoribarangController@index')->name('kategori-barang.index');
-        Route::get('/kategori-barang/add', 'KategoribarangController@create')->name('kategori-barang.create');
-        Route::post('/kategori-barang', 'KategoribarangController@store')->name('kategori-barang.store');
-        Route::get('/kategori-barang/{id}/edit', 'KategoribarangController@edit')->name('kategori-barang.edit');
-        Route::post('/kategori-barang/{id}/update', 'KategoribarangController@update')->name('kategori-barang.update');
-        Route::get('/kategori-barang/{id}/delete', 'KategoribarangController@delete')->name('kategori-barang.delete');
+        Route::get('/kategori-barang', 'KategoriBarangController@index')->name('kategori-barang.index');
+        Route::get('/kategori-barang/add', 'KategoriBarangController@create')->name('kategori-barang.create');
+        Route::post('/kategori-barang', 'KategoriBarangController@store')->name('kategori-barang.store');
+        Route::get('/kategori-barang/{id}/edit', 'KategoriBarangController@edit')->name('kategori-barang.edit');
+        Route::post('/kategori-barang/{id}/update', 'KategoriBarangController@update')->name('kategori-barang.update');
+        Route::get('/kategori-barang/{id}/delete', 'KategoriBarangController@delete')->name('kategori-barang.delete');
 
         Route::get('/sub-kategori-barang', 'SubKategoribarangController@index')->name('sub-kategori-barang.index');
         Route::get('/sub-kategori-barang/add', 'SubKategoribarangController@create')->name('sub-kategori-barang.create');
