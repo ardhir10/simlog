@@ -137,7 +137,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => '',
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -238,7 +238,7 @@ class ApprovalController extends Controller
                     ->update([
                         'status' => 'done',
                         'tindak_lanjut' => null,
-                        'approve_by_id' => Auth::user()->id,
+
                         'keterangan' => $request->keterangan
                     ]);
 
@@ -305,7 +305,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => null,
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -404,7 +404,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => 'DISPOSISI',
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -474,7 +474,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => null,
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -535,7 +535,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => null,
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -633,7 +633,7 @@ class ApprovalController extends Controller
                 ->update([
                     'status' => 'done',
                     'tindak_lanjut' => 'DISPOSISI',
-                    'approve_by_id' => Auth::user()->id,
+
                     'keterangan' => $request->keterangan
                 ]);
 
@@ -703,7 +703,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => null,
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -781,7 +781,7 @@ class ApprovalController extends Controller
             ->update([
                 'status' => 'done',
                 'tindak_lanjut' => null,
-                'approve_by_id' => Auth::user()->id,
+
                 'keterangan' => $request->keterangan
             ]);
 
@@ -870,7 +870,7 @@ class ApprovalController extends Controller
                 ->first()
                 ->update([
                     'status' => 'done',
-                    'approve_by_id' => Auth::user()->id,
+
                 ]);
             PermintaanBarang::where('id', $id)
             ->update(['status' => 'Disetujui']);
@@ -942,7 +942,7 @@ class ApprovalController extends Controller
                 ->first()
                 ->update([
                     'status' => 'done',
-                    'approve_by_id' => Auth::user()->id,
+
                 ]);
 
 
@@ -996,7 +996,7 @@ class ApprovalController extends Controller
                 ->first()
                 ->update([
                     'status' => 'done',
-                    'approve_by_id' => Auth::user()->id,
+
                 ]);
 
 
@@ -1125,7 +1125,7 @@ class ApprovalController extends Controller
                 ->first()
                 ->update([
                     'status' => 'done',
-                    'approve_by_id' => Auth::user()->id,
+
                 ]);
 
 
@@ -1181,7 +1181,7 @@ class ApprovalController extends Controller
                 ->first()
                 ->update([
                     'status' => 'done',
-                    'approve_by_id' => Auth::user()->id,
+
                 ]);
 
 

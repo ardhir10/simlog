@@ -391,6 +391,8 @@
                                                                 <p class="text-muted">
                                                                     {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                     {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    {{-- <span class="fw-bold d-block">Dari : {{$appvs->user->name ?? 'N/A'}} ({{$appvs->user->role->name ?? 'N/A'}})</span> --}}
+                                                                    {{-- <span class="fw-bold d-block">Ke : {{$appvs->role_to_name ?? 'N/A'}} </span> --}}
                                                                     <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
                                                                     <span class="d-block mb-2">Keterangan :</span>
                                                                     <span>{{$appvs->keterangan}}</span>
@@ -398,18 +400,35 @@
                                                         </div>
                                                     </div>
                                                 @elseif ($appvs->kategori == 'DISPOSISI')
-                                                    <div class="col-lg-12">
-                                                        <div class="card bg-warning" style="border: 1px solid">
-                                                            <div class="card-body p-4">
-                                                                <p class="text-muted">
-                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
-                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                                    <span class="d-block mb-2">Disposisi Kepada {{$appvs->role_to_name}}</span>
-                                                                    <span class="d-block mb-2">Keterangan :</span>
-                                                                    <span>{{$appvs->keterangan}}</span>
+                                                    {{-- JIKA LEVELNYA ATAS KEATAS  --}}
+                                                    @if ($appvs->user->role->level < $appvs->diminta->level)
+                                                        <div class="col-lg-12">
+                                                            <div class="card bg-warning" style="border: 1px solid">
+                                                                <div class="card-body p-4">
+                                                                    <p class="text-muted">
+                                                                        {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                        {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                        <span class="d-block mb-2">{{$appvs->user->role->name}} Disposisi ke {{$appvs->diminta->name}}</span>
+                                                                        <span class="d-block mb-2">Keterangan :</span>
+                                                                        <span>{{$appvs->keterangan}}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        <div class="col-lg-12">
+                                                            <div class="card bg-warning" style="border: 1px solid">
+                                                                <div class="card-body p-4">
+                                                                    <p class="text-muted">
+                                                                        {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                        {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                        <span class="d-block mb-2">{{$appvs->user->role->name}} Meminta Arahan ke {{$appvs->diminta->name}}</span>
+                                                                        <span class="d-block mb-2">Keterangan :</span>
+                                                                        <span>{{$appvs->keterangan}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
                                                 @endif
                                             @endforeach
                                         </div>
