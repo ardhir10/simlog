@@ -19,6 +19,23 @@ class BarangPersediaan extends Model
     public function kategori_barang(){
         return $this->belongsTo(KategoriBarang::class,'kategori_barang_id','id');
     }
+    public function stokBarang(){
+        $BarangMasuk = BarangMasuk::where('barang_id',$this->id)->get()->sum('jumlah');
+        $Barangkeluar = BarangKeluar::where('barang_keluar_id',$this->id)->get()->sum('jumlah');
+        return $stock = $BarangMasuk-$Barangkeluar;
+    }
+
+    public function barangMasuk()
+    {
+        return $this->hasMany(BarangMasuk::class, 'barang_id', 'id');
+    }
+
+    public function barangKeluar()
+    {
+        return $this->hasMany(BarangKeluar::class, 'barang_keluar_id', 'id');
+    }
+
+
     public function satuan(){
         return $this->belongsTo(Satuan::class,'satuan_id','id');
     }

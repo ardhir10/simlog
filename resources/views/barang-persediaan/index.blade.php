@@ -41,7 +41,9 @@
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Nama Barang</th>
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Kode Barang</th>
                                 <th class="td-head" width="20%">Peruntukkan</th>
-                                <th class="td-head" width="20%">Jumlah</th>
+                                <th class="td-head" width="20%">Stok Tsd</th>
+                                <th class="td-head" width="20%">Stok Msk</th>
+                                <th class="td-head" width="20%">Stok Klr</th>
                                 <th class="td-head" width="20%" style="white-space: nowrap;">Harga Perolehan</th>
                                 {{-- <th class="td-head" width="20%" style="white-space: nowrap;">Masa Simpan</th> --}}
                                 <th class="td-head" width="20%">Min. Stock</th>
@@ -53,6 +55,11 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>
                                     <div class="d-flex">
+
+                                        <a href="{{route('barang-persediaan.stock-detail',$item->id)}}" data-toggle="tooltip" title="Edit Data"
+                                            class="btn btn rounded-3 btn-outline btn-outline-primary me-1">
+                                            <i class="fa fa-box"></i>
+                                        </a>
                                         <a href="{{route('barang-persediaan.edit',['id'=>$item->id,'sumber_barang'=>$item->sumber_barang])}}" data-toggle="tooltip" title="Edit Data"
                                             class="btn btn rounded-3 btn-outline btn-outline-success me-1">
                                             <i class="fa fa-edit"></i>
@@ -68,7 +75,9 @@
                                 <td>{{$item->nama_barang}}</td>
                                 <td>{{$item->kode_barang}}</td>
                                 <td>{{$item->sub_sub_kategori}}</td>
-                                <td>{{$item->jumlah}} {{$item->satuan->nama_satuan ?? ''}}</td>
+                                <td style="white-space:nowrap">{{$item->stokBarang()}} {{$item->satuan->nama_satuan ?? ''}}</td>
+                                <td>{{$item->barangMasuk->sum('jumlah')}}</td>
+                                <td>{{$item->barangkeluar->sum('jumlah')}}</td>
                                 <td>{{$item->mata_uang}} {{number_format($item->harga_perolehan,0,'.',',')}}</td>
                                 {{-- <td>{{$item->masa_simpan}} Bulan</td> --}}
                                 <td>{{$item->jumlah_stok_minimal}} {{$item->satuan->nama_satuan ?? ''}}</td>

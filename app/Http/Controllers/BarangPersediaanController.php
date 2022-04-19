@@ -21,6 +21,32 @@ class BarangPersediaanController extends Controller
         return view('barang-persediaan.index', $data);
     }
 
+    public function stockDetail($id)
+    {
+        $data['data'] = BarangPersediaan::find($id);
+        $data['page_title'] = " (". $data['data']->nama_barang.')';
+
+        return view('barang-persediaan.stock-detail', $data);
+    }
+
+    public function stockMasuk(Request $request,$id){
+        $dataBarang = BarangPersediaan::find($id);
+        try {
+            $dataInsert['barang_id'] = $id;
+            $dataInsert['timestamp'] = $request->timestamp.' '.date("H:i:s");
+            $dataInsert['jumlah'] = $request->jumlah;
+            $dataInsert['permintaan_id'] = 0;
+            $dataInsert['harga_perolehan'] = $dataBarang->harga_perolehan;
+            $dataInsert['harga_perolehan'] = $dataBarang->harga_perolehan;
+            $dataInsert['tahun_perolehan'] = $dataBarang->tahun_perolehan;
+            $dataInsert['sub_sub_kategori'] = $dataBarang->sub_sub_kategori;
+            BarangMasuk::create($dataInsert);
+            return redirect()->back()->with(['success' => 'Stok Berhasil ditambahkan !']);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with(['failed' => $th->getMessage()]);
+        }
+    }
+
     public function create()
     {
 
