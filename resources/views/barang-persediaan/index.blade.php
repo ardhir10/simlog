@@ -55,7 +55,10 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>
                                     <div class="d-flex">
-
+                                        <a href="{{route('barang-persediaan.create',['id'=>$item->id])}}" data-toggle="tooltip" title="Detail Stok"
+                                            class="btn btn rounded-3 btn-outline btn-outline-secondary me-1">
+                                            <i class="fa fa-money-bill-alt"></i>
+                                        </a>
                                         <a href="{{route('barang-persediaan.stock-detail',$item->id)}}" data-toggle="tooltip" title="Detail Stok"
                                             class="btn btn rounded-3 btn-outline btn-outline-primary me-1">
                                             <i class="fa fa-box"></i>

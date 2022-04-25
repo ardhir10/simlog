@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock-detail/{id}', 'BarangPersediaanController@stockDetail')->name('stock-detail');
         Route::get('/stock-detail/create/{id}', 'BarangPersediaanController@stockDetailCreate')->name('stock-detail-create');
         Route::post('/stock-masuk/{id}', 'BarangPersediaanController@stockMasuk')->name('stock-masuk');
+
+        Route::post('/create-diff/{id}', 'BarangPersediaanController@createDiff')->name('create-diff');
     });
 
     Route::prefix('permintaan-barang')->name('permintaan-barang.')->group(function () {

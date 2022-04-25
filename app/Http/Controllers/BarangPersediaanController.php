@@ -47,14 +47,26 @@ class BarangPersediaanController extends Controller
         }
     }
 
-    public function create()
+    public function create(Request $request)
     {
 
-        $data['page_title'] = "Tambah Barang Persediaan";
-        $data['kategori_barang'] = KategoriBarang::orderby('id', 'desc')->get();
-        $data['satuan'] = Satuan::orderby('id', 'desc')->get();
 
-        return view('barang-persediaan.create', $data);
+        if ($request->id) {
+            $data['page_title'] = "Tambah Barang Persediaan";
+            $data['kategori_barang'] = KategoriBarang::orderby('id', 'desc')->get();
+            $data['satuan'] = Satuan::orderby('id', 'desc')->get();
+            $data['data'] = BarangPersediaan::find($request->id);
+            $data['kategori_barang'] = KategoriBarang::orderby('id', 'desc')->get();
+
+            return view('barang-persediaan.create-diff', $data);
+        }else{
+            $data['page_title'] = "Tambah Barang Persediaan";
+            $data['kategori_barang'] = KategoriBarang::orderby('id', 'desc')->get();
+            $data['satuan'] = Satuan::orderby('id', 'desc')->get();
+
+            return view('barang-persediaan.create', $data);
+        }
+
     }
 
     public function edit($id)
@@ -129,6 +141,70 @@ class BarangPersediaanController extends Controller
 
             return redirect()->route('barang-persediaan.index')->with(['failed' => $th->getMessage()]);
         }
+    }
+
+    public function createDiff(Request $request,$id){
+        $dataBP = BarangPersediaan::find($id);
+
+        if ($dataBP->harga_perolehan == $request->harga_perolehan) {
+            return redirect()->route('barang-persediaan.create',['id'=>$id])->with(['failed' => 'Harga Barang Tidak Boleh Sama !']);
+        }
+
+        $dataInsert['sumber_barang'] = $dataBP->sumber_barang;
+        $dataInsert['kategori_barang_id'] = $dataBP->kategori_barang_id;
+        $dataInsert['nama_barang'] = $dataBP->nama_barang;
+        $dataInsert['kode_barang'] = $dataBP->kode_barang;
+
+
+        $dataInsert['satuan_id'] = $dataBP->satuan_id;
+        $dataInsert['masa_simpan'] = $dataBP->masa_simpan;
+        $dataInsert['jumlah_stok_minimal'] = $dataBP->jumlah_stok_minimal;
+        $dataInsert['spesifikasi_barang'] = $dataBP->spesifikasi_barang;
+        $dataInsert['foto_barang'] = $dataBP->foto_barang;
+
+
+        // IF NEW
+        $dataInsert['nomor_bast'] = $dataBP->nomor_bast;
+        $dataInsert['dokumen_bast'] = $dataBP->dokumen_bast;
+
+
+
+        $dataInsert['created_by_id'] = Auth::user()->id;
+        $dataInsert['created_by_name'] = Auth::user()->name;
+
+
+
+        $dataInsert['sub_sub_kategori'] = $request->sub_sub_kategori;
+        $dataInsert['tahun_perolehan'] = $request->tahun_perolehan;
+        $dataInsert['jumlah'] = $request->jumlah;
+        $dataInsert['harga_perolehan'] = $request->harga_perolehan;
+        $dataInsert['mata_uang'] = $request->mata_uang;
+
+
+        // --- HANDLE PROCESS
+        try {
+            DB::beginTransaction();
+            $barang = BarangPersediaan::create(
+                $dataInsert
+            );
+            BarangMasuk::create([
+                'timestamp' => date('Y-m-d H:i:s'),
+                'barang_id' => $barang->id,
+                'permintaan_id' => 0,
+                'harga_perolehan' => $dataInsert['harga_perolehan'],
+                'jumlah' => $dataInsert['jumlah'] = $request->jumlah,
+                'tahun_perolehan' => $dataInsert['tahun_perolehan'],
+                'sub_sub_kategori' => $dataInsert['sub_sub_kategori'],
+            ]);
+            DB::commit();
+
+            return redirect()->route('barang-persediaan.index')->with(['success' => 'Data berhasil dibuat !']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return redirect()->route('barang-persediaan.index')->with(['failed' => $th->getMessage()]);
+        }
+
     }
 
     public function update(Request $request, $id)
