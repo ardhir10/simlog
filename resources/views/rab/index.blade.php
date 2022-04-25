@@ -89,6 +89,15 @@
                                         <span class="mt-auto ">Ditolak</span>
                                     </div>
                                 </td>
+                                <td>
+                                    <div class="d-flex pb-1 ps-4">
+                                        <div class="avatar-sm me-1">
+                                            <div class="avatar-title bg-selesai rounded-circle ">
+                                            </div>
+                                        </div>
+                                        <span class="mt-auto ">Selesai</span>
+                                    </div>
+                                </td>
 
                             </tr>
 
@@ -108,10 +117,48 @@
                             </thead>
                             <tbody>
                                 @foreach ($rab as $item)
-                                <tr>
+                                <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('rab.approval-review',$item->id) : route('rab.create')}}'>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item->nomor_rab}}</td>
+                                    <td>{{$item->nomor_rab}}
+                                        @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
+                                            <span class="noti-dotnya bg-danger"> ! </span>
+                                        @else
+
+                                        @endif
+                                    </td>
                                     <td>{{$item->kegiatan}}</td>
+                                    <td>{{$item->pengguna()}}</td>
+                                    <td>
+                                        @if ($item->status == 'Dalam Proses')
+                                            <div class="avatar-sm ">
+                                                <div class="avatar-title bg-diproses rounded-circle font-size-12">
+
+                                                </div>
+                                            </div>
+                                        @elseif ($item->status == 'Disetujui')
+                                            <div class="avatar-sm ">
+                                                <div class="avatar-title bg-disetujui rounded-circle font-size-12">
+
+                                                </div>
+                                            </div>
+                                        @elseif ($item->status == 'Selesai')
+                                            <div class="avatar-sm ">
+                                                <div class="avatar-title bg-selesai rounded-circle font-size-12">
+
+                                                </div>
+                                            </div>
+                                        @elseif ($item->status == 'Ditolak')
+                                            <div class="avatar-sm ">
+                                                <div class="avatar-title bg-ditolak rounded-circle font-size-12">
+
+                                                </div>
+                                            </div>
+
+                                        @else
+                                            Draft
+                                            {{-- {{$item->status}} --}}
+                                        @endif
+                                    </td>
                                 </tr>
 
                                 @endforeach

@@ -36,35 +36,45 @@ class BarangPersediaan extends Model
     }
 
     public function peruntukkan(){
-
+        // PENGGUNANYA
         switch ($this->sub_sub_kategori) {
             case '01':
                 return 'Umum';
                 break;
             case '02':
-                return 'Tata Usaha';
+                return 'Sie Kepeg & Umum';
                 break;
             case '03':
-                return 'Logistik';
+                return 'Sie Keuangan';
                 break;
             case '04':
-                return 'Telkompel';
+                return 'Sie Pengadaan';
                 break;
             case '05':
-                return 'KNK';
+                return 'Sie Inventaris';
                 break;
             case '06':
-                return 'SBNP';
+                return 'SieSarPras';
                 break;
             case '07':
-                return 'Pengamatan Laut';
+                return 'Sie Program & Evaluasi';
                 break;
             case '08':
+                return 'SBNP';
+                break;
+            case '09':
+                return 'Telkompel';
+                break;
+            case '10':
+                return 'Pengla';
+                break;
+            case '11':
+                return 'KNK';
+                break;
+            case '12':
                 return 'Bengkel';
                 break;
-
             default:
-                # code...
                 return '';
                 break;
         }

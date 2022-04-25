@@ -570,6 +570,7 @@ class ApprovalController extends Controller
                 $dataApproval['kategori'] = 'APPROVAL';
                 ApprovalProcess::create($dataApproval);
             } else {
+
                 // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEBENDAHARA MATERIL
                 $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
                 $dataPersetujuan['permintaan_barang_id'] = $id;
