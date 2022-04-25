@@ -518,7 +518,8 @@ class ApprovalController extends Controller
 
 
 
-            $disposisiSebelumnya = ApprovalProcess::where('kategori', 'DISPOSISI')
+            $disposisiSebelumnya = ApprovalProcess::where('permintaan_barang_id', $id)
+            ->where('kategori', 'DISPOSISI')
             ->where('role_to_name', 'Kasie Pengadaan')
             ->where('status', '!=','done')
             ->orderBy('id', 'desc')
@@ -570,35 +571,78 @@ class ApprovalController extends Controller
                 $dataApproval['kategori'] = 'APPROVAL';
                 ApprovalProcess::create($dataApproval);
             } else {
+                // CEK APAKAH SEBELUMNYA ADA PERSETUJUAN YANG BELUM DI SETUJUI KABIDLOG
+                $kabidlogSetujui = ApprovalProcess::where('kategori', 'APPROVAL')
+                ->where('permintaan_barang_id', $id)
+                ->where('role_to_name', 'Kabid Logistik')
+                ->where('type','Disetujui Kabid Logistik')
+                ->where('status', '!=','done')
+                ->orderBy('id', 'desc')
+                ->first();
 
-                // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEBENDAHARA MATERIL
-                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
-                $dataPersetujuan['permintaan_barang_id'] = $id;
-                $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
-                $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
-                $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
-                $dataPersetujuan['type'] = 'Disetujui Kasie Pengadaan';
-                $dataPersetujuan['status'] = 'done';
-                $dataPersetujuan['step'] = 0;
-                $dataPersetujuan['keterangan'] = $request->keterangan;
-                $dataPersetujuan['tindak_lanjut'] = null;
-                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
-                $dataPersetujuan['kategori'] = 'PERSETUJUAN';
-                ApprovalProcess::create($dataPersetujuan);
+                if($kabidlogSetujui){
+                    // Jika sudah di setujui kabidlog baru lanjut ke benmat
+                    // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEBENDAHARA MATERIL
+                    $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                    $dataPersetujuan['permintaan_barang_id'] = $id;
+                    $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+                    $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                    $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
+                    $dataPersetujuan['type'] = 'Disetujui Kasie Pengadaan';
+                    $dataPersetujuan['status'] = 'done';
+                    $dataPersetujuan['step'] = 0;
+                    $dataPersetujuan['keterangan'] = $request->keterangan;
+                    $dataPersetujuan['tindak_lanjut'] = null;
+                    $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                    $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+                    ApprovalProcess::create($dataPersetujuan);
 
-                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
-                $dataApproval['permintaan_barang_id'] = $id;
-                $dataApproval['user_peminta_id'] = $permintaanBarang->user_id;
-                $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
-                $dataApproval['role_to_name'] = 'Bendahara Materil' ?? '';
-                $dataApproval['type'] = 'Menunggu Persetujuan Bendahara Materil';
-                $dataApproval['status'] = '';
-                $dataApproval['step'] = 0;
-                $dataApproval['keterangan'] = $request->keterangan;
-                $dataApproval['tindak_lanjut'] = null;
-                $dataApproval['approve_by_id'] = 0;
-                $dataApproval['kategori'] = 'APPROVAL';
-                ApprovalProcess::create($dataApproval);
+                    $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                    $dataApproval['permintaan_barang_id'] = $id;
+                    $dataApproval['user_peminta_id'] = $permintaanBarang->user_id;
+                    $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                    $dataApproval['role_to_name'] = 'Bendahara Materil' ?? '';
+                    $dataApproval['type'] = 'Menunggu Persetujuan Bendahara Materil';
+                    $dataApproval['status'] = '';
+                    $dataApproval['step'] = 0;
+                    $dataApproval['keterangan'] = $request->keterangan;
+                    $dataApproval['tindak_lanjut'] = null;
+                    $dataApproval['approve_by_id'] = 0;
+                    $dataApproval['kategori'] = 'APPROVAL';
+                    ApprovalProcess::create($dataApproval);
+                }else{
+                    // Jika kabid log belum setuju maka harus  dikembalikan ke kabid log
+                    $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                    $dataPersetujuan['permintaan_barang_id'] = $id;
+                    $dataPersetujuan['user_peminta_id'] = $permintaanBarang->user_id;
+                    $dataPersetujuan['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                    $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
+                    $dataPersetujuan['type'] = 'Disetujui '.Auth::user()->role->name;
+                    $dataPersetujuan['status'] = 'done';
+                    $dataPersetujuan['step'] = 0;
+                    $dataPersetujuan['keterangan'] = $request->keterangan;
+                    $dataPersetujuan['tindak_lanjut'] = null;
+                    $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                    $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+                    ApprovalProcess::create($dataPersetujuan);
+
+
+                    $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                    $dataApproval['permintaan_barang_id'] = $id;
+                    $dataApproval['user_peminta_id'] = $permintaanBarang->user_id;
+                    $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
+                    $dataApproval['role_to_name'] = 'Kabid Logistik' ?? '';
+                    $dataApproval['type'] = 'Menunggu Persetujuan Kabid Logistik';
+                    $dataApproval['status'] = '';
+                    $dataApproval['step'] = 0;
+                    $dataApproval['keterangan'] = $request->keterangan;
+                    $dataApproval['tindak_lanjut'] = null;
+                    $dataApproval['approve_by_id'] = 0;
+                    $dataApproval['kategori'] = 'APPROVAL';
+                    ApprovalProcess::create($dataApproval);
+
+                }
+
 
             }
 
