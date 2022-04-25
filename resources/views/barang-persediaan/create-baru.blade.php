@@ -17,14 +17,19 @@
         <div class="form-group">
             <label for=""><strong>Peruntukkan</strong></label>
             <select name="sub_sub_kategori" class="form-select select2" required>
-                <option value="01">(01) Umum</option>
-                <option value="02">(02) Tata Usaha</option>
-                <option value="03">(03) Logistik</option>
-                <option value="04">(04) Telkompel</option>
-                <option value="05">(05) KNK</option>
-                <option value="06">(06) SBNP</option>
-                <option value="07">(07) Pengamatan Laut</option>
-                <option value="08">(08) Bengkel</option>
+                 <option value="01">(01) Umum</option>
+                <option value="02">(02) Sie Kepeg & Umum</option>
+                <option value="03">(03) Sie Keuangan</option>
+                <option value="04">(04) Sie Pengadaan</option>
+                <option value="05">(05) Sie Inventaris</option>
+                <option value="06">(06) Sie SarPras</option>
+                <option value="07">(07) Sie Program & Evaluasi</option>
+                <option value="08">(08) SBNP</option>
+                <option value="09">(09) Telkompel</option>
+                <option value="10">(10) Pengla</option>
+                <option value="11">(11) KNK</option>
+                <option value="12">(12) Bengkel</option>
+
 
             </select>
         </div>

@@ -98,49 +98,54 @@ class User extends Authenticatable
             • Jika Role = (Kepala Kelompok SBNP), Kode = SBNP
             */
 
-        if ($roleName == 'Nakhoda') {
-            $kode = '05';
-        } else if ($roleName == 'Kepala VTS' || $roleName == 'Kepala SROP') {
-            // Telkompel
-            $kode = '04';
-        } else if (
-            $roleName == 'Kepala Distrik Navigasi' ||
-            $roleName == 'Kabag Tata Usaha' ||
-            $roleName == 'Subbag Kepegawaian dan Umum' ||
+        if ($roleName == 'Kepala Kelompok Bengkel') {
+            $kode = '12';
+        }  else if (
+            $roleName == 'Kasie Kepeg & Umum' ||
+            $roleName == 'Subbag Kepegawaian dan Umum'
+        ) {
+            $kode = '02';
+        }
+         else if (
+            $roleName == 'Kasie Keuangan' ||
             $roleName == 'Subbag Keuangan'
         ) {
-            // Tata Usaha
-            $kode = '02';
-        } else if (
-            $roleName == 'Kabid Operasi' ||
-            $roleName == 'Seksi Program' ||
-            $roleName == 'Seksi Sarana Prasarana'
-        ) {
-            // OPS BELUM ADA  ?
-            $kode = '01';
-        } else if (
-            $roleName == 'Kabid Logistik' ||
-            $roleName == 'Seksi Pengadaan' ||
-            $roleName == 'Seksi Inventaris'
-        ) {
-            // Logistik
             $kode = '03';
         } else if (
-            $roleName == 'Kepala Kelompok Pengamatan Laut'
+            $roleName == 'Kasie Pengadaan' ||
+            $roleName == 'Staff Seksi Pengadaan' ||
+            $roleName == 'Seksi Seksi Pengadaan'
         ) {
-            // Pengamat Laut
-            $kode = '07';
+            $kode = '04';
         } else if (
-            $roleName == 'Kepala Kelompok Bengkel'
+            $roleName == 'Kasie Inventaris' ||
+            $roleName == 'Seksi Inventaris'
         ) {
-            // Bengkel
-            $kode = '08';
+            $kode = '05';
+        } else if (
+            $roleName == 'Kasie Sarpras' ||
+            $roleName == 'Seksi Sarana Prasarana'
+        ) {
+            $kode = '06';
+        } else if (
+            $roleName == 'Kasie Program' ||
+            $roleName == 'Seksi Program'
+        ) {
+            $kode = '07';
         } else if (
             $roleName == 'Kepala Kelompok SBNP'
         ) {
-            // SBNP
-            $kode = '06';
-        } else {
+            $kode = '08';
+        } else if ($roleName == 'Kepala VTS' || $roleName == 'Kepala SROP') {
+            $kode = '09';
+        } else if ($roleName == 'Kepala Kelompok Pengamatan Laut' ) {
+            $kode = '10';
+        } else if ($roleName == 'Nakhoda') {
+            $kode = '11';
+        }
+
+
+        else {
             // UMUM
             $kode = '01';
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ApprovalRab;
 use App\BarangPersediaan;
 use App\RAB;
 use App\RabDetail;
@@ -9,6 +10,8 @@ use App\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PDF;
+
 
 class RencanaAnggaranBiayaController extends Controller
 {
@@ -43,9 +46,8 @@ class RencanaAnggaranBiayaController extends Controller
         if($id == null){
             try {
                 if($request->submit == 'AJUKAN'){
-                    RAB::whereId($id)->update(['is_draft'=>false]);
-
-                    return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
+                    // RAB::whereId($id)->update(['is_draft'=>false]);
+                    // return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
                 }else{
                     // Saat Klik Pilih Item
                     $dataRab['kegiatan'] = $request->kegiatan;
@@ -70,25 +72,30 @@ class RencanaAnggaranBiayaController extends Controller
         }else{
             try {
                 if ($request->submit == 'AJUKAN') {
-                    RAB::whereId($id)->update(['is_draft'=> false]);
 
-
+                    DB::beginTransaction();
+                    RAB::whereId($id)->update([
+                        'is_draft'=> false,
+                        'status'=> 'Dalam Proses',
+                    ]);
                     // Buat Approval Persetujuan RAB
                     $dataApproval['timestamp'] = date('Y-m-d H:i:s');
                     $dataApproval['rab_id'] = $id;
                     $dataApproval['user_id'] = Auth::user()->id;
                     $dataApproval['user_name'] = Auth::user()->name;
-                    $dataApproval['rolte_to_name'] = 'Kasie Pengadaan';
+                    $dataApproval['role_to_name'] = 'Kasie Pengadaan';
                     $dataApproval['type'] = 'Menunggu Persetujuan Kasie Pengadaan';
                     $dataApproval['status'] = '';
-                    $dataApproval['keterangan'] = $request->keterangan;
+                    $dataApproval['keterangan'] = $request->keterangan ?? '';
                     $dataApproval['tindak_lanjut'] = '';
                     $dataApproval['approve_by_id'] = Auth::user()->id;
                     $dataApproval['kategori'] = "APPROVAL";
-                    
+                    ApprovalRab::create($dataApproval);
+                    DB::commit();
                     return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
                 }
             } catch (\Throwable $th) {
+                DB::rollback();
                 return redirect()->route('rab.create')->with(['failed' => $th->getMessage()]);
             }
 
@@ -162,6 +169,271 @@ class RencanaAnggaranBiayaController extends Controller
     public function deleteItem($id){
         RabDetail::where('id',$id)->delete();
         return redirect()->route('rab.create')->with(['success' => 'Item Dihapus !']);
+    }
+
+
+    // APPROVAL
+
+    public function approvalReview($id){
+        $data['page_title'] = 'Rencana Anggaran Biaya';
+        $data['data'] = RAB::find($id);
+
+        return view('rab-approval.review',$data);
+    }
+
+    public function approvalTindakLanjut(Request $request,$id){
+
+        $rab = RAB::find($id);
+        // update approval sebelumnya
+        ApprovalRab::where('rab_id', $id)
+        ->orderBy('id', 'desc')
+            ->first()
+            ->update([
+                'status' => 'done',
+                'tindak_lanjut' => '',
+                'keterangan' => $request->keterangan ?? ''
+            ]);
+        if($request->tindak_lanjut == 'SETUJUI'){
+            DB::beginTransaction();
+
+
+            if(Auth::user()->role->name == 'Kasie Pengadaan'){
+                foreach ($request->jumlah_disetujui as $key => $value) {
+                    // Update Rab Detail
+                    RabDetail::where('id', $key)->update(['jumlah_disetujui' => $value]);
+                }
+                // APPROVAL DISETUJUI KASIE PENGADAAN
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = 'Kasie Pengadaan' ?? '';
+
+                $dataApproval['type'] = 'Disetujui Kasie Pengadaan';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+
+                // Buat Approval Persetujuan RAB
+                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                $dataPersetujuan['rab_id'] = $id;
+                $dataPersetujuan['user_id'] = Auth::user()->id;
+                $dataPersetujuan['user_name'] = Auth::user()->name;
+                $dataPersetujuan['role_to_name'] = 'Kabid Logistik';
+                $dataPersetujuan['type'] = 'Menunggu Persetujuan Kabid Logistik';
+                $dataPersetujuan['status'] = '';
+                $dataPersetujuan['keterangan'] = $request->keterangan ?? '';
+                $dataPersetujuan['tindak_lanjut'] = '';
+                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                $dataPersetujuan['kategori'] = "APPROVAL";
+                ApprovalRab::create($dataPersetujuan);
+
+            } elseif (Auth::user()->role->name == 'Kabid Logistik'){
+                foreach ($request->jumlah_disetujui as $key => $value) {
+                    // Update Rab Detail
+                    RabDetail::where('id', $key)->update(['jumlah_disetujui' => $value]);
+                }
+                // APPROVAL DISETUJUI KaBID LOGISTIK PENGADAAN
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = 'Kabid Logistik' ?? '';
+
+                $dataApproval['type'] = 'Disetujui Kabid Logistik';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+
+
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = '' ?? '';
+
+                $dataApproval['type'] = 'RAB Disetujui';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+            }
+
+
+
+            RAB::where('id', $id)
+                ->update(['status' => 'Selesai']);
+            DB::commit();
+            return redirect()->route('rab.approval-review', $rab->id)->with(['success' => 'Data Berhasil Disetujui !']);
+
+        }elseif($request->tindak_lanjut == "UPDATE"){
+
+            DB::beginTransaction();
+            if (Auth::user()->role->name == 'Kasie Pengadaan') {
+                foreach ($request->jumlah_disetujui as $key => $value) {
+                    // Update Rab Detail
+                    RabDetail::where('id', $key)->update(['jumlah_disetujui' => $value]);
+                }
+                // APPROVAL DISETUJUI KASIE PENGADAAN
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = 'Kasie Pengadaan' ?? '';
+
+                $dataApproval['type'] = 'Disetujui Kasie Pengadaan';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+
+                // Buat Approval Persetujuan RAB
+                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                $dataPersetujuan['rab_id'] = $id;
+                $dataPersetujuan['user_id'] = Auth::user()->id;
+                $dataPersetujuan['user_name'] = Auth::user()->name;
+                $dataPersetujuan['role_to_name'] = 'Kabid Logistik';
+                $dataPersetujuan['type'] = 'Menunggu Persetujuan Kabid Logistik';
+                $dataPersetujuan['status'] = '';
+                $dataPersetujuan['keterangan'] = $request->keterangan ?? '';
+                $dataPersetujuan['tindak_lanjut'] = '';
+                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                $dataPersetujuan['kategori'] = "APPROVAL";
+                ApprovalRab::create($dataPersetujuan);
+            } elseif (Auth::user()->role->name == 'Kabid Logistik') {
+                foreach ($request->jumlah_disetujui as $key => $value) {
+                    // Update Rab Detail
+                    RabDetail::where('id', $key)->update(['jumlah_disetujui' => $value]);
+                }
+                // APPROVAL DISETUJUI KaBID LOGISTIK PENGADAAN
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = 'Kabid Logistik' ?? '';
+
+                $dataApproval['type'] = 'Disetujui Kabid Logistik';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+
+
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = '' ?? '';
+
+                $dataApproval['type'] = 'RAB Disetujui';
+                $dataApproval['status'] = 'done';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? '';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'PERSETUJUAN';
+                ApprovalRab::create($dataApproval);
+            }
+
+
+            RAB::where('id', $id)
+                ->update(['status' => 'Selesai']);
+
+            DB::commit();
+            return redirect()->route('rab.approval-review', $rab->id)->with(['success' => 'Data Berhasil Disetujui !']);
+
+        }elseif($request->tindak_lanjut == 'TOLAK'){
+            DB::beginTransaction();
+            if (Auth::user()->role->name == 'Kasie Pengadaan') {
+                // APPROVAL PROCESS
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = '' ?? '';
+
+
+                $dataApproval['type'] = 'Permintaan Ditolak Kasie Pengadaan';
+                $dataApproval['status'] = '';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? 'Ditolak';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'APPROVAL';
+
+                ApprovalRab::create($dataApproval);
+
+            } elseif (Auth::user()->role->name == 'Kabid Logistik') {
+                // APPROVAL PROCESS
+                $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                $dataApproval['rab_id'] = $id;
+                $dataApproval['user_id'] = $rab->created_by;
+                $dataApproval['user_name'] = $rab->created_by_name ?? '';
+                $dataApproval['role_to_name'] = '' ?? '';
+
+
+                $dataApproval['type'] = 'Permintaan Ditolak Kabid Logistik';
+                $dataApproval['status'] = '';
+
+                $dataApproval['keterangan'] = $request->keterangan ?? 'Ditolak';
+
+                $dataApproval['tindak_lanjut'] = $request->tindak_lanjut;
+                $dataApproval['approve_by_id'] = Auth::user()->id;
+                $dataApproval['kategori'] = 'APPROVAL';
+
+                ApprovalRab::create($dataApproval);
+            }
+
+
+            RAB::where('id', $id)
+                ->update(['status' => 'Ditolak']);
+            DB::commit();
+            return redirect()->route('rab.approval-review', $rab->id)->with(['success' => 'Data Berhasil ditolak !']);
+        }else{
+            dd('NOT AVAILABLE');
+        }
+    }
+
+    public function cetakRab(Request $request, $id)
+    {
+        $data['title'] = 'UPP4';
+
+        $rab = RAB::where('id', $id)
+            ->first();
+        $data['data'] =$rab ;
+        if ($request->v == 'html') {
+            return view('pdf.rab', $data);
+        }
+
+
+        $pdf = PDF::loadView('pdf.rab', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
+        // $font = Font_Metrics::get_font("helvetica", "bold");
+
+        return $pdf->stream($rab->nomor_rab . ' (RAB).pdf');
     }
     private function generateNomorRab()
     {

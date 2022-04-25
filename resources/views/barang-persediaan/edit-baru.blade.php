@@ -18,14 +18,20 @@
         <div class="form-group">
             <label for=""><strong>Peruntukkan</strong></label>
             <select name="sub_sub_kategori" class="form-select select2" required>
-                <option {{$data->sub_sub_kategori == '01' ? 'selected=selected':''}} value="01">(01) Umum</option>
-                <option {{$data->sub_sub_kategori == '02' ? 'selected=selected':''}} value="02">(02) Tata Usaha</option>
-                <option {{$data->sub_sub_kategori == '03' ? 'selected=selected':''}} value="03">(03) Logistik</option>
-                <option {{$data->sub_sub_kategori == '04' ? 'selected=selected':''}} value="04">(04) Telkompel</option>
-                <option {{$data->sub_sub_kategori == '05' ? 'selected=selected':''}} value="05">(05) KNK</option>
-                <option {{$data->sub_sub_kategori == '06' ? 'selected=selected':''}} value="06">(06) SBNP</option>
-                <option {{$data->sub_sub_kategori == '07' ? 'selected=selected':''}} value="07">(07) Pengamatan Laut</option>
-                <option {{$data->sub_sub_kategori == '08' ? 'selected=selected':''}} value="08">(08) Bengkel</option>
+
+
+                <option {{$data->sub_sub_kategori == '01' ? 'selected=selected':''}}  value="01">(01) Umum</option>
+                <option {{$data->sub_sub_kategori == '02' ? 'selected=selected':''}}  value="02">(02) Sie Kepeg & Umum</option>
+                <option {{$data->sub_sub_kategori == '03' ? 'selected=selected':''}}  value="03">(03) Sie Keuangan</option>
+                <option {{$data->sub_sub_kategori == '04' ? 'selected=selected':''}}  value="04">(04) Sie Pengadaan</option>
+                <option {{$data->sub_sub_kategori == '05' ? 'selected=selected':''}}  value="05">(05) Sie Inventaris</option>
+                <option {{$data->sub_sub_kategori == '06' ? 'selected=selected':''}}  value="06">(06) Sie SarPras</option>
+                <option {{$data->sub_sub_kategori == '07' ? 'selected=selected':''}}  value="07">(07) Sie Program & Evaluasi</option>
+                <option {{$data->sub_sub_kategori == '08' ? 'selected=selected':''}}  value="08">(08) SBNP</option>
+                <option {{$data->sub_sub_kategori == '09' ? 'selected=selected':''}}  value="09">(09) Telkompel</option>
+                <option {{$data->sub_sub_kategori == '10' ? 'selected=selected':''}}  value="10">(10) Pengla</option>
+                <option {{$data->sub_sub_kategori == '11' ? 'selected=selected':''}}  value="11">(11) KNK</option>
+                <option {{$data->sub_sub_kategori == '12' ? 'selected=selected':''}}  value="12">(12) Bengkel</option>
             </select>
         </div>
     </div>

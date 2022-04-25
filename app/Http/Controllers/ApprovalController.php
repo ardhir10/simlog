@@ -642,7 +642,7 @@ class ApprovalController extends Controller
                     ApprovalProcess::create($dataApproval);
 
                 }
-                
+
 
             }
 

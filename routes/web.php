@@ -92,6 +92,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/delete-item/{id?}', 'RencanaAnggaranBiayaController@deleteItem')->name('delete-item');
         Route::get('/batalkan/{id?}', 'RencanaAnggaranBiayaController@batalkan')->name('batalkan');
 
+
+        Route::get('/approval-review/{id?}', 'RencanaAnggaranBiayaController@approvalReview')->name('approval-review');
+        Route::post('/approval-tindak-lanjut/{id?}', 'RencanaAnggaranBiayaController@approvalTindakLanjut')->name('approval-tindak-lanjut');
+
+        Route::get('/cetak-rab/{id}', 'RencanaAnggaranBiayaController@cetakRab')->name('cetak-rab');
+
     });
 
 
