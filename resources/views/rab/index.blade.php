@@ -45,9 +45,17 @@
         <div class="card shadow-lg">
             <div class="card-header justify-content-between d-flex align-items-center">
                 <h4 class="card-title">{{$page_title}}</h4>
-                <a href="{{route('rab.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat RAB
-                    <i class="fa fa-plus align-middle"></i>
-                </a>
+
+                @if (
+                    Auth::user()->role->name == 'Kabid Logistik' ||
+                    Auth::user()->role->name == 'Kasie Pengadaan' ||
+                    Auth::user()->role->name == 'Staff Seksi Pengadaan'
+                    )
+    q             <a href="{{route('rab.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat RAB
+                        <i class="fa fa-plus align-middle"></i>
+                    </a>
+                @endif
+
             </div>
             <div class="card-body">
                 <div class="col-12">
