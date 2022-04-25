@@ -43,7 +43,8 @@ class RencanaAnggaranBiayaController extends Controller
         if($id == null){
             try {
                 if($request->submit == 'AJUKAN'){
-                    RAB::whereId($id)->update('is_draft',false);
+                    RAB::whereId($id)->update(['is_draft'=>false]);
+
                     return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
                 }else{
                     // Saat Klik Pilih Item
@@ -70,6 +71,21 @@ class RencanaAnggaranBiayaController extends Controller
             try {
                 if ($request->submit == 'AJUKAN') {
                     RAB::whereId($id)->update(['is_draft'=> false]);
+
+
+                    // Buat Approval Persetujuan RAB
+                    $dataApproval['timestamp'] = date('Y-m-d H:i:s');
+                    $dataApproval['rab_id'] = $id;
+                    $dataApproval['user_id'] = Auth::user()->id;
+                    $dataApproval['user_name'] = Auth::user()->name;
+                    $dataApproval['rolte_to_name'] = 'Kasie Pengadaan';
+                    $dataApproval['type'] = 'Menunggu Persetujuan Kasie Pengadaan';
+                    $dataApproval['status'] = '';
+                    $dataApproval['keterangan'] = $request->keterangan;
+                    $dataApproval['tindak_lanjut'] = '';
+                    $dataApproval['approve_by_id'] = Auth::user()->id;
+                    $dataApproval['kategori'] = "APPROVAL";
+                    
                     return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
                 }
             } catch (\Throwable $th) {
