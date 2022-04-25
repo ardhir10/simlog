@@ -88,6 +88,17 @@
                 @endif
 
                 {{-- ALL USER --}}
+                @if (
+                    (Auth::user()->role->type ?? null) == 1 ||
+                    (Auth::user()->role->type ?? null) == 3
+                    )
+                    <li>
+                        <a href="{{route('rab.index')}}">
+                            <i class="icon nav-icon" data-feather="trello"></i>
+                            <span class="menu-item" data-key="t-sales">Rencana Angg. Biaya</span>
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a href="/">
                         <i class="icon nav-icon" data-feather="trello"></i>

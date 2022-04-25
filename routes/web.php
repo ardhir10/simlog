@@ -83,6 +83,17 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    Route::prefix('rab')->name('rab.')->group(function () {
+        Route::get('/', 'RencanaAnggaranBiayaController@index')->name('index');
+        Route::get('/create', 'RencanaAnggaranBiayaController@create')->name('create');
+        Route::post('/store/{id?}', 'RencanaAnggaranBiayaController@store')->name('store');
+        Route::get('/get-barang-persediaan/{id?}', 'RencanaAnggaranBiayaController@getBarangPersediaan')->name('get-barang-persediaan');
+        Route::post('/input-item-rab/{id?}', 'RencanaAnggaranBiayaController@inputItem')->name('input-item');
+        Route::get('/delete-item/{id?}', 'RencanaAnggaranBiayaController@deleteItem')->name('delete-item');
+        Route::get('/batalkan/{id?}', 'RencanaAnggaranBiayaController@batalkan')->name('batalkan');
+
+    });
+
 
 
     // --- MASTER DATA

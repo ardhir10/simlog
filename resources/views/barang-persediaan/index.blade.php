@@ -74,7 +74,7 @@
                                 <td>{{$item->kategori_barang->nama_kategori ?? 'Tidak Dalam Kategori'}}</td>
                                 <td>{{$item->nama_barang}}</td>
                                 <td>{{$item->kode_barang}}</td>
-                                <td>{{$item->sub_sub_kategori}}</td>
+                                <td>{{$item->peruntukkan()}}</td>
                                 <td style="white-space:nowrap">{{$item->stokBarang()}} {{$item->satuan->nama_satuan ?? ''}}</td>
                                 <td>{{$item->barangMasuk->sum('jumlah')}}</td>
                                 <td>{{$item->barangkeluar->sum('jumlah')}}</td>

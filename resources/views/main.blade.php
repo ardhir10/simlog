@@ -312,6 +312,13 @@
             border-radius: 10px;
         }
 
+        .clickable-row{
+            cursor: pointer;
+        }
+        .clickable-row:hover{
+            background: #0bb9795b !important;
+        }
+
     </style>
 
 </head>
@@ -342,7 +349,6 @@
                         <div class="col-sm-12 text-center " style="font-weight: bold;">
                             <script>
                                 document.write(new Date().getFullYear())
-
                             </script> &copy; SIMLOG
                         </div>
                         {{-- <div class="col-sm-6">
@@ -403,12 +409,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
     rel='stylesheet' />
+    <script src="{{asset('assets/libs/axios/axios.min.js')}}"></script>
     @stack('scripts')
     <script>
         $('.ada').val();
@@ -453,6 +460,9 @@
             })
         }
         $(".select2").select2();
+
+
+
     </script>
 
 </body>
