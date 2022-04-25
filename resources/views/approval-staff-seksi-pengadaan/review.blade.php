@@ -140,7 +140,7 @@
                                                     </div>
                                                 </div>
 
-                                                @foreach ($data->timeline as $apv)
+                                                @foreach ($data->timeline->where('type','!=','Disetujui Staff Seksi Pengadaan') as $apv)
                                                     @if ($apv->tindak_lanjut == 'TOLAK')
                                                         @php
                                                         $class = 'event-list-reject';

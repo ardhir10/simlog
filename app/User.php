@@ -80,23 +80,23 @@ class User extends Authenticatable
     {
         if($roleName == null)
             $roleName = $this->role->name ?? null;
-        /*
-        PL.001/04/SIM/KNK-2022
-        PL. adalah bentuk baku, 001 adalah nomor urut auto generate (Nomor Urut direset jadi 001
-        jika berbeda bulan), 04 Adalah bulan April (05-Mei, 06-Juni, dan seterusnya), SIM adalah
-        bentuk baku yang mengartikan SIMLOG, KNK adalah Kode Role User, -2022 adalah tahun.
-        Kode Role User
-        • Jika Role = (Nakhoda), Kode = KNK
-        • Jika Role = (Kepala VTS), Kode = VTS
-        • Jika Role = (Kepala SROP), Kode = SROP
-        • Jika Role = (Kepala Distrik Navigasi), Kode = TU
-        • Jika Role = (Kabag Tata Usaha, Subbag Kepegawaian & Umum, Subbag Keuangan), Kode = TU
-        • Jika Role = (Kabid Operasi, Seksi Program, Seksi Sarana Prasarana), Kode = OPS
-        • Jika Role = (Kabid Logistik, Seksi Pengadaan, Seksi Inventaris), Kode = LOG
-        • Jika Role = (Kepala Kelompok Pengamatan Laut), Kode = PENGLA
-        • Jika Role = (Kepala Kelompok Bengkel), Kode = BKL
-        • Jika Role = (Kepala Kelompok SBNP), Kode = SBNP
-        */
+            /*
+            PL.001/04/SIM/KNK-2022
+            PL. adalah bentuk baku, 001 adalah nomor urut auto generate (Nomor Urut direset jadi 001
+            jika berbeda bulan), 04 Adalah bulan April (05-Mei, 06-Juni, dan seterusnya), SIM adalah
+            bentuk baku yang mengartikan SIMLOG, KNK adalah Kode Role User, -2022 adalah tahun.
+            Kode Role User
+            • Jika Role = (Nakhoda), Kode = KNK
+            • Jika Role = (Kepala VTS), Kode = VTS
+            • Jika Role = (Kepala SROP), Kode = SROP
+            • Jika Role = (Kepala Distrik Navigasi), Kode = TU
+            • Jika Role = (Kabag Tata Usaha, Subbag Kepegawaian & Umum, Subbag Keuangan), Kode = TU
+            • Jika Role = (Kabid Operasi, Seksi Program, Seksi Sarana Prasarana), Kode = OPS
+            • Jika Role = (Kabid Logistik, Seksi Pengadaan, Seksi Inventaris), Kode = LOG
+            • Jika Role = (Kepala Kelompok Pengamatan Laut), Kode = PENGLA
+            • Jika Role = (Kepala Kelompok Bengkel), Kode = BKL
+            • Jika Role = (Kepala Kelompok SBNP), Kode = SBNP
+            */
 
         if ($roleName == 'Nakhoda') {
             $kode = '05';

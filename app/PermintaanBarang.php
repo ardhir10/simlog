@@ -163,7 +163,7 @@ class PermintaanBarang extends Model
             $roleName == 'Subbag Kepegawaian dan Umum' ||
             $roleName == 'Subbag Keuangan'
         ) {
-            $kode = User::where('role_id', 33)->first();
+            $kode = User::where('role_id', 33)->first()->name;
         } else if (
             $roleName == 'Kabid Operasi' ||
             $roleName == 'Seksi Program' ||
@@ -175,13 +175,13 @@ class PermintaanBarang extends Model
             $roleName == 'Kepala Kelompok Bengkel' ||
             $roleName == 'Kepala Kelompok SBNP'
         ) {
-            $kode = User::where('role_id', 34)->first();
+            $kode = User::where('role_id', 34)->first()->name;
         } else if (
             $roleName == 'Kabid Logistik' ||
             $roleName == 'Seksi Pengadaan' ||
             $roleName == 'Seksi Inventaris'
         ) {
-            $kode = User::where('role_id', 35)->first();
+            $kode = User::where('role_id', 35)->first()->name;
         } else {
             $kode = 'NONUSER';
         }
