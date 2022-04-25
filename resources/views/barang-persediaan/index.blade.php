@@ -56,7 +56,7 @@
                                 <td>
                                     <div class="d-flex">
 
-                                        <a href="{{route('barang-persediaan.stock-detail',$item->id)}}" data-toggle="tooltip" title="Edit Data"
+                                        <a href="{{route('barang-persediaan.stock-detail',$item->id)}}" data-toggle="tooltip" title="Detail Stok"
                                             class="btn btn rounded-3 btn-outline btn-outline-primary me-1">
                                             <i class="fa fa-box"></i>
                                         </a>
