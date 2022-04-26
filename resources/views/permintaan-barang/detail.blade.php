@@ -529,17 +529,14 @@
 
     <!-- Lapor Distribusi -->
     <div id="laporDistribusi" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">LAPORAN DISTRIBUSI</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{route('approval.lapor',$data->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
-
                     <div class="modal-body">
                         <div class="form-group mb-2">
                             <input type="checkbox" id="check" class="" required>
@@ -562,8 +559,41 @@
                             <label for="check">Keterangan</label>
                             <textarea name="keterangan" id="" cols="30" rows="3" class="form-control"></textarea>
                         </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white ">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Barang</th>
+                                        <th>Kode</th>
+                                        <th>UPP4</th>
+                                        <th>Distribusi</th>
+                                        <th>Satuan</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data->barang_diminta as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->barang->nama_barang ?? 'N/A'}}</td>
+                                            <td>{{$item->barang->kode_barang ?? 'N/A'}}</td>
+                                            <td>{{$item->jumlah_disetujui ?? 'N/A'}}</td>
+                                            <td>
+                                                <input type="number" name="jumlah_distribusi[]">
+                                            </td>
+                                            <td>{{$item->barang->satuan->nama_satuan ?? 'N/A'}}</td>
+                                            <td>
+                                                <input type="file" name="file_upload[]">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
                         <div class="form-group mb-2">
-                            <label for="check">Keterangan</label>
+                            <label for="check"></label>
                             <input type="file" multiple name="file[]" class="form-control" required>
                         </div>
 
