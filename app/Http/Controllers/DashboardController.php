@@ -44,7 +44,7 @@ class DashboardController extends Controller
             $total = $totalBarangMasuk - $totalBarangKeluar;
 
             $saldo[] = $total;
-            $kategori[] = $dc->kategori_barang->nama_kategori;
+            $kategori[] = $dc->kategori_barang->nama_kategori ?? null;
         }
 
         $data['kategori']= $kategori;
