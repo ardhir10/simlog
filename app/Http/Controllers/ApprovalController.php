@@ -572,14 +572,13 @@ class ApprovalController extends Controller
                 ApprovalProcess::create($dataApproval);
             } else {
                 // CEK APAKAH SEBELUMNYA ADA PERSETUJUAN YANG BELUM DI SETUJUI KABIDLOG
-                $kabidlogSetujui = ApprovalProcess::where('kategori', 'APPROVAL')
-                ->where('permintaan_barang_id', $id)
+                $kabidlogSetujui = ApprovalProcess::
+                where('permintaan_barang_id', $id)
                 ->where('role_to_name', 'Kabid Logistik')
                 ->where('type','Disetujui Kabid Logistik')
-                ->where('status', '!=','done')
+                ->where('status','done')
                 ->orderBy('id', 'desc')
                 ->first();
-
                 if($kabidlogSetujui){
                     // Jika sudah di setujui kabidlog baru lanjut ke benmat
                     // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEBENDAHARA MATERIL

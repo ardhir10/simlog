@@ -187,29 +187,19 @@
                     <table class="table" >
                             <thead>
                                 <tr class="tr-head"
-                                    style="background: #1E1E1E;color:white;font-weight:bold;">
-                                    <td class="" style="vertical-align: middle;" width="1" rowspan="2">
+                                    style="background: #ebebeb;color:black;font-weight:bold;">
+                                    <td class="" style="vertical-align: middle;" width="1">
                                         No</td>
-                                    <td class="td-head" style="vertical-align: middle" rowspan="2">
+                                    <td class="td-head" style="vertical-align: middle" >
                                         Nama Barang</td>
-                                    <td class="td-head" style="vertical-align: middle" rowspan="2">
+                                    <td class="td-head" style="vertical-align: middle" >
                                         Satuan</td>
-                                    <td class="td-head" style="vertical-align: middle" rowspan="2">
+                                    <td class="td-head" style="vertical-align: middle" >
                                         Harga Satuan</td>
+                                    <td class="td-head text-center" >QTY</td>
+                                    <td class="td-head text-center" >Sub Total</td>
+                                    <td class="td-head">Keterangan</td>
 
-
-                                    <td class="td-head text-center" colspan="3">QTY</td>
-                                    <td class="td-head" rowspan="2">Keterangan</td>
-
-                                </tr>
-                                <tr class="tr-head"
-                                    style="background: #1E1E1E;color:white;font-weight:bold;">
-                                    <td class="td-head" style="border-radius: 0px !important">
-                                        Permintaan</td>
-                                    <td class="td-head" style="border-radius: 0px !important">
-                                        Disetujui</td>
-                                    <td class="td-head" style="border-radius: 0px !important">
-                                        Sub Total</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -230,14 +220,12 @@
                                         <td style="width: 265px">{{$item->nama_barang ?? null}}</td>
                                         <td>{{$item->satuan ?? null}}</td>
                                         <td>{{$item->harga_satuan ?? null}}</td>
-                                        <td>{{$item->qty ?? null}}</td>
                                         <td>{{$item->jumlah_disetujui ?? null}}</td>
                                         <td>{{$item->mata_uang}}&nbsp;{{$item->jumlah_disetujui * $item->harga_satuan ?? null}}</td>
                                         <td>{{$item->keterangan ?? null}}</td>
                                     </tr>
                                 @endforeach
                                 <tr style="background: #ebebeb;">
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -255,13 +243,11 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
                                     <td style="white-space: nowrap">PPn 11%</td>
                                     <td>{{$item->mata_uang}}&nbsp;{{$ppn}}</td>
                                     <td></td>
                                 </tr>
                                 <tr style="background: #ebebeb;">
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -420,7 +406,7 @@
                 <tr>
 
 
-                    <td style="width: auto;padding-right:10px;">
+                    <!-- <td style="width: auto;padding-right:10px;" class="d-none">
                         <div style="text-align: center;">
                             <div style="margin-bottom:18px;">
                                 <span style="display: block;font-size: 12px;">Diverifikasi Oleh</span>
@@ -437,7 +423,7 @@
                                 <span style="display: block;font-size: 10px;" >{{$data->tanggal_permintaan ?? '-'}}</span>
                             @endif
                         </div>
-                    </td>
+                    </td> -->
                     <td style="width: auto;padding-right:10px;">
                         <div style="text-align: center;">
                             <div style="margin-bottom:18px;">
