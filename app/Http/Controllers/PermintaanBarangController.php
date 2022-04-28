@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ApprovalProcess;
 use App\BarangPersediaan;
 use App\KategoriBarang;
+use App\LaporanDistribusi;
 use App\PermintaanBarang;
 use App\PermintaanBarangDetail;
 use App\User;
@@ -169,6 +170,7 @@ class PermintaanBarangController extends Controller
         $data['kurir'] = User::whereHas('role',function($q){
             $q->where('name', 'Kurir/Offsetter');
         })->get();
+        $data['laporan_distribusi'] = LaporanDistribusi::where('permintaan_barang_id',$id)->orderBy('id','desc')->first();
         return view('permintaan-barang.detail', $data);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ApprovalProcess;
+use App\BarangDistribusi;
 use App\BarangKeluar;
 use App\BarangPersediaan;
 use App\FileLaporanDistribusi;
@@ -83,6 +84,9 @@ class ApprovalController extends Controller
                     ->orderBy('id','asc');
                 }])
                 ->first();
+
+        $data['laporan_distribusi'] = LaporanDistribusi::where('permintaan_barang_id', $id)->orderBy('id', 'desc')->first();
+
 
         $data['page_title'] = $permintaanBarang->nomor_nota_dinas;
         $data['data'] = $permintaanBarang;
@@ -1430,31 +1434,70 @@ class ApprovalController extends Controller
     }
 
     public function lapor(Request $request,$id){
+
+        $permintaanBarang = PermintaanBarang::find($id);
         try{
             DB::beginTransaction();
             $laporanDistribusi['permintaan_barang_id'] = $id;
             $laporanDistribusi['lokasi_distribusi'] = $request->lokasi_distribusi;
-            $laporanDistribusi['tanggal_waktu'] = $request->tanggal.' '.$request->jam.':00';
+            $laporanDistribusi['tanggal_waktu'] = $request->tanggal.' '.$request->jam;
             $laporanDistribusi['keterangan'] = $request->keterangan;
             $laporanDistribusi['lapor_by_id'] = Auth::user()->id;
             $ld = LaporanDistribusi::create($laporanDistribusi);
+            $i=0;
+            $listBarangDistribusi = [];
 
-            foreach ($request->file as $key => $value) {
+            $idBarangDistribusi = [];
+            foreach ($permintaanBarang->barang_diminta as $key => $value) {
+                if($request->jumlah_distribusi[$i] > 0){
+                    $barangDistribusi['permintaan_id'] = $permintaanBarang->id;
+                    $barangDistribusi['permintaan_barang_detail_id'] = $value->id;
+                    $barangDistribusi['laporan_distribusi_id'] = $ld->id;
+                    $barangDistribusi['timestamp']= date('Y-m-d H:i:s');
+                    $barangDistribusi['jumlah'] = $request->jumlah_distribusi[$i];
+                    $barangDistribusi['file'] = '';
+                    $barangDistribusi['user_id'] = Auth::user()->id;
+
+
+
+                    $listBarangDistribusi[] = $barangDistribusi;
+                    $idBarangDistribusi[] = BarangDistribusi::create($barangDistribusi)->id;
+
+                    // Update status Distribusi jika jumlahnya sudah sama dengan yang diminta
+                    if($value->distribusiSelesai()){
+                        PermintaanBarangDetail::where('id',$value->id)
+                            ->update(['status'=>'done']);
+                    }
+
+                }
+                $i++;
+
+            }
+
+
+
+            $j = 0;
+            if($request->file_upload){
+                foreach ($request->file_upload as $key => $value) {
                     $value = $value;
-                    $name = $id.'_'. $key.'_'.time() . '.' . $value->getClientOriginalExtension();
+                    $name = $id . '_' . $key . '_' . time() . '.' . $value->getClientOriginalExtension();
                     $destinationPath = public_path('images/laporan-distribusi/');
                     $value->move($destinationPath, $name);
 
                     $insertFile['laporan_distribusi_id'] = $ld->id;
+                    $insertFile['permintaan_barang_detail_id'] = $key;
+                    $insertFile['barang_distribusi_id'] = $idBarangDistribusi[$j];
                     $insertFile['timestamp'] = date('Y-m-d H:i:s');
                     $insertFile['file_name'] = $name;
                     FileLaporanDistribusi::create($insertFile);
+                    $j++;
+                }
             }
             DB::commit();
-            return redirect()->route('permintaan-barang.detail', $id)->with(['success' => 'Sukses Lapor Distribusi barang !']);
+            return redirect()->back()->with(['success' => 'Sukses Lapor Distribusi barang !']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->route('permintaan-barang.detail', $id)->with(['failed' => $th->getMessage()]);
+            return redirect()->back()->with(['failed' => $th->getMessage()]);
         }
     }
 }
