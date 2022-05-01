@@ -89,12 +89,10 @@
                             <div class="col-lg-4 offset-lg-2">
                                 <div class="text-end">
                                         @if (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
-                                            @if (!$data->laporanDistribusi)
-                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
+                                            <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
 
-                                                    <i class="fa fa-file"></i>
-                                                    LAPOR DISTRIBUSI</button>
-                                            @endif
+                                                <i class="fa fa-file"></i>
+                                                LAPOR DISTRIBUSI</button>
                                         @else
                                             @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
                                                 <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
@@ -450,9 +448,48 @@
                                                     <span class="d-block fs-5" >{{$data->laporanDistribusi->keterangan}}</span>
                                                 </div>
                                                 <div class="col-lg-12 mt-3">
-                                                   @foreach ($data->laporanDistribusi->fileDistribusi as $fd)
-                                                    <img src="{{ asset('images/laporan-distribusi/'.$fd->file_name) }}" width="100" height="100" alt="">
-                                                   @endforeach
+                                                    <table class="table table-bordered">
+                                                        <thead class="bg-dark text-white ">
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Nama Barang</th>
+                                                                <th>Satuan</th>
+                                                                <th>Kode</th>
+                                                                <th>UPP4</th>
+                                                                <th>Detail Distribusi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($data->barang_diminta as $item)
+                                                                <tr style="background:{{$item->distribusiSelesai() == true ? '#51D28C': '#FBC31E'}}">
+                                                                    <td>{{$loop->iteration}}</td>
+                                                                    <td>{{$item->barang->nama_barang ?? 'N/A'}}</td>
+                                                                    <td>{{$item->barang->satuan->nama_satuan ?? 'N/A'}}</td>
+                                                                    <td>{{$item->barang->kode_barang ?? 'N/A'}}</td>
+                                                                    <td>{{$item->jumlah_disetujui ?? 'N/A'}}</td>
+                                                                    <td>
+                                                                        <table class="table table-bordered">
+                                                                            <tr>
+                                                                                <td colspan="2" class="fw-bolder">Total Distribusi : {{$item->totalDistribusi() ?? 'N/A'}}</td>
+                                                                            </tr>
+                                                                            @foreach ($item->barangDistribusi as $bdis)
+                                                                                <tr>
+                                                                                    <td>{{$bdis->created_at}}</td>
+                                                                                    <td>{{$bdis->jumlah}}</td>
+                                                                                    <td><a href="{{asset('images/laporan-distribusi/'.optional(optional($bdis)->gambar)->file_name ?? null)}}" target="_blank">
+                                                                                        <img src="{{asset('images/laporan-distribusi/'.optional(optional($bdis)->gambar)->file_name ?? null)}}" height="30" alt="">
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </table>
+                                                                    </td>
+
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
@@ -460,6 +497,7 @@
                                 </div>
                             </div>
                         @endif
+
 
 
                     </div>
@@ -505,7 +543,7 @@
 
     <!-- Lapor Distribusi -->
     <div id="laporDistribusi" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">LAPORAN DISTRIBUSI</h5>
@@ -515,7 +553,6 @@
                 </div>
                 <form action="{{route('approval.lapor',$data->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
-
                     <div class="modal-body">
                         <div class="form-group mb-2">
                             <input type="checkbox" id="check" class="" required>
@@ -524,24 +561,68 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="check">Lokasi Distribusi</label>
-                            <input type="text" name="lokasi_distribusi" class="form-control" required>
+                            <input type="text" name="lokasi_distribusi" value="{{$laporan_distribusi->lokasi_distribusi ?? null}}" class="form-control" required>
                         </div>
                         <div class="form-group mb-2">
                             <label for="check">Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control" required>
+                            <input type="date" name="tanggal" value="{{ ($laporan_distribusi->tanggal_waktu??null) ? explode(' ',$laporan_distribusi->tanggal_waktu)[0]:''}}" class="form-control" required>
                         </div>
                         <div class="form-group mb-2">
                             <label for="check">Jam</label>
-                            <input type="time" name="jam" class="form-control" required>
+                            <input type="time" value="{{ ($laporan_distribusi->tanggal_waktu??null) ? explode(' ',$laporan_distribusi->tanggal_waktu)[1]:''}}"  name="jam" class="form-control" required>
                         </div>
                         <div class="form-group mb-2">
                             <label for="check">Keterangan</label>
-                            <textarea name="keterangan" id="" cols="30" rows="3" class="form-control"></textarea>
+                            <textarea name="keterangan" id="" cols="30" rows="3" class="form-control">{{$laporan_distribusi->keterangan ?? null}}</textarea>
                         </div>
-                        <div class="form-group mb-2">
-                            <label for="check">Keterangan</label>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white ">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Barang</th>
+                                        <th>Kode</th>
+                                        <th>UPP4</th>
+                                        <th>Total Distribusi</th>
+                                        <th>Distribusi</th>
+                                        <th>Satuan</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data->barang_diminta as $item)
+                                        <tr style="background:{{$item->distribusiSelesai() == true ? '#51D28C': '#FBC31E'}}">
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->barang->nama_barang ?? 'N/A'}}</td>
+                                            <td>{{$item->barang->kode_barang ?? 'N/A'}}</td>
+                                            <td>{{$item->jumlah_disetujui ?? 'N/A'}}</td>
+                                            <td>{{$item->totalDistribusi() ?? 'N/A'}}</td>
+                                            <td>
+                                                @if ($item->distribusiSelesai() == true)
+                                                    Distribusi Selesai
+                                                    <input value="0" max="{{$item->jumlah_disetujui-$item->totalDistribusi()}}" class="{{$item->distribusiSelesai() == true ? 'd-none': ''}}" type="hidden" name="jumlah_distribusi[]">
+                                                @else
+                                                    <input value="0" max="{{$item->jumlah_disetujui-$item->totalDistribusi()}}" class="{{$item->distribusiSelesai() == true ? 'd-none': ''}}" type="number" name="jumlah_distribusi[]">
+                                                @endif
+                                            </td>
+                                            <td>{{$item->barang->satuan->nama_satuan ?? 'N/A'}}</td>
+                                            <td>
+                                                @if ($item->distribusiSelesai() == true)
+                                                    Distribusi Selesai
+                                                @else
+                                                    <input type="file" class="{{$item->distribusiSelesai() == true ? 'd-none': ''}}" name="file_upload[{{$item->id}}]">
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+                        {{-- <div class="form-group mb-2">
+                            <label for="check"></label>
                             <input type="file" multiple name="file[]" class="form-control" required>
-                        </div>
+                        </div> --}}
 
 
                     </div>

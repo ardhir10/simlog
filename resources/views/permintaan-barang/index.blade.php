@@ -241,12 +241,15 @@
 <script>
     $('#data-table').DataTable({
         //   "pageLength": 3
+        paging:true
 
     });
 
-    $(".clickable-row").click(function() {
+    $("#data-table").on("click", ".clickable-row", function(){
         window.location = $(this).data("href");
     });
+
+   
 
 </script>
 @endpush

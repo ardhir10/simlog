@@ -102,6 +102,21 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    Route::prefix('retur-barang')->name('retur-barang.')->group(function () {
+        Route::get('/', 'ReturBarangController@index')->name('index');
+        Route::get('/create', 'ReturBarangController@create')->name('create');
+        Route::get('/batalkan/{id?}', 'ReturBarangController@batalkan')->name('batalkan');
+        Route::get('/hapus-barang/{id?}', 'ReturBarangController@hapusBarang')->name('hapus-barang');
+        Route::post('/tambah-barang', 'ReturBarangController@tambahBarang')->name('tambah-barang');
+        Route::post('/retur-barang/{id}', 'ReturBarangController@store')->name('simpan');
+
+        Route::get('/approval-review/{id?}', 'ReturBarangController@approvalReview')->name('approval-review');
+        Route::post('/approval-tindak-lanjut/{id?}', 'ReturBarangController@approvalTindakLanjut')->name('approval-tindak-lanjut');
+        Route::get('/cetak-bast/{id}', 'ReturBarangController@cetakBast')->name('cetak-bast');
+
+        
+    });
+
 
 
     // --- MASTER DATA

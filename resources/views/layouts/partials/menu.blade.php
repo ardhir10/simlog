@@ -99,12 +99,21 @@
                         </a>
                     </li>
                 @endif
-                <li>
-                    <a href="/">
-                        <i class="icon nav-icon" data-feather="trello"></i>
-                        <span class="menu-item" data-key="t-sales">Retur Barang</span>
-                    </a>
-                </li>
+                
+                @if (
+                    (Auth::user()->role->type ?? null) == 2 || 
+                    (Auth::user()->role->name ?? null) == 'Kurir/Offsetter' || 
+                    (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
+                    (Auth::user()->role->name ?? null) == 'Pengelola Gudang'
+                    )
+                    <li>
+                        <a href="{{route('retur-barang.index')}}">
+                            <i class="icon nav-icon" data-feather="trello"></i>
+                            <span class="menu-item" data-key="t-sales">Retur Barang</span>
+                        </a>
+                    </li>
+                @endif
+
 
                 @if ((Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
                     (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
