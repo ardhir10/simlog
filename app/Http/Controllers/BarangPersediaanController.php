@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\BarangMasuk;
 use App\BarangPersediaan;
+use App\Imports\GeneralImport;
 use App\KategoriBarang;
 use App\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class BarangPersediaanController extends Controller
 {
@@ -301,6 +302,169 @@ class BarangPersediaanController extends Controller
             return $fileName = $name;
         }
         return false;
+    }
+
+    public function import(Request $request){
+
+        $timestampID = date('Y-m-d H:i:s');
+        if ($request->hasFile('file')) {
+            try {
+                $rows = Excel::toArray(new GeneralImport(), $request->file('file'));
+                $dataBarangImport = [];
+                $dataBarangImport2 = [];
+
+                foreach ($rows[0] as $key => $value) {
+                    if(is_numeric($value[0])){
+
+
+
+                        // UDAH JADI
+                        $dataBarang['kode_barang'] = $value[1];
+
+                        if( strpos($value[2], "-") == 0){
+                            $namaBarang = substr($value[2], 1);
+                            $namaBarang = trim($namaBarang, ' ');
+                        }
+                        $dataBarang['nama_barang'] = $namaBarang;
+                        $dataBarang['tahun_perolehan'] = $value[3];
+                        $dataBarang['satuan'] = $value[5];
+                        $dataBarang['harga_perolehan'] = $value[6];
+                        $dataBarang['kategori'] = $value[13];
+                        // // Peruntukkan Apa saja yang ada stocknya
+                        $peruntukkan = [];
+                        if($value[14]>0){
+                            // umum
+                            $peruntukkan[] = ['kode_peruntukkan'=>'01','value'=>$value[14]];
+                        }
+                        if($value[15]>0){
+                            // SBNP
+                            $peruntukkan[] = ['kode_peruntukkan'=>'08','value'=>$value[15]];
+                        }
+                        if ($value[16]>0) {
+                            // TELKOMPEL
+                            $peruntukkan[] = ['kode_peruntukkan'=>'09','value'=>$value[16]];
+                        }
+                        if ($value[17]>0) {
+                            // PENGLA
+                            $peruntukkan[] = ['kode_peruntukkan'=>'10','value'=>$value[17]];
+                        }
+                        if ($value[18]>0) {
+                            // KNK
+                            $peruntukkan[] = ['kode_peruntukkan'=>'11','value'=>$value[18]];
+                        }
+                        if ($value[19]>0) {
+                            // BEGNKEL
+                            $peruntukkan[] = ['kode_peruntukkan'=>'12','value'=>$value[19]];
+                        }
+                        if ($value[20]>0) {
+                            // Sie Kepeg & Umum
+                            $peruntukkan[] = ['kode_peruntukkan'=>'02','value'=>$value[20]];
+                        }
+                        if ($value[21]>0) {
+                            // Sie Keuangan
+                            $peruntukkan[] = ['kode_peruntukkan'=>'03','value'=>$value[21]];
+                        }
+                        if ($value[22]>0) {
+                            // Sie Pengadaan
+                            $peruntukkan[] = ['kode_peruntukkan'=>'04','value'=>$value[22]];
+                        }
+                        if ($value[23]>0) {
+                            // Sie Inventaris
+                            $peruntukkan[] = ['kode_peruntukkan'=>'05','value'=>$value[23]];
+                        }
+                        if ($value[24]>0) {
+                            // Sie Sarpras
+                            $peruntukkan[] = ['kode_peruntukkan'=>'06','value'=>$value[24]];
+                        }
+                        if ($value[25]>0) {
+                            // Sie Sarpras
+                            $peruntukkan[] = ['kode_peruntukkan'=>'07','value'=>$value[25]];
+                        }
+
+                        $dataBarang['peruntukkan_available'] = $peruntukkan;
+
+                        // HANYA DI PROSES JIKA MEMILIKI SUB TOTAL UNTUK MENGHINDARI SALAH HITUNG
+                        if ($value[12]>0) {
+                            $dataBarangImport[] = $value[0];
+                            try {
+                                DB::beginTransaction();
+                                // GENERATE SATUAN
+                                $satuanId = Satuan::updateOrCreate(['nama_satuan' => $dataBarang['satuan']], ['nama_satuan' => $dataBarang['satuan']]);
+                                $satuanId = $satuanId->id;
+
+                                // GENERATE KATEGORI
+                                $kategoriId = KategoriBarang::updateOrCreate(['nama_kategori' => $dataBarang['kategori']], ['nama_kategori' => $dataBarang['kategori']]);
+                                $kategoriId = $kategoriId->id;
+
+                                // LOOP BERDASARKAN PERUNTUKKAN
+                                foreach ($peruntukkan as $key => $value2) {
+                                    $BarangPersediaan = BarangPersediaan::where('nama_barang', $namaBarang)
+                                        ->where('sub_sub_kategori', $value2['kode_peruntukkan'])
+                                        ->where('harga_perolehan', $dataBarang['harga_perolehan'])
+                                        ->where('kode_barang', $dataBarang['kode_barang'])
+                                        ->first();
+                                    if ($BarangPersediaan) {
+                                        $BarangPersediaanId = $BarangPersediaan;
+                                    } else {
+                                        $dataBarangImport2[] = $value[0];
+
+                                        // Buat Barangnya
+                                        $createBarang['sumber_barang'] = 'existing';
+                                        $createBarang['kategori_barang_id'] = $kategoriId;
+                                        $createBarang['nama_barang'] = $namaBarang;
+                                        $createBarang['kode_barang'] = $dataBarang['kode_barang'];
+                                        $createBarang['tahun_perolehan'] = $dataBarang['tahun_perolehan'];
+                                        $createBarang['jumlah'] = 0;
+                                        $createBarang['satuan_id'] = $satuanId;
+                                        $createBarang['harga_perolehan'] = $dataBarang['harga_perolehan'];
+                                        $createBarang['mata_uang'] = 'IDR';
+                                        $createBarang['masa_simpan'] = 0;
+                                        $createBarang['jumlah_stok_minimal'] = 0;
+                                        $createBarang['spesifikasi_barang'] = '';
+                                        $createBarang['foto_barang'] = '';
+                                        $createBarang['created_by_id'] = Auth::user()->id;
+                                        $createBarang['created_by_name'] = Auth::user()->name;
+                                        $createBarang['sub_sub_kategori'] = $value2['kode_peruntukkan'];
+                                        $createBarang['from'] = 'file';
+                                        $BarangPersediaanId = BarangPersediaan::create($createBarang);
+                                    }
+
+                                    // Masukkan Stock
+                                    BarangMasuk::create([
+                                        'timestamp' => $timestampID,
+                                        'barang_id' => $BarangPersediaanId->id,
+                                        'permintaan_id' => 0,
+                                        'harga_perolehan' => $dataBarang['harga_perolehan'],
+                                        'tahun_perolehan' => $dataBarang['tahun_perolehan'],
+                                        'jumlah' => $value2['value'],
+                                        'sub_sub_kategori' =>  $value2['kode_peruntukkan'],
+                                    ]);
+                                }
+                                DB::commit();
+                            } catch (\Throwable $th) {
+                                dd($value);
+                            }
+                        }
+
+
+
+                    }
+                }
+                // $dataBarangImport = array_filter($dataBarangImport,function($q){
+                //     if($q > 0 ){
+                //         return $q;
+                //     }
+                // });
+
+                dd($dataBarangImport, $dataBarangImport2, array_diff($dataBarangImport,$dataBarangImport2));
+
+            } catch (\Throwable $th) {
+                dd($th);
+                return back()->with(['failed' => $th->getMessage()]);
+            }
+        }
+
+        return back()->with(['failed' => 'Please Check your file, Something is wrong there.']);
     }
 }
 

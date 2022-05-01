@@ -16,7 +16,6 @@ class ApiDashboardController extends Controller
 
         if($month == 'all'){
             $barangMasuk = BarangMasuk::get();
-
         }else{
             $barangMasuk = BarangMasuk::where('timestamp','ilike', $dateRange.'%')->get();
         }

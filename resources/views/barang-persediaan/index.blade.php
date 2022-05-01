@@ -21,9 +21,15 @@
         <div class="card shadow-lg">
             <div class="card-header justify-content-between d-flex align-items-center">
                 <h4 class="card-title">{{$page_title}}</h4>
-                <a href="{{route('barang-persediaan.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Tambah Barang
-                    <i class="fa fa-plus align-middle"></i>
-                </a>
+                <div class="d-flex">
+
+                    <button data-bs-toggle="modal" data-bs-target="#importModal" class="btn btn-outline btn-outline-primary  me-1 btn-rounded"> Import Barang
+                        <i class="fa fa-upload align-middle"></i>
+                    </button>
+                    <a href="{{route('barang-persediaan.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Tambah Barang
+                        <i class="fa fa-plus align-middle"></i>
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="col-12">
@@ -107,6 +113,35 @@
 </div> <!-- container-fluid -->
 </div>
 @endsection
+
+@push('modals')
+<!-- MODAL IMPORT -->
+<div id="importModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Import Data From Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{route('barang-persediaan.import')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="">Upload File Excel</label>
+                        <input type="file" name="file" class="form-control">
+                    </div>
+                    <button class="btn btn-success mt-3">Import Data</button>
+                </form>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@endpush
 
 @push('scripts')
 <script>
