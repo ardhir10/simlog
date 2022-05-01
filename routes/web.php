@@ -85,6 +85,46 @@ Route::middleware('auth')->group(function () {
 
     });
 
+
+    Route::prefix('rencana-kebutuhan')->name('rencana-kebutuhan.')->group(function () {
+        Route::get('/', 'RencanaKebutuhanController@index')->name('index');
+        Route::get('/create', 'RencanaKebutuhanController@create')->name('create');
+        Route::get('/batalkan/{id?}', 'RencanaKebutuhanController@batalkan')->name('batalkan');
+        Route::post('/store/{id?}', 'RencanaKebutuhanController@store')->name('store');
+        Route::get('/get-barang-persediaan/{id?}', 'RencanaKebutuhanController@getBarangPersediaan')->name('get-barang-persediaan');
+        Route::post('/input-item/{id?}', 'RencanaKebutuhanController@inputItem')->name('input-item');
+        Route::get('/delete-item/{id?}', 'RencanaKebutuhanController@deleteItem')->name('delete-item');
+        Route::get('/detail/{id?}', 'RencanaKebutuhanController@detail')->name('detail');
+
+    });
+
+    Route::prefix('rk-approval')->name('rk-approval.')->group(function () {
+
+        Route::get('/', 'ApprovalRencanaKebutuhanController@index')->name('index');
+        Route::get('/review/{id}', 'ApprovalRencanaKebutuhanController@review')->name('review');
+        Route::post('/tindak-lanjut/{id}', 'ApprovalRencanaKebutuhanController@tindakLanjut')->name('tindak-lanjut');
+        Route::post('/tindak-lanjut-update/{id}/{idApproval}/{idPersetujuan}', 'ApprovalRencanaKebutuhanController@tindakLanjutUpdate')->name('tindak-lanjut-update');
+
+        Route::post('/pengelola-gudang-setuju/{id}', 'ApprovalRencanaKebutuhanController@pengelolaGudangsetuju')->name('pengelola-gudang-setuju');
+
+        Route::post('/kabid-logistik-setuju/{id}', 'ApprovalRencanaKebutuhanController@kabidLogistikSetuju')->name('kabid-logistik-setuju');
+        Route::post('/kabid-logistik-setuju-disposisi-kadisnav/{id}', 'ApprovalRencanaKebutuhanController@kabidLogistikSetujuDisposisiKadisnav')->name('kabid-logistik-setuju-disposisi-kadisnav');
+        Route::post('/kabid-logistik-disposisi/{id}', 'ApprovalRencanaKebutuhanController@kabidLogistikDisposisi')->name('kabid-logistik-disposisi');
+
+        Route::post('/kasie-pengadaan-setuju/{id}', 'ApprovalRencanaKebutuhanController@kasiePengadaanSetuju')->name('kasie-pengadaan-setuju');
+        Route::post('/kasie-pengadaan-setuju-disposisi-kadisnav/{id}', 'ApprovalController@kasiePengadaanSetujuDisposisiKadisnav')->name('kasie-pengadaan-setuju-disposisi-kadisnav');
+        Route::post('/bendahara-materil-setuju/{id}', 'ApprovalRencanaKebutuhanController@bendaharaMaterilSetuju')->name('bendahara-materil-setuju');
+        Route::post('/staff-seksi-pengadaan-setuju/{id}', 'ApprovalRencanaKebutuhanController@staffSeksiPengadaanSetuju')->name('staff-seksi-pengadaan-setuju');
+        Route::post('/pengelola-gudang-siap/{id}', 'ApprovalRencanaKebutuhanController@pengelolaGudangSiap')->name('pengelola-gudang-siap');
+
+        Route::post('/terima-barang/{id}', 'ApprovalRencanaKebutuhanController@terimaBarang')->name('terima-barang');
+        Route::post('/kirim-kurir/{id}', 'ApprovalRencanaKebutuhanController@kirimKurir')->name('kirim-kurir');
+        Route::post('/terima-barang-by-kurir/{id}', 'ApprovalRencanaKebutuhanController@terimaBarangByKurir')->name('terima-barang-by-kurir');
+
+        Route::post('/serahkan-barang/{id}', 'ApprovalRencanaKebutuhanController@serahkanBarang')->name('serahkan-barang');
+        Route::post('/lapor/{id}', 'ApprovalRencanaKebutuhanController@lapor')->name('lapor');
+    });
+
     Route::prefix('rab')->name('rab.')->group(function () {
         Route::get('/', 'RencanaAnggaranBiayaController@index')->name('index');
         Route::get('/create', 'RencanaAnggaranBiayaController@create')->name('create');
@@ -114,8 +154,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/approval-tindak-lanjut/{id?}', 'ReturBarangController@approvalTindakLanjut')->name('approval-tindak-lanjut');
         Route::get('/cetak-bast/{id}', 'ReturBarangController@cetakBast')->name('cetak-bast');
 
-        
+
     });
+
 
 
 

@@ -22,12 +22,18 @@ class BarangPersediaan extends Model
     public function stokBarang(){
         $BarangMasuk = BarangMasuk::where('barang_id',$this->id)->get()->sum('jumlah');
         $Barangkeluar = BarangKeluar::where('barang_keluar_id',$this->id)->get()->sum('jumlah');
-        return $stock = $BarangMasuk-$Barangkeluar;
+        $BarangRetur = ReturDetail::where('barang_id', $this->id)->where('status', 'done')->get()->sum('jumlah_retur') ?? 0;
+        return $stock = $BarangMasuk-$Barangkeluar+$BarangRetur;
     }
 
     public function barangMasuk()
     {
         return $this->hasMany(BarangMasuk::class, 'barang_id', 'id');
+    }
+
+    public function barangRetur()
+    {
+        return $totalBarangRetur = ReturDetail::where('barang_id',$this->id)->where('status','done')->get()->sum('jumlah_retur') ?? 0;
     }
 
     public function barangKeluar()

@@ -88,35 +88,26 @@
                             </div>
                             <div class="col-lg-4 offset-lg-2">
                                 <div class="text-end">
-                                        @if ($data->lastApproval())
-                                            @if (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
-                                                {{-- @if (!$data->laporanDistribusi) --}}
-                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
-                                                        <i class="fa fa-file"></i>
-                                                        LAPOR DISTRIBUSI</button>
-                                                {{-- @endif --}}
-                                            @else
-                                                @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
-                                                        <button class="btn btn-lg btn-info " disabled >
-                                                        <i class="fa fa-truck"></i>
-                                                        DIJEMPUT KURIR</button>
-                                                @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
-                                                    <button class="btn btn-lg btn-success " disabled>
+                                        @if (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
+                                            <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#laporDistribusi" >
+
+                                                <i class="fa fa-file"></i>
+                                                LAPOR DISTRIBUSI</button>
+                                        @else
+                                            @if ($data->approvals->where('type','Barang Dijemput Kurir')->first())
+                                                <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
+                                                <i class="fa fa-check"></i>
+                                                TERIMA BARANG</button>
+                                            @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diterima')
+                                                <button class="btn btn-lg btn-success " disabled>
                                                     <i class="fa fa-check"></i>
                                                     BARANG SUDAH DITERIMA</button>
-                                                @elseif (($data->lastApproval()->type ?? null) == 'Barang Telah diserahkan Pengelola Gudang')
-                                                    <button class="btn btn-lg btn-primary " data-bs-toggle="modal" data-bs-target="#pilihKurir" >
-                                                        <i class="fa fa-truck"></i>
-                                                        PILIH KURIR</button>
-                                                        <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#terimaBarang" >
-                                                            <i class="fa fa-check"></i>
-                                                            TERIMA BARANG</button>
-                                                @else
-                                                    <h1 class="text-warning">SEDANG DIPROSES</h1>
-                                                @endif
+                                            @else
 
                                             @endif
+
                                         @endif
+
                                 </div>
                             </div>
                         </div>
@@ -372,7 +363,7 @@
                             </div>
                         </div>
 
-                       {{-- PERSETUJUAN --}}
+                        {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">
                             <div class="col-lg-12">
@@ -388,6 +379,8 @@
                                                                 <p class="text-muted">
                                                                     {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                     {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                    {{-- <span class="fw-bold d-block">Dari : {{$appvs->user->name ?? 'N/A'}} ({{$appvs->user->role->name ?? 'N/A'}})</span> --}}
+                                                                    {{-- <span class="fw-bold d-block">Ke : {{$appvs->role_to_name ?? 'N/A'}} </span> --}}
                                                                     <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
                                                                     <span class="d-block mb-2">Keterangan :</span>
                                                                     <span>{{$appvs->keterangan}}</span>
@@ -395,18 +388,35 @@
                                                         </div>
                                                     </div>
                                                 @elseif ($appvs->kategori == 'DISPOSISI')
-                                                    <div class="col-lg-12">
-                                                        <div class="card bg-warning" style="border: 1px solid">
-                                                            <div class="card-body p-4">
-                                                                <p class="text-muted">
-                                                                    {{date('d F T',strtotime($appvs->timestamp))}} ||
-                                                                    {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
-                                                                    <span class="d-block mb-2">Disposisi Kepada {{$appvs->role_to_name}}</span>
-                                                                    <span class="d-block mb-2">Keterangan :</span>
-                                                                    <span>{{$appvs->keterangan}}</span>
+                                                    {{-- JIKA LEVELNYA ATAS KEATAS  --}}
+                                                    @if ($appvs->user->role->level < $appvs->diminta->level)
+                                                        <div class="col-lg-12">
+                                                            <div class="card bg-warning" style="border: 1px solid">
+                                                                <div class="card-body p-4">
+                                                                    <p class="text-muted">
+                                                                        {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                        {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                        <span class="d-block mb-2">{{$appvs->user->role->name}} Disposisi ke {{$appvs->diminta->name}}</span>
+                                                                        <span class="d-block mb-2">Keterangan :</span>
+                                                                        <span>{{$appvs->keterangan}}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        <div class="col-lg-12">
+                                                            <div class="card bg-warning" style="border: 1px solid">
+                                                                <div class="card-body p-4">
+                                                                    <p class="text-muted">
+                                                                        {{date('d F T',strtotime($appvs->timestamp))}} ||
+                                                                        {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
+                                                                        <span class="d-block mb-2">{{$appvs->user->role->name}} Meminta Arahan ke {{$appvs->diminta->name}}</span>
+                                                                        <span class="d-block mb-2">Keterangan :</span>
+                                                                        <span>{{$appvs->keterangan}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
                                                 @endif
                                             @endforeach
                                         </div>
@@ -414,6 +424,7 @@
                                 </div>
                             </div>
                         </div>
+
                         @if ($data->laporanDistribusi)
 
                             {{-- LAPORAN DISTRIBUSI --}}
@@ -444,7 +455,7 @@
                                                                 <th>Nama Barang</th>
                                                                 <th>Satuan</th>
                                                                 <th>Kode</th>
-                                                                <th>Qty</th>
+                                                                <th>UPP4</th>
                                                                 <th>Detail Distribusi</th>
                                                             </tr>
                                                         </thead>
@@ -459,16 +470,7 @@
                                                                     <td>
                                                                         <table class="table table-bordered">
                                                                             <tr>
-                                                                                <td colspan="2" class="fw-bolder">
-                                                                                    <span class="d-block">
-
-                                                                                        Total Distribusi : {{$item->totalDistribusi() ?? 'N/A'}}
-                                                                                    </span>
-                                                                                     <span class="d-block">
-
-                                                                                        Sisa : {{$item->barangBelumDistribusi() ?? 'N/A'}}
-                                                                                    </span>
-                                                                                </td>
+                                                                                <td colspan="2" class="fw-bolder">Total Distribusi : {{$item->totalDistribusi() ?? 'N/A'}}</td>
                                                                             </tr>
                                                                             @foreach ($item->barangDistribusi as $bdis)
                                                                                 <tr>
@@ -497,6 +499,7 @@
                         @endif
 
 
+
                     </div>
                 </div>
             </div>
@@ -520,12 +523,12 @@
 
                     </button>
                 </div>
-                <form action="{{route('approval.terima-barang',$data->id)}}" method="post">
+                <form action="{{route('approval.terima-barang-by-kurir',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
                         <p class="text-center">
-                            Dengan menekan tombol lanjutkan , anda sebagai Peminta barang melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
+                            Dengan menekan tombol lanjutkan , anda sebagai Kurir melakukan konfirmasi bahwa Anda telah menerima barang dengan jumlah yang tepat dan barang dalam kondisi baik.
                         </p>
 
 
@@ -538,49 +541,15 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!-- sample modal content -->
-    <div id="pilihKurir" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Silahkan Pilih Kurir</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form  action="{{route('approval.kirim-kurir',$data->id)}}" method="post">
-                        @csrf
-                        <div class="form-group mb-2">
-                            <label for="">Pilih Kurir :</label>
-                            <select name="kurir_id" class="form-select" val>
-                                @foreach ($kurir ?? [] as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Keterangan :</label>
-                           <textarea name="keterangan" class="form-control" id="" cols="30" rows="3"></textarea>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">KIRIM KURIR</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
     <!-- Lapor Distribusi -->
     <div id="laporDistribusi" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">LAPORAN DISTRIBUSI</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                    </button>
                 </div>
                 <form action="{{route('approval.lapor',$data->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -613,7 +582,7 @@
                                         <th>No</th>
                                         <th>Nama Barang</th>
                                         <th>Kode</th>
-                                        <th>Total QTY</th>
+                                        <th>UPP4</th>
                                         <th>Total Distribusi</th>
                                         <th>Distribusi</th>
                                         <th>Satuan</th>

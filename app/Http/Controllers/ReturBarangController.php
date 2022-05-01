@@ -87,8 +87,8 @@ class ReturBarangController extends Controller
                 })
                 ->get();
         }
-       
-       
+
+
         return view('retur-barang.create', $data);
     }
 
@@ -123,7 +123,7 @@ class ReturBarangController extends Controller
             return redirect()->route('retur-barang.create')->with(['failed' => $th->getMessage()]);
         }
 
-       
+
 
 
     }
@@ -150,7 +150,7 @@ class ReturBarangController extends Controller
             ]);
 
             // APPROVAL DISETUJUI KASIE PENGADAAN
-         
+
 
             // Buat Approval Persetujuan Retur
             // $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
@@ -189,7 +189,7 @@ class ReturBarangController extends Controller
             DB::rollBack();
             return redirect()->route('retur-barang.index')->with(['failed' => 'Gagal dibuat !']);
         }
-        
+
     }
 
     public function approvalTindakLanjut(Request $request, $id)
@@ -211,7 +211,7 @@ class ReturBarangController extends Controller
 
 
             if (Auth::user()->role->name == 'Bendahara Materil') {
-                
+
                 // APPROVAL BENDAHARA MATERIL
                 $dataApproval['timestamp'] = date('Y-m-d H:i:s');
                 $dataApproval['retur_id'] = $id;
@@ -229,7 +229,7 @@ class ReturBarangController extends Controller
                 $dataApproval['kategori'] = 'PERSETUJUAN';
                 ApprovalRetur::create($dataApproval);
 
-                // Buat Approval Persetujuan 
+                // Buat Approval Persetujuan
                 $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
                 $dataPersetujuan['retur_id'] = $id;
                 $dataPersetujuan['user_id'] = Auth::user()->id;
@@ -294,7 +294,7 @@ class ReturBarangController extends Controller
             $dataApproval['kategori'] = 'PERSETUJUAN';
             ApprovalRetur::create($dataApproval);
 
-            // Buat Approval Persetujuan 
+            // Buat Approval Persetujuan
             $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
             $dataPersetujuan['retur_id'] = $id;
             $dataPersetujuan['user_id'] = Auth::user()->id;
@@ -310,13 +310,13 @@ class ReturBarangController extends Controller
             ReturBarang::where('id', $id)
                 ->update(['status' => 'Dalam Proses']);
 
-           
+
             DB::commit();
             return redirect()->route('retur-barang.approval-review', $id)->with(['success' => 'Siap menerima barang !']);
         } elseif ($request->tindak_lanjut == 'SERAHKAN BARANG') {
             DB::beginTransaction();
 
-            // APPROVAL 
+            // APPROVAL
             $dataApproval['timestamp'] = date('Y-m-d H:i:s');
             $dataApproval['retur_id'] = $id;
             $dataApproval['user_id'] = Auth::user()->id;
@@ -333,7 +333,7 @@ class ReturBarangController extends Controller
             $dataApproval['kategori'] = 'PERSETUJUAN';
             ApprovalRetur::create($dataApproval);
 
-            // Buat Approval Persetujuan 
+            // Buat Approval Persetujuan
             $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
             $dataPersetujuan['retur_id'] = $id;
             $dataPersetujuan['user_id'] = Auth::user()->id;
@@ -352,13 +352,13 @@ class ReturBarangController extends Controller
                     'status' => 'Dalam Proses',
                     'nomor_bast' => $this->generateNomorBast()
                 ]);
-           
+
             DB::commit();
             return redirect()->route('retur-barang.approval-review', $id)->with(['success' => 'Barang diserahkan !']);
         } elseif ($request->tindak_lanjut == 'TERIMA BARANG') {
             DB::beginTransaction();
 
-            // APPROVAL 
+            // APPROVAL
             $dataApproval['timestamp'] = date('Y-m-d H:i:s');
             $dataApproval['retur_id'] = $id;
             $dataApproval['user_id'] = Auth::user()->id;
@@ -410,7 +410,7 @@ class ReturBarangController extends Controller
             return view('pdf.bast-retur', $data);
         }
 
-        
+
 
 
         $pdf = PDF::loadView('pdf.bast-retur', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
@@ -452,7 +452,7 @@ class ReturBarangController extends Controller
     private function generateNomorRetur()
     {
 
-     
+
 
         $roleName = Auth::user()->role->name;
         $kode = $this->getKode($roleName);
@@ -470,7 +470,7 @@ class ReturBarangController extends Controller
             $removed1char = substr($increment[1], 1);
             $increment = explode('/', $removed1char);
             $removed1char = substr($increment[0], 1);
-            
+
 
             $generateOrder_nr =
             'R.' . str_pad($removed1char + 1, 3, "0", STR_PAD_LEFT) .'/' . $month_now . '/SIM/' . $kode . '-' . $year_now;
@@ -483,9 +483,6 @@ class ReturBarangController extends Controller
 
     private function generateNomorBast()
     {
-
-
-
         $roleName = Auth::user()->role->name;
         $kode = $this->getKode($roleName);
 
@@ -498,7 +495,7 @@ class ReturBarangController extends Controller
             ->first();
 
         if ($obj) {
-     
+
             $increment = explode('/', $obj->nomor_bast);
             $removed1char = substr($increment[0], 1);
 

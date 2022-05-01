@@ -64,6 +64,12 @@
                         <span class="menu-item" data-key="t-sales">Permintaan barang</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('rencana-kebutuhan.index')}}">
+                        <i class="icon nav-icon" data-feather="trello"></i>
+                        <span class="menu-item" data-key="t-sales">Rencana Kebutuhan</span>
+                    </a>
+                </li>
 
                 {{-- ROLE TYPE MAP
                 1 = A (User Approval) staff:staff
@@ -99,10 +105,10 @@
                         </a>
                     </li>
                 @endif
-                
+
                 @if (
-                    (Auth::user()->role->type ?? null) == 2 || 
-                    (Auth::user()->role->name ?? null) == 'Kurir/Offsetter' || 
+                    (Auth::user()->role->type ?? null) == 2 ||
+                    (Auth::user()->role->name ?? null) == 'Kurir/Offsetter' ||
                     (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
                     (Auth::user()->role->name ?? null) == 'Pengelola Gudang'
                     )

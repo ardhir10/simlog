@@ -51,7 +51,7 @@
                     Auth::user()->role->name == 'Kasie Pengadaan' ||
                     Auth::user()->role->name == 'Staff Seksi Pengadaan'
                     )
-    q             <a href="{{route('rab.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat RAB
+                 <a href="{{route('rab.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat RAB
                         <i class="fa fa-plus align-middle"></i>
                     </a>
                 @endif
