@@ -198,13 +198,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/kategori-barang/{id}/update', 'KategoriBarangController@update')->name('kategori-barang.update');
         Route::get('/kategori-barang/{id}/delete', 'KategoriBarangController@delete')->name('kategori-barang.delete');
 
-        Route::get('/sub-kategori-barang', 'SubKategoribarangController@index')->name('sub-kategori-barang.index');
-        Route::get('/sub-kategori-barang/add', 'SubKategoribarangController@create')->name('sub-kategori-barang.create');
-        Route::get('/sub-kategori-barang', 'SubKategoribarangController@index')->name('sub-kategori-barang.index');
-        Route::post('/sub-kategori-barang', 'SubKategoribarangController@store')->name('sub-kategori-barang.store');
-        Route::get('/sub-kategori-barang/{id}/edit', 'SubKategoribarangController@edit')->name('sub-kategori-barang.edit');
-        Route::post('/sub-kategori-barang/{id}/update', 'SubKategoribarangController@update')->name('sub-kategori-barang.update');
-        Route::get('/sub-kategori-barang/{id}/delete', 'SubKategoribarangController@delete')->name('sub-kategori-barang.delete');
+        Route::get('/sub-kategori-barang', 'SubKategoriBarangController@index')->name('sub-kategori-barang.index');
+        Route::get('/sub-kategori-barang/add', 'SubKategoriBarangController@create')->name('sub-kategori-barang.create');
+        Route::get('/sub-kategori-barang', 'SubKategoriBarangController@index')->name('sub-kategori-barang.index');
+        Route::post('/sub-kategori-barang', 'SubKategoriBarangController@store')->name('sub-kategori-barang.store');
+        Route::get('/sub-kategori-barang/{id}/edit', 'SubKategoriBarangController@edit')->name('sub-kategori-barang.edit');
+        Route::post('/sub-kategori-barang/{id}/update', 'SubKategoriBarangController@update')->name('sub-kategori-barang.update');
+        Route::get('/sub-kategori-barang/{id}/delete', 'SubKategoriBarangController@delete')->name('sub-kategori-barang.delete');
 
         // ---SATUAN
         Route::get('/satuan', 'SatuanController@index')->name('satuan.index');
