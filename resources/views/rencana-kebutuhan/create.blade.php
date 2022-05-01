@@ -59,7 +59,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="">Kegiatan</label>
-                                        <input type="text" name="kegiatan" class="form-control" {{$data != null ? 'readonly':''}} value="{{$data->kegiatan ?? null}}">
+                                        <input type="text" name="kegiatan" class="form-control" {{$data != null ? 'readonly':''}} value="{{$data->kegiatan ?? null}}" required>
                                     </div>
                                 </div>
                             </div>

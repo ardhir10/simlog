@@ -92,15 +92,7 @@
                                         <span class="mt-auto ">Ditolak</span>
                                     </div>
                                 </td>
-                                <td>
-                                    <div class="d-flex pb-1 ps-4">
-                                        <div class="avatar-sm me-1">
-                                            <div class="avatar-title bg-selesai rounded-circle ">
-                                            </div>
-                                        </div>
-                                        <span class="mt-auto ">Selesai</span>
-                                    </div>
-                                </td>
+
 
                             </tr>
 

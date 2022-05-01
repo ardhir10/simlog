@@ -45,8 +45,9 @@
                             </button>
                         </a>
                     </div>
-
                 </div>
+
+
                 <form action="{{route('rab.store',$data->id ?? null)}}" enctype="multipart/form-data" method="POST">
                     @csrf
                     <div class="card-body p-4">
@@ -56,16 +57,37 @@
                         <div class="fw-bold mb-3">{{$data->nomor_rab ?? null}}</div>
                         <div class="col-lg-12">
                             <div class="row mb-3">
-                                <div class="col-lg-6">
+                                <div class="col-lg-7 mb-3">
+                                    <div class="form-group">
+                                        <label for="">Rencana Kebutuhan</label>
+                                        @if ($data->rencana_kebutuhan_id ?? null)
+                                            <select name="rencana_kebutuhan_id" class="form-select select2" disabled>
+                                                <option  value="">PILIH RENCANA KEBUTUHAN</option>
+                                                @foreach ($rencana_kebutuhan as $rk)
+                                                    <option {{($rk->id ?? null ) == $data->rencana_kebutuhan_id ?? null ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <select name="rencana_kebutuhan_id" class="form-select select2" >
+                                                <option  value="">PILIH RENCANA KEBUTUHAN</option>
+                                                @foreach ($rencana_kebutuhan as $rk)
+                                                    <option {{($rk->id ?? null ) == $data->rencana_kebutuhan_id ?? null ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 ">
                                     <div class="form-group">
                                         <label for="">Kegiatan</label>
-                                        <input type="text" name="kegiatan" class="form-control" value="{{$data->kegiatan ?? null}}">
+                                        <input type="text" name="kegiatan" class="form-control" value="{{$data->kegiatan ?? null}}" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="">MAK</label>
-                                        <input type="text" name="mak" class="form-control" value="{{$data->mak ?? null}}">
+                                        <input type="text" name="mak" class="form-control" value="{{$data->mak ?? null}}" required>
                                     </div>
                                 </div>
 
@@ -104,11 +126,103 @@
                                         </select>
                                     </div>
                                 </div>
+
+
+                                <div class="col-lg-12 mt-4">
+                                    <div class="fw-bold mb-3">Rencana Anggaran Biaya</div>
+                                    <div class="row mb-3">
+
+                                        @if ($data->rencana_kebutuhan_id ?? null)
+                                            <div class="col-lg-12">
+                                                <table class="table">
+                                                    <thead class="bg-success text-white">
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Nama Barang</th>
+                                                            <th>Satuan</th>
+                                                            <th>Qty</th>
+                                                            <th>Harga Satuan</th>
+                                                            <th>Keterangan</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($rab_details as $rd)
+                                                            <tr>
+                                                                <td>{{$loop->iteration}}</td>
+                                                                <td>{{$rd->nama_barang}}</td>
+                                                                <td>{{$rd->satuan}}</td>
+                                                                <td>{{$rd->qty}}</td>
+                                                                <td>
+                                                                    <input type="text" name="harga_satuan[{{$rd->id}}]" value="{{$rd->harga_satuan}}" required>
+                                                                    <select  name="mata_uang[{{$rd->id}}]" class="" id="" required>
+                                                                        <option value="IDR">IDR</option>
+                                                                    </select>
+                                                                </td>
+
+                                                                <td>{{$rd->keterangan}}</td>
+                                                                <td>
+                                                                    <a href="{{route('rab.delete-item',$rd->id)}}" onclick="return confirm('Yakin hapus item ?')">
+                                                                        <button class="btn btn-danger">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
+                                                                        </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            <div class="col-lg-12">
+                                                <table class="table">
+                                                    <thead class="bg-success text-white">
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Nama Barang</th>
+                                                            <th>Satuan</th>
+                                                            <th>Qty</th>
+                                                            <th>Harga Satuan</th>
+                                                            <th>Jumlah</th>
+                                                            <th>Keterangan</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($rab_details as $rd)
+                                                            <tr>
+                                                                <td>{{$loop->iteration}}</td>
+                                                                <td>{{$rd->nama_barang}}</td>
+                                                                <td>{{$rd->satuan}}</td>
+                                                                <td>{{$rd->qty}}</td>
+                                                                <td>{{$rd->harga_satuan}}</td>
+                                                                <td>{{$rd->mata_uang}}&nbsp;{{ $rd->harga_satuan * $rd->qty}}</td>
+                                                                <td>{{$rd->keterangan}}</td>
+                                                                <td>
+                                                                    <a href="{{route('rab.delete-item',$rd->id)}}" onclick="return confirm('Yakin hapus item ?')">
+                                                                        <button class="btn btn-danger">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
+                                                                        </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        @endif
+
+
+                                    </div>
+                                </div>
+
                             </div>
+
                             @if ($data)
                                 @if ($rab_details)
                                     <input type="hidden" name="submit" value="AJUKAN">
-                                    <button class="btn w-100 btn-success btn-lg">
+                                    <button class="btn  btn-success btn-lg">
                                     <i class="fa fa-list-alt"></i>
                                     Ajukan RAB </button>
                                 @endif
@@ -124,128 +238,84 @@
                     </div>
                 </form>
                 <hr>
-                @if ($data)
-                    <form action="{{route('rab.input-item',$data->id ?? null)}}" method="POST">
-                        @csrf
-                        <div class="card-body p-4">
-                            <div class="col-12">
-                                @include('components.flash-message')
-                            </div>
-                            <div class="fw-bold mb-3">Input Item RAB</div>
-                            <div class="col-lg-12">
-                                <div class="row mb-3">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="">Nama Barang</label>
-                                            <input type="hidden" name="barang_id" class="form-control" value="" required>
-                                            <input type="text" name="nama_barang" class="form-control" value="" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="">Satuan</label>
-                                            <select name="satuan" id="" class="form-select" required>
-                                                @foreach ($satuan as $s)
-                                                <option value="{{$s->nama_satuan}}">{{$s->nama_satuan}}</option>
 
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="">Pilih Barang</label>
-                                            <button class="btn btn-warning w-100" type="button" data-bs-toggle="modal" data-bs-target="#barangExistingList">Pilih Barang Existing</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label for="">Qty</label>
-                                            <input type="number" name="qty" class="form-control" value="" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="">Harga Satuan</label>
-                                            <input type="number" class="form-control" name="harga_satuan" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="">Mata Uang</label>
-                                            <select name="mata_uang"  class="form-select" id="" required>
-                                                <option value="IDR">IDR</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mt-2">
-                                        <div class="form-group">
-                                            <label for="">Keterangan</label>
-                                            <textarea name="keterangan"  rows="3" class="form-control" required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary btn-sm ">INPUT ITEM</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="card-body p-4">
-                        <div class="col-12">
-                            @include('components.flash-message')
-                        </div>
-                        <div class="fw-bold mb-3">Rencana Anggaran Biaya</div>
-                        <div class="col-lg-12">
-                            <div class="row mb-3">
-                                <div class="col-lg-12">
-                                    <table class="table">
-                                        <thead class="bg-success text-white">
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Barang</th>
-                                                <th>Satuan</th>
-                                                <th>Qty</th>
-                                                <th>Harga Satuan</th>
-                                                <th>Jumlah</th>
-                                                <th>Keterangan</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($rab_details as $rd)
-                                                <tr>
-                                                    <td>{{$loop->iteration}}</td>
-                                                    <td>{{$rd->nama_barang}}</td>
-                                                    <td>{{$rd->satuan}}</td>
-                                                    <td>{{$rd->qty}}</td>
-                                                    <td>{{$rd->harga_satuan}}</td>
-                                                    <td>{{$rd->mata_uang}}&nbsp;{{ $rd->harga_satuan * $rd->qty}}</td>
-                                                    <td>{{$rd->keterangan}}</td>
-                                                    <td>
-                                                          <a href="{{route('rab.delete-item',$rd->id)}}" onclick="return confirm('Yakin hapus item ?')">
-                                                            <button class="btn btn-danger">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                            </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                @endif
-                <hr>
 
 
 
             </div>
-        </div>
+            @if ($data)
+                @if ($data->rencana_kebutuhan_id == null)
+                    <div class="card shadow-lg">
+                        <form action="{{route('rab.input-item',$data->id ?? null)}}" method="POST">
+                            @csrf
+                            <div class="card-body p-4">
+                                <div class="col-12">
+                                    @include('components.flash-message')
+                                </div>
+                                <div class="fw-bold mb-3">Input Item RAB</div>
+                                <div class="col-lg-12">
+                                    <div class="row mb-3">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Nama Barang</label>
+                                                <input type="hidden" name="barang_id" class="form-control" value="" required>
+                                                <input type="text" name="nama_barang" class="form-control" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="">Satuan</label>
+                                                <select name="satuan" id="" class="form-select" required>
+                                                    @foreach ($satuan as $s)
+                                                    <option value="{{$s->nama_satuan}}">{{$s->nama_satuan}}</option>
+
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="">Pilih Barang</label>
+                                                <button class="btn btn-warning w-100" type="button" data-bs-toggle="modal" data-bs-target="#barangExistingList">Pilih Barang Existing</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label for="">Qty</label>
+                                                <input type="number" name="qty" class="form-control" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="">Harga Satuan</label>
+                                                <input type="number" class="form-control" name="harga_satuan" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="">Mata Uang</label>
+                                                <select name="mata_uang"  class="form-select" id="" required>
+                                                    <option value="IDR">IDR</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mt-2">
+                                            <div class="form-group">
+                                                <label for="">Keterangan</label>
+                                                <textarea name="keterangan"  rows="3" class="form-control" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm ">INPUT ITEM</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+
+            @endif
     </div>
 
     <!-- end row -->

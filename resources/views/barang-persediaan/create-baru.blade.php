@@ -17,7 +17,7 @@
         <div class="form-group">
             <label for=""><strong>Peruntukkan</strong></label>
             <select name="sub_sub_kategori" class="form-select select2" required>
-                 <option value="01">(01) Umum</option>
+                <option value="01">(01) Umum</option>
                 <option value="02">(02) Sie Kepeg & Umum</option>
                 <option value="03">(03) Sie Keuangan</option>
                 <option value="04">(04) Sie Pengadaan</option>

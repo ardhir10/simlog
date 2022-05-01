@@ -761,8 +761,6 @@ class ApprovalRencanaKebutuhanController extends Controller
                 ]);
 
 
-
-
             if ($persetujuanSebelumnya) {
                 // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEUSER YANG MELAKUKAN DISPOSISI
                 $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
@@ -850,26 +848,13 @@ class ApprovalRencanaKebutuhanController extends Controller
             RencanaKebutuhan::where('id', $id)
                 ->update(['status' => 'Disetujui']);
 
-            // $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
-            // $dataPersetujuan['rencana_kebutuhan_id'] = $id;
-            // $dataPersetujuan['user_peminta_id'] = $rencanaKebutuhan->created_by;
-            // $dataPersetujuan['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
-            // $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
-            // $dataPersetujuan['type'] = 'Disetujui Pengelola Gudang';
-            // $dataPersetujuan['status'] = 'done';
-            // $dataPersetujuan['step'] = 0;
-            // $dataPersetujuan['keterangan'] = $request->keterangan;
-            // $dataPersetujuan['tindak_lanjut'] = null;
-            // $dataPersetujuan['approve_by_id'] = Auth::user()->id;
-            // $dataPersetujuan['kategori'] = 'PERSETUJUAN';
-            // ApprovalRencanaKebutuhanProcess::create($dataPersetujuan);
 
             $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
             $dataPersetujuan['rencana_kebutuhan_id'] = $id;
             $dataPersetujuan['user_peminta_id'] = $rencanaKebutuhan->created_by;
             $dataPersetujuan['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
-            $dataPersetujuan['role_to_name'] = Auth::user()->role->name ?? '';
-            $dataPersetujuan['type'] = 'Pesanan Telah disiapkan Pengelola Gudang';
+            $dataPersetujuan['role_to_name'] ='';
+            $dataPersetujuan['type'] = 'Rencana Kebutuhan Telah di Setujui';
             $dataPersetujuan['status'] = 'done';
             $dataPersetujuan['step'] = 0;
             $dataPersetujuan['keterangan'] = $request->keterangan;
@@ -879,25 +864,10 @@ class ApprovalRencanaKebutuhanController extends Controller
             ApprovalRencanaKebutuhanProcess::create($dataPersetujuan);
 
 
-            $dataApproval['timestamp'] = date('Y-m-d H:i:s');
-            $dataApproval['rencana_kebutuhan_id'] = $id;
-            $dataApproval['user_peminta_id'] = $rencanaKebutuhan->created_by;
-            $dataApproval['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
-            $dataApproval['role_to_name'] = 'Pengelola Gudang' ?? '';
-            $dataApproval['type'] = 'Menunggu Barang Diserahkan';
-            $dataApproval['status'] = '';
-            $dataApproval['step'] = 0;
-            $dataApproval['keterangan'] = $request->keterangan;
-            $dataApproval['tindak_lanjut'] = null;
-            $dataApproval['approve_by_id'] = 0;
-            $dataApproval['kategori'] = 'APPROVAL';
-            ApprovalRencanaKebutuhanProcess::create($dataApproval);
-
-
 
 
             DB::commit();
-            return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['success' => 'Pesanan Sudah Siap !']);
+            return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['success' => 'Rencana Kebutuhan disetujui !']);
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['failed' => $th->getMessage()]);

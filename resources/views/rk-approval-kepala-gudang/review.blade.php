@@ -85,31 +85,28 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="d-block mb-3">
-                                    <span>{{$data->perihal}}</span>
-                                    <br>
-                                    <span class="d-block">Diminta Oleh : {{$data->dimintaOleh()}}</span>
-                                    <span class="d-block">Bagian/Bidang : {{$data->bagianBidang()}}</span>
-                                    <span class="d-block">Nomor UPP3 : {{$data->nomor_upp3}}</span>
-                                    <span class="d-block">Tanggal Permintaan :
-                                        {{date('d F Y',strtotime($data->tanggal_permintaan))}}</span>
+                                    <h5 class="mb-2">{{$data->nomor_rk}} | {{date('d F Y',strtotime($data->timestamp))}}</h5>
+                                    <div class="row mb-3">
+                                        <div class="col-lg-6">
+                                            <span class="d-block text-success">Kegiatan</span>
+                                            <span class="d-block">{{$data->kegiatan}}</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-lg-6">
+                                            <span class="d-block text-success">Pengguna</span>
+                                            <span class="d-block">{{$data->pengguna()}}</span>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                                 <div class="col-lg-6">
                                      @if ($data->lastApproval()->type == 'Disetujui Bendahara Materil')
                                         <div class="row animate__animated  animate__fadeIn">
                                             <div class="col-lg-4 offset-lg-8">
                                                 <div class="text-end">
-                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#pesananSiap">PESANAN SIAP</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    @if ($data->lastApproval()->type == 'Pesanan Telah disiapkan Pengelola Gudang')
-                                        <div class="row animate__animated  animate__fadeIn">
-                                            <div class="col-lg-4 offset-lg-8">
-                                                <div class="text-end">
-                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#serahkanBarang">SERAHKAN BARANG</button>
+                                                    <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#pesananSiap">Setujui</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -220,7 +217,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title mb-4">List Barang</h5>
-
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="table-responsive">
@@ -233,17 +229,16 @@
                                                         <th class="td-head" style="vertical-align: middle" rowspan="2">
                                                             Nama Barang</th>
                                                         <th class="td-head" style="vertical-align: middle" rowspan="2">
-                                                            Kode</th>
-                                                        <th class="td-head" style="vertical-align: middle" rowspan="2">
-                                                            Kategori</th>
-                                                        <th class="td-head text-center" colspan="2">Jumlah</th>
-                                                        <th class="td-head" rowspan="2">Satuan</th>
+                                                            Satuan</th>
+
+                                                        <th class="td-head text-center" colspan="2">Permintaan</th>
+                                                        <th class="td-head" rowspan="2">Keterangan</th>
 
                                                     </tr>
                                                     <tr class="tr-head"
                                                         style="background: #1E1E1E;color:white;font-weight:bold;">
                                                         <th class="td-head" style="border-radius: 0px !important">
-                                                            Permintaan</th>
+                                                            Qty</th>
                                                         <th class="td-head" style="border-radius: 0px !important">
                                                             Disetujui</th>
                                                     </tr>
@@ -254,26 +249,23 @@
                                                     <td>
                                                         <div>
                                                             <span
-                                                                class="d-block font-size-15 fw-bold">{{$bd->barang->nama_barang ?? 'N/A'}}</span>
+                                                                class="d-block font-size-15 fw-bold">{{$bd->nama_barang ?? 'N/A'}}</span>
                                                             {{-- <span class="">{{$bd->barang->kode_barang ?? 'N/A'}}</span>
                                                             <span
                                                                 class="">{{$bd->barang->kategori_barang->nama_kategori ?? 'N/A'}}</span>
                                                             <span class="d-block">Sisa Stock :
                                                                 {{$bd->barang->jumlah ?? 'N/A'}}</span> --}}
-
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="font-size-15">{{$bd->barang->kode_barang ?? 'N/A'}}</span>
+                                                            class="font-size-15">{{$bd->satuan ?? 'N/A'}}</span>
                                                     </td>
-                                                    <td><span
-                                                            class="font-size-15">{{$bd->barang->kategori_barang->nama_kategori ?? 'N/A'}}</span>
-                                                    </td>
-                                                    <td class="font-size-15">{{$bd->jumlah}}</td>
+
+                                                    <td class="font-size-15">{{$bd->qty}}</td>
                                                     <td class="font-size-15">{{$bd->jumlah_disetujui ?? 0}}</td>
                                                     <td class="font-size-15">
-                                                        {{$bd->barang->satuan->nama_satuan ?? 'N/A'}}</td>
+                                                        {{$bd->keterangan?? 'N/A'}}</td>
 
 
                                                 </tr>
@@ -289,85 +281,7 @@
                             </div>
                         </div>
 
-                        {{-- DOKUMEN DOWNLOAD --}}
-                        <div class="row animate__animated  animate__fadeIn">
-                            <div class="col-lg-12">
-                                <div class="card shadow-lg">
-                                    <div class="card-body ">
-                                        <div class="row ">
-                                            <div class="col-lg-3">
-                                                <div class="d-flex">
-                                                    <div>
-                                                        <img height="65" src="{{asset('assets/images/icon/file.png')}}"
-                                                            alt="">
-                                                    </div>
-                                                    <div>
-                                                        <span class="d-block"
-                                                            style="font-size:20px;font-weight:bold;">Nota Dinas</span>
-                                                        <a href="{{route('permintaan-barang.nota-dinas',$data->id)}}"
-                                                            target="_blank">
-                                                            <button class="btn btn-sm btn-success">Download</button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="d-flex">
-                                                    <div>
-                                                        <img height="65" src="{{asset('assets/images/icon/file.png')}}"
-                                                            alt="">
-                                                    </div>
-                                                    <div>
-                                                        <span class="d-block"
-                                                            style="font-size:20px;font-weight:bold;">UPP3</span>
-                                                        <a href="{{route('permintaan-barang.upp3',$data->id)}}"
-                                                            target="_blank">
-                                                            <button class="btn btn-sm btn-success">Download</button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if ($data->approvals->where('kategori','PERSETUJUAN')->first->id ?? null)
-                                                <div class="col-lg-3">
-                                                    <div class="d-flex">
-                                                        <div>
-                                                            <img height="65" src="{{asset('assets/images/icon/file.png')}}"
-                                                                alt="">
-                                                        </div>
-                                                        <div>
-                                                            <span class="d-block"
-                                                                style="font-size:20px;font-weight:bold;">UPP4</span>
-                                                            <a href="{{route('permintaan-barang.upp4',$data->id)}}"
-                                                                target="_blank">
-                                                                <button class="btn btn-sm btn-success">Download</button>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                             @if ($data->nomor_bast)
-                                                <div class="col-lg-3">
-                                                    <div class="d-flex">
-                                                        <div>
-                                                            <img height="65" src="{{asset('assets/images/icon/file.png')}}"
-                                                                alt="">
-                                                        </div>
-                                                        <div>
-                                                            <span class="d-block"
-                                                                style="font-size:20px;font-weight:bold;">BAST</span>
-                                                            <a href="{{route('permintaan-barang.upp4',$data->id)}}"
-                                                                target="_blank">
-                                                                <button class="btn btn-sm btn-success">Download</button>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
                          {{-- PERSETUJUAN --}}
                         <hr>
@@ -455,16 +369,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">PESANAN SIAP</h5>
+                    <h5 class="modal-title" id="myModalLabel">SETUJUI RENCANA KEBUTUHAN</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
-                <form action="{{route('approval.pengelola-gudang-siap',$data->id)}}" method="post">
+                <form action="{{route('rk-approval.pengelola-gudang-siap',$data->id)}}" method="post">
                     @csrf
 
                     <div class="modal-body">
-                        <p class="text-center">Dengan menekan tombol ini , maka Pengelola Gudang Telah memastikan barang yang diminta telah disiapkan dan siap untuk diambil oleh Kurir/Pengguna </p>
 
                         <div class="form-group">
                             <label for="">Keterangan</label>
@@ -480,31 +393,6 @@
     </div><!-- /.modal -->
 
 
-     <!-- Modal Serahkan Barang -->
-    <div id="serahkanBarang" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Serahkan Barang</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                    </button>
-                </div>
-                <form action="{{route('approval.serahkan-barang',$data->id)}}" method="post">
-                    @csrf
-
-                    <div class="modal-body">
-                        <p class="text-center">Dengan menekan tombol ini , maka pengelola gudang mengkonfirmasi bahwa barang telah diserahkan kepada Kurir/Pengguna </p>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="simpanBeritaTambahan">SERAHKAN BARANG</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 
 </div>

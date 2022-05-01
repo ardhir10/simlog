@@ -6,6 +6,8 @@ use App\ApprovalRab;
 use App\BarangPersediaan;
 use App\RAB;
 use App\RabDetail;
+use App\RencanaKebutuhan;
+use App\RencanaKebutuhanDetail;
 use App\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,8 @@ class RencanaAnggaranBiayaController extends Controller
         }
 
 
+        $data['rencana_kebutuhan'] = RencanaKebutuhan::where('status','Disetujui')->get();
+
         $data['rab_details'] = RabDetail::where('rab_id',$dataRab->id ??null)->get();
         $data['rab'] = RAB::orderBy('id', 'desc')->get();
         return view('rab.create', $data);
@@ -49,6 +53,7 @@ class RencanaAnggaranBiayaController extends Controller
                     // RAB::whereId($id)->update(['is_draft'=>false]);
                     // return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
                 }else{
+                    DB::beginTransaction();
                     // Saat Klik Pilih Item
                     $dataRab['kegiatan'] = $request->kegiatan;
                     $dataRab['mak'] = $request->mak;
@@ -60,14 +65,61 @@ class RencanaAnggaranBiayaController extends Controller
                     $dataRab['timestamp'] = date('Y-m-d H:i:s');
                     $dataRab['status'] = 'draft';
                     $dataRab['nomor_rab'] = $this->generateNomorRab();
-                    RAB::create($dataRab);
+                    $dataRab['rencana_kebutuhan_id'] = $request->rencana_kebutuhan_id;
+
+
+                    $id = RAB::create($dataRab);
+                    $id = $id->id;
+                    // Jika Dari Rencan Kebutuhan
+                    if ($request->rencana_kebutuhan_id) {
+                        $listBarangRencanaKebutuhan = RencanaKebutuhanDetail::where('rencana_kebutuhan_id', $request->rencana_kebutuhan_id)->get();
+
+                        foreach ($listBarangRencanaKebutuhan as $key => $lbrk) {
+                            $cariBarang = RabDetail::where('rab_id', $id)
+                            ->where('nama_barang', $lbrk->nama_barang)
+                            ->where('satuan', $lbrk->satuan)
+                            ->where('harga_satuan', $lbrk->harga_satuan)
+                            ->where('mata_uang', $lbrk->mata_uang)
+                            ->first();
+                            if ($cariBarang) {
+                                $data['rab_id'] = $id;
+                                $data['nama_barang'] = $lbrk->nama_barang;
+                                $data['satuan'] = $lbrk->satuan;
+                                $data['qty'] = $lbrk->qty;
+                                $data['harga_satuan']
+                                    = $lbrk->harga_satuan;
+                                $data['mata_uang']
+                                    = $lbrk->mata_uang;
+                                $data['keterangan']
+                                    = $lbrk->keterangan;
+                                $data['add_by'] = Auth::user()->id;
+
+                                RabDetail::where('rab_id', $id)->update($data);
+                            } else {
+                                $data['rab_id'] = $id;
+                                $data['nama_barang'] = $lbrk->nama_barang;
+                                $data['satuan'] = $lbrk->satuan;
+                                $data['qty'] = $lbrk->qty;
+                                $data['harga_satuan']
+                                    = $lbrk->harga_satuan;
+                                $data['mata_uang']
+                                    = $lbrk->mata_uang;
+                                $data['keterangan']
+                                    = $lbrk->keterangan;
+                                $data['add_by'] = Auth::user()->id;
+
+                                RabDetail::create($data);
+                            }
+                        }
+                    }
+                    DB::commit();
                     return redirect()->route('rab.create')->with(['success' => 'Rab di buat !']);
                 }
 
             } catch (\Throwable $th) {
+                DB::rollBack();
                 return redirect()->route('rab.create')->with(['failed' => $th->getMessage()]);
             }
-
 
         }else{
             try {
@@ -90,6 +142,17 @@ class RencanaAnggaranBiayaController extends Controller
                     $dataApproval['tindak_lanjut'] = '';
                     $dataApproval['approve_by_id'] = Auth::user()->id;
                     $dataApproval['kategori'] = "APPROVAL";
+
+                    if ($request->harga_satuan) {
+                        foreach ($request->harga_satuan as $key => $value) {
+                            RabDetail::where('id',$key)
+                                    ->update([
+                                        'harga_satuan' =>$value,
+                                        'mata_uang' =>$request->mata_uang[$key],
+                                    ]);
+                        }
+                    }
+
                     ApprovalRab::create($dataApproval);
                     DB::commit();
                     return redirect()->route('rab.index')->with(['success' => 'Rab di Ajukan !']);
@@ -101,6 +164,8 @@ class RencanaAnggaranBiayaController extends Controller
 
         }
     }
+
+
 
 
     public function getBarangPersediaan($id){

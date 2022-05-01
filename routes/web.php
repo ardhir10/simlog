@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/kabid-logistik-disposisi/{id}', 'ApprovalRencanaKebutuhanController@kabidLogistikDisposisi')->name('kabid-logistik-disposisi');
 
         Route::post('/kasie-pengadaan-setuju/{id}', 'ApprovalRencanaKebutuhanController@kasiePengadaanSetuju')->name('kasie-pengadaan-setuju');
-        Route::post('/kasie-pengadaan-setuju-disposisi-kadisnav/{id}', 'ApprovalController@kasiePengadaanSetujuDisposisiKadisnav')->name('kasie-pengadaan-setuju-disposisi-kadisnav');
+        Route::post('/kasie-pengadaan-setuju-disposisi-kadisnav/{id}', 'ApprovalRencanaKebutuhanController@kasiePengadaanSetujuDisposisiKadisnav')->name('kasie-pengadaan-setuju-disposisi-kadisnav');
         Route::post('/bendahara-materil-setuju/{id}', 'ApprovalRencanaKebutuhanController@bendaharaMaterilSetuju')->name('bendahara-materil-setuju');
         Route::post('/staff-seksi-pengadaan-setuju/{id}', 'ApprovalRencanaKebutuhanController@staffSeksiPengadaanSetuju')->name('staff-seksi-pengadaan-setuju');
         Route::post('/pengelola-gudang-siap/{id}', 'ApprovalRencanaKebutuhanController@pengelolaGudangSiap')->name('pengelola-gudang-siap');
@@ -129,6 +129,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'RencanaAnggaranBiayaController@index')->name('index');
         Route::get('/create', 'RencanaAnggaranBiayaController@create')->name('create');
         Route::post('/store/{id?}', 'RencanaAnggaranBiayaController@store')->name('store');
+        Route::post('/store-wrk/{id?}', 'RencanaAnggaranBiayaController@storeWithRencanaKebutuhan')->name('store-with-rencana-kebutuhan');
         Route::get('/get-barang-persediaan/{id?}', 'RencanaAnggaranBiayaController@getBarangPersediaan')->name('get-barang-persediaan');
         Route::post('/input-item-rab/{id?}', 'RencanaAnggaranBiayaController@inputItem')->name('input-item');
         Route::get('/delete-item/{id?}', 'RencanaAnggaranBiayaController@deleteItem')->name('delete-item');
@@ -139,6 +140,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/approval-tindak-lanjut/{id?}', 'RencanaAnggaranBiayaController@approvalTindakLanjut')->name('approval-tindak-lanjut');
 
         Route::get('/cetak-rab/{id}', 'RencanaAnggaranBiayaController@cetakRab')->name('cetak-rab');
+
+    });
+
+    Route::prefix('rencana-kebutuhan-tahunan')->name('rencana-kebutuhan-tahunan.')->group(function () {
+        Route::get('/', 'RencanaKebutuhanTahunanController@index')->name('index');
+        Route::get('/create', 'RencanaKebutuhanTahunanController@create')->name('create');
+        Route::get('/edit/{id}', 'RencanaKebutuhanTahunanController@edit')->name('edit');
+        Route::post('/store/{id?}', 'RencanaKebutuhanTahunanController@store')->name('store');
+        Route::get('/delete/{id}', 'RencanaKebutuhanTahunanController@delete')->name('delete');
 
     });
 

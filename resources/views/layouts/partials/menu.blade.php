@@ -70,6 +70,12 @@
                         <span class="menu-item" data-key="t-sales">Rencana Kebutuhan</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('rencana-kebutuhan-tahunan.index')}}">
+                        <i class="icon nav-icon" data-feather="trello"></i>
+                        <span class="menu-item" data-key="t-sales">R. Kebutuhan Tahunan</span>
+                    </a>
+                </li>
 
                 {{-- ROLE TYPE MAP
                 1 = A (User Approval) staff:staff
