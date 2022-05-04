@@ -99,6 +99,12 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/', 'LaporanController@index')->name('index');
+        Route::get('/export-excel', 'LaporanController@exportExcel')->name('export-excel');
+
+    });
+
     Route::prefix('rk-approval')->name('rk-approval.')->group(function () {
 
         Route::get('/', 'ApprovalRencanaKebutuhanController@index')->name('index');

@@ -32,7 +32,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="">Barang Persediaan</label>
-                                <select name="nama_barang" id="" class="form-select">
+                                <select name="nama_barang" id="" class="form-select select2">
                                     @foreach ($barang_persediaan as $barang_persediaan)
                                         <option value="{{$barang_persediaan->nama_barang}}">{{$barang_persediaan->nama_barang}}</option>
                                     @endforeach

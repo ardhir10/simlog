@@ -56,6 +56,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach ($barang_persediaan as $item)
                             <tr>
                                 <td>{{$loop->iteration}}</td>
@@ -101,6 +102,7 @@
                         </tbody>
 
                     </table>
+
                 </div>
 
             </div>

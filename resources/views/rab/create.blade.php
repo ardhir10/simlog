@@ -71,7 +71,7 @@
                                             <select name="rencana_kebutuhan_id" class="form-select select2" >
                                                 <option  value="">PILIH RENCANA KEBUTUHAN</option>
                                                 @foreach ($rencana_kebutuhan as $rk)
-                                                    <option {{($rk->id ?? null ) == $data->rencana_kebutuhan_id ?? null ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
+                                                    <option {{($rk->id ?? null ) == ($data->rencana_kebutuhan_id ?? null) ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
                                                 @endforeach
                                             </select>
                                         @endif
@@ -81,7 +81,7 @@
                                 <div class="col-lg-6 ">
                                     <div class="form-group">
                                         <label for="">Kegiatan</label>
-                                        <input type="text" name="kegiatan" class="form-control" value="{{$data->kegiatan ?? null}}" required>
+                                        <input type="text" name="kegiatan" class="form-control" value="{{$rk->kegiatan ?? null}}" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -96,16 +96,19 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="">Pengguna</label>
-                                        <select name="pengguna" class="form-select select2" required>
-                                            <option {{($data->pengguna ?? null ) == '01' ? 'selected=selected' :''}} value="01">(01) Umum</option>
-                                            <option {{($data->pengguna ?? null ) == '02' ? 'selected=selected' :''}} value="02">(02) Tata Usaha</option>
-                                            <option {{($data->pengguna ?? null ) == '03' ? 'selected=selected' :''}} value="03">(03) Logistik</option>
-                                            <option {{($data->pengguna ?? null ) == '04' ? 'selected=selected' :''}} value="04">(04) Telkompel</option>
-                                            <option {{($data->pengguna ?? null ) == '05' ? 'selected=selected' :''}} value="05">(05) KNK</option>
-                                            <option {{($data->pengguna ?? null ) == '06' ? 'selected=selected' :''}} value="06">(06) SBNP</option>
-                                            <option {{($data->pengguna ?? null ) == '07' ? 'selected=selected' :''}} value="07">(07) Pengamatan Laut</option>
-                                            <option {{($data->pengguna ?? null ) == '08' ? 'selected=selected' :''}} value="08">(08) Bengkel</option>
-                                            <option {{($data->pengguna ?? null ) == '08' ? 'selected=selected' :''}} value="08">(09) Bidang Operasi</option>
+                                        <select name="pengguna" class="form-select " required>
+                                            <option {{($rk->pengguna ?? null ) == '01' ? 'selected=selected' :''}}  value="01">(01) Umum</option>
+                                            <option {{($rk->pengguna ?? null ) == '02' ? 'selected=selected' :''}}  value="02">(02) Sie Kepeg & Umum</option>
+                                            <option {{($rk->pengguna ?? null ) == '03' ? 'selected=selected' :''}}  value="03">(03) Sie Keuangan</option>
+                                            <option {{($rk->pengguna ?? null ) == '04' ? 'selected=selected' :''}}  value="04">(04) Sie Pengadaan</option>
+                                            <option {{($rk->pengguna ?? null ) == '05' ? 'selected=selected' :''}}  value="05">(05) Sie Inventaris</option>
+                                            <option {{($rk->pengguna ?? null ) == '06' ? 'selected=selected' :''}}  value="06">(06) Sie SarPras</option>
+                                            <option {{($rk->pengguna ?? null ) == '07' ? 'selected=selected' :''}}  value="07">(07) Sie Program & Evaluasi</option>
+                                            <option {{($rk->pengguna ?? null ) == '08' ? 'selected=selected' :''}}  value="08">(08) SBNP</option>
+                                            <option {{($rk->pengguna ?? null ) == '09' ? 'selected=selected' :''}}  value="09">(09) Telkompel</option>
+                                            <option {{($rk->pengguna ?? null ) == '10' ? 'selected=selected' :''}}  value="10">(10) Pengla</option>
+                                            <option {{($rk->pengguna ?? null ) == '11' ? 'selected=selected' :''}}  value="11">(11) KNK</option>
+                                            <option {{($rk->pengguna ?? null ) == '12' ? 'selected=selected' :''}}  value="12">(12) Bengkel</option>
                                         </select>
                                     </div>
                                 </div>

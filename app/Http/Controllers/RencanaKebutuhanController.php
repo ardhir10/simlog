@@ -26,14 +26,16 @@ class RencanaKebutuhanController extends Controller
         $dataRk = RencanaKebutuhan::where('created_by', Auth::user()->id)
         ->where('is_draft', true)
         ->first();
-        if ($dataRk) {
-            $data['data'] = $dataRk;
-            $data['barang_persediaan'] = BarangPersediaan::where('sub_sub_kategori',$dataRk->pengguna)->orderBy('id', 'desc')->get();
-        } else {
-            $data['data'] = null;
-            $data['barang_persediaan'] = BarangPersediaan::orderBy('id', 'desc')->get();
-        }
+        // if ($dataRk) {
+        //     $data['data'] = $dataRk;
+        //     $data['barang_persediaan'] = BarangPersediaan::where('sub_sub_kategori',$dataRk->pengguna)->orderBy('id', 'desc')->get();
+        // } else {
+        //     $data['data'] = null;
+        //     $data['barang_persediaan'] = BarangPersediaan::orderBy('id', 'desc')->get();
+        // }
 
+            $data['data'] = $dataRk;
+        $data['barang_persediaan'] = BarangPersediaan::orderBy('id', 'desc')->get();
 
         $data['rk_details'] = RencanaKebutuhanDetail::where('rencana_kebutuhan_id', $dataRk->id ?? null)->get();
         $data['rk'] = RencanaKebutuhan::orderBy('id', 'desc')->get();

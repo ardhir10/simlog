@@ -41,6 +41,8 @@ class BarangPersediaanController extends Controller
             $dataInsert['harga_perolehan'] = $dataBarang->harga_perolehan;
             $dataInsert['tahun_perolehan'] = $dataBarang->tahun_perolehan;
             $dataInsert['sub_sub_kategori'] = $dataBarang->sub_sub_kategori;
+            $dataInsert['keterangan'] = $dataBarang->keterangan;
+            $dataInsert['created_by'] = Auth::user()->id;
             BarangMasuk::create($dataInsert);
             return redirect()->back()->with(['success' => 'Stok Berhasil ditambahkan !']);
         } catch (\Throwable $th) {
@@ -456,7 +458,8 @@ class BarangPersediaanController extends Controller
                 //     }
                 // });
 
-                dd($dataBarangImport, $dataBarangImport2, array_diff($dataBarangImport,$dataBarangImport2));
+                // dd($dataBarangImport, $dataBarangImport2, array_diff($dataBarangImport,$dataBarangImport2));
+                return redirect()->route('barang-persediaan.index')->with(['success' => 'Import data berhasil !']);
 
             } catch (\Throwable $th) {
                 dd($th);

@@ -21,7 +21,8 @@
         <div class="card shadow-lg">
             <div class="card-header justify-content-between d-flex align-items-center">
                 <h4 class="card-title">Stock Masuk {{$page_title}}</h4>
-                <a  data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline btn-outline-success  btn-rounded"> Tambah Stok
+                <a  data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline btn-outline-success  btn-rounded">
+
                     <i class="fa fa-plus align-middle"></i>
                 </a>
             </div>
@@ -123,13 +124,17 @@
                 <form action="{{route('barang-persediaan.stock-masuk',$data->id)}}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-2 d-none">
                             <label for="">Tanggal</label>
                             <input type="date" name="timestamp" class="form-control" value="{{date('Y-m-d')}}">
                         </div>
                         <div class="form-group">
                             <label for="">Jumlah ({{$data->satuan->nama_satuan}})</label>
                             <input type="number" name="jumlah" class="form-control" value="{{date('Y-m-d')}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Keterangan </label>
+                            <textarea name="keterangan" class="form-control" id="" cols="30" rows="3"></textarea>
                         </div>
 
                     </div>
