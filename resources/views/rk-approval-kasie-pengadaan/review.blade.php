@@ -488,7 +488,7 @@
                             <label for="">Disposisi Ke :</label>
                             <select name="disposisi_ke" id="" class="form-select">
                                 <option value="Kabid Logistik">Kabid Logistik</option>
-                                <option value="Bendahara Materil">Bendahara Materil</option>
+                                {{-- <option value="Bendahara Materil">Bendahara Materil</option> --}}
                                 <option value="Staff Seksi Pengadaan">Staff Seksi Pengadaan</option>
                             </select>
                         </div>

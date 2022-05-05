@@ -216,7 +216,7 @@ class RencanaAnggaranBiayaController extends Controller
 
     }
 
-    public function batalkan($id){
+    public function batalkan($id=0){
         try {
             DB::beginTransaction();
             RabDetail::where('rab_id',$id)->delete();

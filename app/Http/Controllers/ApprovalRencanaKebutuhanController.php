@@ -534,13 +534,13 @@ class ApprovalRencanaKebutuhanController extends Controller
                     $dataApproval['rencana_kebutuhan_id'] = $id;
                     $dataApproval['user_peminta_id'] = $rencanaKebutuhan->created_by;
                     $dataApproval['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
-                    $dataApproval['role_to_name'] = 'Bendahara Materil' ?? '';
-                    $dataApproval['type'] = 'Menunggu Persetujuan Bendahara Materil';
+                    $dataApproval['role_to_name'] = $rencanaKebutuhan->user->role->name ?? '';
+                    $dataApproval['type'] = 'Perintah Pembuatan RAB';
                     $dataApproval['status'] = '';
                     $dataApproval['step'] = 0;
                     $dataApproval['keterangan'] = $request->keterangan;
                     $dataApproval['tindak_lanjut'] = null;
-                    $dataApproval['approve_by_id'] = 0;
+                    $dataApproval['approve_by_id'] = $rencanaKebutuhan->user->id ?? null;
                     $dataApproval['kategori'] = 'APPROVAL';
                     ApprovalRencanaKebutuhanProcess::create($dataApproval);
                 } else {

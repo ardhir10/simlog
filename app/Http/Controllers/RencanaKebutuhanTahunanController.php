@@ -9,9 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class RencanaKebutuhanTahunanController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $data['page_title'] = "Rencana Kebutuhan Tahunan";
-        $data['rencana_kebutuhan_tahunan'] = RencanaKebutuhanTahunan::orderby('id', 'desc')->get();
+
+        if($request->tahun){
+            $data['rencana_kebutuhan_tahunan'] = RencanaKebutuhanTahunan::where('tahun',$request->tahun)->orderby('id', 'desc')->get();
+
+
+        }else{
+
+            $data['rencana_kebutuhan_tahunan'] = RencanaKebutuhanTahunan::where('tahun',$request->tahun)->orderby('id', 'desc')->get();
+        }
 
         return view('rencana-kebutuhan-tahunan.index',$data);
     }

@@ -157,7 +157,7 @@
                                         </td>
                                     </tr>
                                 @else
-                                    <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('rencana-kebutuhan.detail',$item->id) : route('rab.create')}}'>
+                                    <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('rk-approval.review',$item->id) : route('rab.create')}}'>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item->nomor_rk}}
                                             @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
