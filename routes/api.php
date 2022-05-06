@@ -25,6 +25,7 @@ Route::post('/v1/permintaan-ditolak', 'ApiDashboardController@permintaanDitolak'
 Route::post('/v1/permintaan-dalamproses', 'ApiDashboardController@permintaanDalamproses')->name('api.permintaan-dalamproses');
 Route::post('/v1/nilai-distribusi', 'ApiDashboardController@nilaiDistribusi')->name('api.nilai-distribusi');
 Route::post('/v1/nilai-belum-distribusi', 'ApiDashboardController@nilaiBelumDistribusi')->name('api.nilai-belumdistribusi');
+Route::post('/v1/rencana-tahunan', 'ApiDashboardController@rencanaTahunan')->name('api.rencana-tahunan');
 
 
 

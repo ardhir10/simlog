@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BarangKeluar;
 use App\BarangMasuk;
 use App\PermintaanBarang;
+use App\RencanaKebutuhanTahunan;
 use Illuminate\Http\Request;
 
 class ApiDashboardController extends Controller
@@ -198,5 +199,114 @@ class ApiDashboardController extends Controller
 
 
         return  response()->json($data, 200);
+    }
+
+    public function rencanaTahunan(Request $request)
+    {
+        $year = $request->year ?? date('Y');
+        $month = $request->month;
+        $dateRange = $year . '-' . $month;
+        $category = [
+            '01',
+            '02',
+            '03',
+            '04',
+            '05',
+            '06',
+            '07',
+            '08',
+            '09',
+            '10',
+            '11',
+            '12'
+        ];
+        $rkt = RencanaKebutuhanTahunan::where('tahun', $year)->first();
+
+        $series = [
+            ['01' => ['rkt'=> $rkt->p01]],
+            ['02' => ['rkt'=> $rkt->p02]],
+            ['03' => ['rkt'=> $rkt->p03]],
+            ['04' => ['rkt'=> $rkt->p04]],
+            ['05' => ['rkt'=> $rkt->p05]],
+            ['06' => ['rkt'=> $rkt->p06]],
+            ['07' => ['rkt'=> $rkt->p07]],
+            ['08' => ['rkt'=> $rkt->p08]],
+            ['09' => ['rkt'=> $rkt->p09]],
+            ['10' => ['rkt'=> $rkt->p10]],
+            ['11' => ['rkt'=> $rkt->p11]],
+            ['12' => ['rkt'=> $rkt->p11]],
+        ];
+
+
+
+        $seriesRk = [];
+        $seriesBk = [];
+        foreach ($category as $key => $value) {
+            $totalBk = 0;
+            $bk = BarangKeluar::where('sub_sub_kategori', $value)->get();
+            foreach ($bk as $key => $vbk) {
+                $totalBk+= $vbk->harga_perolehan + $vbk->jumlah;
+            }
+            $seriesBk[] = $totalBk;
+            $seriesRk[] = $rkt->{'p' . $value};
+        }
+
+        $category = array_map(function($a){
+            return $this->peruntukkan($a);
+        },$category);
+
+        $data['category'] = $category;
+        $data['series'] = [
+            'rk'=> $seriesRk,
+            'bk'=> $seriesRk,
+        ];
+
+        return  response()->json($data, 200);
+    }
+
+    private function peruntukkan($a)
+    {
+        // PENGGUNANYA
+        switch ($a) {
+            case '01':
+                return 'Umum';
+                break;
+            case '02':
+                return 'Sie Kepeg & Umum';
+                break;
+            case '03':
+                return 'Sie Keuangan';
+                break;
+            case '04':
+                return 'Sie Pengadaan';
+                break;
+            case '05':
+                return 'Sie Inventaris';
+                break;
+            case '06':
+                return 'SieSarPras';
+                break;
+            case '07':
+                return 'Sie Program & Evaluasi';
+                break;
+            case '08':
+                return 'SBNP';
+                break;
+            case '09':
+                return 'Telkompel';
+                break;
+            case '10':
+                return 'Pengla';
+                break;
+            case '11':
+                return 'KNK';
+                break;
+            case '12':
+                return 'Bengkel';
+                break;
+            default:
+                return '';
+                break;
+        }
     }
 }

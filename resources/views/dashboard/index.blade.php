@@ -167,8 +167,12 @@
                                     <option value="12">Desember</option>
                                 </select>
                                 <select name="" class="barangmasuk-daterange" id="barangMasukTahun">
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
+                                    <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
                                 </select>
 
                             </div>
@@ -202,8 +206,12 @@
                                     <option value="12">Desember</option>
                                 </select>
                                 <select name="" class="barangkeluar-daterange" id="barangKeluarTahun">
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
+                                    <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
                                 </select>
 
                             </div>
@@ -237,8 +245,12 @@
                                     <option value="12">Desember</option>
                                 </select>
                                 <select name="" class="saldobarang-daterange" id="saldoBarangTahun">
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
+                                    <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
                                 </select>
 
                             </div>
@@ -286,8 +298,12 @@
                                             <option value="12">Desember</option>
                                         </select>
                                         <select name="" class="permintaandisetujui-daterange" id="permintaanDisetujuiTahun">
-                                            <option value="2022">2022</option>
-                                            <option value="2021">2021</option>
+                                            <?php
+                                            for ($x=date("Y"); $x>1900; $x--)
+                                            {
+                                                echo'<option value="'.$x.'">'.$x.'</option>';
+                                            }
+                                            ?>
                                         </select>
 
                                     </div>
@@ -322,8 +338,12 @@
                                             <option value="12">Desember</option>
                                         </select>
                                         <select name="" class="permintaanditolak-daterange" id="permintaanDitolakTahun">
-                                            <option value="2022">2022</option>
-                                            <option value="2021">2021</option>
+                                            <?php
+                                            for ($x=date("Y"); $x>1900; $x--)
+                                            {
+                                                echo'<option value="'.$x.'">'.$x.'</option>';
+                                            }
+                                            ?>
                                         </select>
 
                                     </div>
@@ -374,8 +394,12 @@
                                     <option value="12">Desember</option>
                                 </select>
                                 <select name="" class="distribusi-daterange" id="distribusiTahun">
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
+                                    <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
                                 </select>
 
                             </div>
@@ -409,10 +433,13 @@
                                     <option value="12">Desember</option>
                                 </select>
                                 <select name="" class="belumdistribusi-daterange" id="belumdistribusiTahun">
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
+                                     <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
                                 </select>
-
                             </div>
                         </div>
                     </div>
@@ -420,6 +447,48 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
+                    <div class="card-body p-3">
+                        <h5 class="text-dashboard fw-bolder">Rencana Kebutuhan Tahunan</h5>
+                        <div class="d-block ">
+                            <div class="form-group">
+                                <select name="" class="rencana-tahunan-daterange" id="distribusiTahunanBulan">
+                                    <option value="all">All</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                                <select name="" class="rencana-tahunan-daterange" id="distribusiTahunanTahun">
+                                     <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                        echo'<option value="'.$x.'">'.$x.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="main2" style="height:370px;">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
     @endsection
 
@@ -437,7 +506,7 @@
             $(this).addClass('active');
         })
 
-
+        // BAR CHART 1
         var chartDom = document.getElementById('main');
         var myChart = echarts.init(chartDom);
         var option;
@@ -462,6 +531,38 @@
         };
 
         option && myChart.setOption(option);
+
+        // BAR CHART 2
+        generateChart2();
+        function generateChart2(){
+            var chartDom2 = document.getElementById('main2');
+            var myChart2 = echarts.init(chartDom2);
+            var option2;
+
+            option2 = {
+            xAxis: {
+                type: 'category',
+                data: ['01','02','03']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            tooltip:{
+            show:true
+            },
+            series: [
+                {
+                    data: [7,12,10],
+                    type: 'bar'
+                },
+                {
+                    data: [9,10,11],
+                    type: 'bar'
+                }
+            ]
+            };
+            option2 && myChart2.setOption(option2);
+        }
 
 
         $('.barangmasuk-daterange').on('change',function(){
