@@ -25,37 +25,37 @@
                     <i class="fa fa-plus align-middle"></i>
                 </a>
             </div>
-            <div class="card-body">
+            <div class="card-body p-2 ">
                 <div class="col-12">
                     @include('components.flash-message')
                 </div>
                 <form action="">
-                <div class="row mb-3">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Pilih Tahun</label>
-                            <select name="tahun" id="" required class="form-select select2">
-                                <?php
-                                for ($x=date("Y"); $x>1900; $x--)
-                                {
-                                        if (($data->tahun_anggaran ?? null ) == $x) {
-                                            echo'<option selected=selected value="'.$x.'">'.$x.'</option>';
-                                        } else {
-                                            echo'<option value="'.$x.'">'.$x.'</option>';
-                                        }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="">_</label>
-                                <button type="submit" class="btn btn-primary w-100 " >SHOW</button>
+                                <label for="">Pilih Tahun</label>
+                                <select name="tahun" id="" required class="form-select select2">
+                                    <?php
+                                    for ($x=date("Y"); $x>1900; $x--)
+                                    {
+                                            if (($data->tahun_anggaran ?? null ) == $x) {
+                                                echo'<option selected=selected value="'.$x.'">'.$x.'</option>';
+                                            } else {
+                                                echo'<option value="'.$x.'">'.$x.'</option>';
+                                            }
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
+                        <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label for="">_</label>
+                                    <button type="submit" class="btn btn-primary w-100 " >SHOW</button>
+                                </div>
+
+                        </div>
                     </div>
-                </div>
                 </form>
                 <div class="table-responsive">
                     <table class="table-striped datatables" id="data-table" style="font-size: 16px">

@@ -185,7 +185,7 @@
                     <div class="card-body p-3">
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Nilai Barang Keluar</h5>
-                            <span>IDR</span>
+                            <span class="d-block">IDR</span>
                             <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBarangKeluar">-</span>
                         </div>
                         <div class="d-block text-end">
@@ -454,7 +454,7 @@
                         <h5 class="text-dashboard fw-bolder">Rencana Kebutuhan Tahunan</h5>
                         <div class="d-block ">
                             <div class="form-group">
-                                <select name="" class="rencana-tahunan-daterange" id="distribusiTahunanBulan">
+                                <select name="" class="rencana-tahunan-daterange d-none" id="distribusiTahunanBulan">
                                     <option value="all">All</option>
                                     <option value="01">Januari</option>
                                     <option value="02">Februari</option>
@@ -469,7 +469,7 @@
                                     <option value="11">November</option>
                                     <option value="12">Desember</option>
                                 </select>
-                                <select name="" class="rencana-tahunan-daterange" id="distribusiTahunanTahun">
+                                <select name="" class="rencana-kebutuhan-tahunan" id="distribusiTahunanTahun">
                                      <?php
                                     for ($x=date("Y"); $x>1900; $x--)
                                     {
@@ -533,16 +533,17 @@
         option && myChart.setOption(option);
 
         // BAR CHART 2
-        generateChart2();
-        function generateChart2(){
-            var chartDom2 = document.getElementById('main2');
-            var myChart2 = echarts.init(chartDom2);
-            var option2;
+        var chartDom2 = document.getElementById('main2');
+        var myChart2 = echarts.init(chartDom2);
+        var option2;
+        function generateChart2(data){
+            data = data.data;
 
+            console.log(data);
             option2 = {
             xAxis: {
                 type: 'category',
-                data: ['01','02','03']
+                data: data.category
             },
             yAxis: {
                 type: 'value'
@@ -552,16 +553,36 @@
             },
             series: [
                 {
-                    data: [7,12,10],
+                    data: data.series.bk,
                     type: 'bar'
                 },
                 {
-                    data: [9,10,11],
+                    data: data.series.rk,
                     type: 'bar'
                 }
-            ]
+            ],
+            dataZoom: [{
+                    type: 'inside',
+                    start: 0,
+                },
+                {
+                    type: 'slider',
+                    fillerColor: '#E9ECEF'
+                },
+                {
+                    start: 0,
+                    handleSize: '100%',
+                    handleStyle: {
+                        color: '#fff',
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.6)',
+                        shadowOffsetX: 2,
+                        shadowOffsetY: 2
+                    }
+                }
+            ],
             };
-            option2 && myChart2.setOption(option2);
+            myChart2.setOption(option2);
         }
 
 
@@ -577,6 +598,19 @@
                 month:month
             });
             $('#nilaiBarangMasuk').text(resp.data.total)
+        }
+        $('.rencana-kebutuhan-tahunan').on('change',function(){
+            getRencanaTahunan();
+        })
+        getRencanaTahunan();
+        async function getRencanaTahunan(){
+            let year = $('.rencana-kebutuhan-tahunan').val();
+            let month = $('.rencana-kebutuhan-bulan').val();
+            let resp = await axios.post(@json(route('api.rencana-tahunan')),{
+                year:year,
+                month:month
+            });
+            generateChart2(resp)
         }
 
         $('.barangkeluar-daterange').on('change',function(){

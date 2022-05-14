@@ -220,26 +220,66 @@ class ApiDashboardController extends Controller
             '11',
             '12'
         ];
-        $rkt = RencanaKebutuhanTahunan::where('tahun', $year)->first();
+        $rkt = RencanaKebutuhanTahunan::where('tahun', $year)->get();
+        $p01 = 0;
+        $p02 = 0;
+        $p03 = 0;
+        $p04 = 0;
+        $p05 = 0;
+        $p06 = 0;
+        $p07 = 0;
+        $p08 = 0;
+        $p09 = 0;
+        $p10 = 0;
+        $p11 = 0;
+        $p11 = 0;
 
+
+        $seriesRk = [];
+        foreach ($rkt as $key => $value) {
+            $p01 +=$value->p01;
+            $p02 +=$value->p02;
+            $p03 +=$value->p03;
+            $p04 +=$value->p04;
+            $p05 +=$value->p05;
+            $p06 +=$value->p06;
+            $p07 +=$value->p07;
+            $p08 +=$value->p08;
+            $p09 +=$value->p09;
+            $p10 +=$value->p10;
+            $p11 +=$value->p11;
+            $seriesRk =[
+                $p01,
+                $p02,
+                $p03,
+                $p04,
+                $p05,
+                $p06,
+                $p07,
+                $p08,
+                $p09,
+                $p10,
+                $p11,
+            ];
+        }
         $series = [
-            ['01' => ['rkt'=> $rkt->p01]],
-            ['02' => ['rkt'=> $rkt->p02]],
-            ['03' => ['rkt'=> $rkt->p03]],
-            ['04' => ['rkt'=> $rkt->p04]],
-            ['05' => ['rkt'=> $rkt->p05]],
-            ['06' => ['rkt'=> $rkt->p06]],
-            ['07' => ['rkt'=> $rkt->p07]],
-            ['08' => ['rkt'=> $rkt->p08]],
-            ['09' => ['rkt'=> $rkt->p09]],
-            ['10' => ['rkt'=> $rkt->p10]],
-            ['11' => ['rkt'=> $rkt->p11]],
-            ['12' => ['rkt'=> $rkt->p11]],
+            ['01' => ['rkt' => $p01]],
+            ['02' => ['rkt' => $p02]],
+            ['03' => ['rkt' => $p03]],
+            ['04' => ['rkt' => $p04]],
+            ['05' => ['rkt' => $p05]],
+            ['06' => ['rkt' => $p06]],
+            ['07' => ['rkt' => $p07]],
+            ['08' => ['rkt' => $p08]],
+            ['09' => ['rkt' => $p09]],
+            ['10' => ['rkt' => $p10]],
+            ['11' => ['rkt' => $p11]],
+            ['12' => ['rkt' => $p11]],
         ];
 
 
 
-        $seriesRk = [];
+
         $seriesBk = [];
         foreach ($category as $key => $value) {
             $totalBk = 0;
@@ -248,7 +288,6 @@ class ApiDashboardController extends Controller
                 $totalBk+= $vbk->harga_perolehan + $vbk->jumlah;
             }
             $seriesBk[] = $totalBk;
-            $seriesRk[] = $rkt->{'p' . $value};
         }
 
         $category = array_map(function($a){
@@ -258,7 +297,7 @@ class ApiDashboardController extends Controller
         $data['category'] = $category;
         $data['series'] = [
             'rk'=> $seriesRk,
-            'bk'=> $seriesRk,
+            'bk'=> $seriesBk,
         ];
 
         return  response()->json($data, 200);
