@@ -23,27 +23,29 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
-        $dataChart = BarangPersediaan::distinct('kategori_barang_id')->get();
+        $dataChart = BarangPersediaan::distinct('kategori_barang_id')
+        
+            ->get();
 
         $kategori = [];
         $saldo = [];
         foreach ($dataChart as $key => $dc) {
-            $barangMasuk = BarangMasuk::where('barang_id', $dc->id)->get();
-            $barangKeluar = BarangKeluar::where('barang_keluar_id', $dc->id)->get();
+            // $barangMasuk = BarangMasuk::where('barang_id', $dc->id)->get();
+            // $barangKeluar = BarangKeluar::where('barang_keluar_id', $dc->id)->get();
 
 
-            $totalBarangMasuk = 0;
-            foreach ($barangMasuk as $key => $value) {
-                $totalBarangMasuk += $value->harga_perolehan * $value->jumlah;
-            }
+            // $totalBarangMasuk = 0;
+            // foreach ($barangMasuk as $key => $value) {
+            //     $totalBarangMasuk += $value->harga_perolehan * $value->jumlah;
+            // }
 
-            $totalBarangKeluar = 0;
-            foreach ($barangKeluar as $key => $value) {
-                $totalBarangKeluar += $value->harga_perolehan * $value->jumlah;
-            }
-            $total = $totalBarangMasuk - $totalBarangKeluar;
+            // $totalBarangKeluar = 0;
+            // foreach ($barangKeluar as $key => $value) {
+            //     $totalBarangKeluar += $value->harga_perolehan * $value->jumlah;
+            // }
+            // $total = $totalBarangMasuk - $totalBarangKeluar;
 
-            $saldo[] = $total;
+            $saldo[] = $dc->stokBarang()*$dc->harga_perolehan;
             $kategori[] = $dc->kategori_barang->nama_kategori ?? null;
         }
 

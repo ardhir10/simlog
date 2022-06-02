@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.easy-pie-chart/1.0.1/jquery.easy-pie-chart.css">
 
 <style>
-    .card-1 {
+.card-1 {
         --animate-duration: 0.5s;
     }
 
@@ -147,7 +147,7 @@
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Nilai Barang Masuk</h5>
                             <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBarangMasuk">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiBarangMasuk">-</span>
                         </div>
                         <div class="d-block text-end">
                             <div class="form-group">
@@ -186,7 +186,7 @@
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Nilai Barang Keluar</h5>
                             <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBarangKeluar">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiBarangKeluar">-</span>
                         </div>
                         <div class="d-block text-end">
                             <div class="form-group">
@@ -225,7 +225,7 @@
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Saldo Barang Persediaan</h5>
                             <span>IDR</span>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiSaldoBarang">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiSaldoBarang">-</span>
                         </div>
                         <div class="d-block text-end">
                             <div class="form-group">
@@ -278,7 +278,7 @@
                             <div class="card-body p-3">
                                 <div class="d-block mb-3">
                                     <h5 class="text-dashboard fw-bolder">Permintaan Disetujui</h5>
-                                    <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDisetujui">-</span>
+                                    <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiPermintaanDisetujui">-</span>
                                 </div>
                                 <div class="d-block text-end">
                                     <div class="form-group">
@@ -318,7 +318,7 @@
                             <div class="card-body p-3">
                                 <div class="d-block mb-3">
                                     <h5 class="text-dashboard fw-bolder">Permintaan Ditolak</h5>
-                                    <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDitolak">-</span>
+                                    <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiPermintaanDitolak">-</span>
                                 </div>
                                 <div class="d-block text-end">
                                     <div class="form-group">
@@ -362,7 +362,7 @@
                     <div class="card-body p-3">
                         <div class="d-block mb-4">
                             <h5 class="text-dashboard fw-bolder">Permintaan Dalam Proses</h5>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiPermintaanDalamproses">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiPermintaanDalamproses">-</span>
                         </div>
                     </div>
                     <br>
@@ -373,7 +373,7 @@
                     <div class="card-body p-3">
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Barang Yang Telah Didistribusikan</h5>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiDistribusi">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiDistribusi">-</span>
                             <span>Item Barang</span>
                         </div>
                         <div class="d-block text-end">
@@ -412,7 +412,7 @@
                     <div class="card-body p-3">
                         <div class="d-block mb-3">
                             <h5 class="text-dashboard fw-bolder">Barang Yang Belum Didistribusikan</h5>
-                            <span style="font-size: 7.7vh ;font-weight:bold;" id="nilaiBelumDistribusi">-</span>
+                            <span style="font-size: 6.1vh ;font-weight:bold;" id="nilaiBelumDistribusi">-</span>
                             <span>Item Barang</span>
                         </div>
                         <div class="d-block text-end">

@@ -133,7 +133,7 @@
                                                         <td>{{$item->nama_barang}}</td>
                                                         <td>{{$item->kode_barang}}</td>
                                                         <td>{{$item->kategori_barang->nama_kategori ?? null}}</td>
-                                                        <td>{{$item->jumlah}}</td>
+                                                        <td>{{$item->stokBarang()}}</td>
                                                         <td>{{$item->satuan->nama_satuan}}</td>
                                                         <td style="width: 30%">
                                                             <form action="{{route('permintaan-barang.add-barang',['id'=>$item->id,'permintaanBarangId'=>$data->id])}}" method="post">
