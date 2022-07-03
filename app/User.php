@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->belongsTo(StasiunRadioPantai::class, 'srop_id', 'id');
     }
 
+    public function vts()
+    {
+        return $this->belongsTo(StasiunVts::class, 'stasiun_vts_id', 'id');
+    }
+
 
     public function getSubKategoriKode($roleName=null)
     {

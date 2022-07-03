@@ -79,7 +79,7 @@
                                         </a>
                                     </div>
                                     <div class="mb-4">
-                                         <h5 class="text-white h2">Sistem Logistik</h5>
+                                         <h5 class="text-white h2">Sistem Informasi Manajemen Logistik</h5>
                                     </div>
                                     <form action="{{ route('login') }}" method="post">
                                         @csrf

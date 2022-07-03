@@ -266,7 +266,8 @@ Route::get('/master-data/user/{id}/delete', 'UserController@delete')->name('user
 Route::get('/master-data/user/show/{id}', 'UserController@show')->name('user.show');
 Route::get('/user-setting', 'UserController@userSetting')->name('user.setting');
 Route::post('/user-setting', 'UserController@userSettingUpdate')->name('user.setting.update');
-Route::get('/user-s', 'UserController@userSettingUpdate')->name('public-data.user');
+ 
+Route::get('/public-data/user/{id}', 'UserController@viewUserPublic')->name('public-data.user');
 
 
 
