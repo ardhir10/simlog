@@ -270,4 +270,10 @@ class UserController extends Controller
 
     }
 
+    public function viewUserPublic($id){
+        $data['page_title'] = 'User Setting';
+        $data['user'] = User::findOrFail($id);
+        return view('master-data.user.user-public', $data);
+    }
+
 }

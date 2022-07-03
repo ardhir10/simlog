@@ -139,7 +139,7 @@
                                                             <form action="{{route('permintaan-barang.add-barang',['id'=>$item->id,'permintaanBarangId'=>$data->id])}}" method="post">
                                                                 @csrf
                                                                 <div class="d-flex">
-                                                                    <input type="number" style="width: 100px;" name="jumlah" class="me-2" value="1" min="1" max="{{$item->jumlah}}">
+                                                                    <input type="number" style="width: 100px;" name="jumlah" class="me-2" value="1" min="1" max="{{$item->stokBarang()}}">
                                                                     <input type="hidden"  id="beritaTambahan{{$item->id}}" value="" name="berita_tambahan">
                                                                     <button type="button" class="btn btn-sm btn-secondary me-2" onclick="popupBeritaTambahan('beritaTambahan{{$item->id}}')" data-bs-toggle="modal" data-bs-target="#myModal">
                                                                         <i class="fa fa-sticky-note"></i> Catatan
@@ -302,9 +302,9 @@
         $('#myModal').modal('toggle');
     })
     $('#data-table').DataTable({
-        "pageLength": 3,
+        "pageLength": 10,
         ordering: false,
-        paging: false,
+        paging: true,
         "searching": false,
         keys: true, //enable KeyTable extension
     });

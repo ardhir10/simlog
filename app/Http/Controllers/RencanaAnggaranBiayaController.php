@@ -39,7 +39,8 @@ class RencanaAnggaranBiayaController extends Controller
         }
 
 
-        $data['rencana_kebutuhan'] = RencanaKebutuhan::where('status','Disetujui')->get();
+        // $data['rencana_kebutuhan'] = RencanaKebutuhan::where('status','Disetujui')->get();
+        $data['rencana_kebutuhan'] = RencanaKebutuhan::get();
 
         $data['rab_details'] = RabDetail::where('rab_id',$dataRab->id ??null)->get();
         $data['rab'] = RAB::orderBy('id', 'desc')->get();

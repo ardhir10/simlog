@@ -269,15 +269,15 @@ class PermintaanBarangController extends Controller
         $month_now = date('m');
         $obj = DB::table('permintaan_barang')
             ->select('nomor_nota_dinas')
-            ->latest('id')
             ->where('nomor_nota_dinas', 'like', '%'.$month_now.'/'.$kode . '%')
+            ->latest('nomor_nota_dinas')
             ->first();
-
         if ($obj) {
             $increment = explode('/', $obj->nomor_nota_dinas);
             $increment = explode('/', $increment[0]);
             $increment = explode('.', $increment[0]);
-            $removed1char = substr($increment[1], 1);
+            $removed1char = substr($increment[1], 2);
+
             $generateOrder_nr = 'PL.'. str_pad($removed1char + 1, 3, "0", STR_PAD_LEFT).'/'.$month_now .'/'. $kode.'-'.$year_now;
         } else {
             $generateOrder_nr = 'PL.'. str_pad(1, 3, "0", STR_PAD_LEFT).'/'.$month_now .'/'. $kode.'-'.$year_now;

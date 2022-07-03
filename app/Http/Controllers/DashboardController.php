@@ -23,35 +23,42 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
-        $dataChart = BarangPersediaan::distinct('kategori_barang_id')
-        
-            ->get();
+        $dataChart = BarangPersediaan::get();
 
         $kategori = [];
         $saldo = [];
+
+        $dataBarangWithSaldo = [];
         foreach ($dataChart as $key => $dc) {
-            // $barangMasuk = BarangMasuk::where('barang_id', $dc->id)->get();
-            // $barangKeluar = BarangKeluar::where('barang_keluar_id', $dc->id)->get();
+            $barangMasuk = BarangMasuk::where('barang_id', $dc->id)->get();
+            $barangKeluar = BarangKeluar::where('barang_keluar_id', $dc->id)->get();
 
 
-            // $totalBarangMasuk = 0;
-            // foreach ($barangMasuk as $key => $value) {
-            //     $totalBarangMasuk += $value->harga_perolehan * $value->jumlah;
-            // }
+            $totalBarangMasuk = 0;
+            foreach ($barangMasuk as $key => $value) {
+                $totalBarangMasuk += $value->harga_perolehan * $value->jumlah;
+            }
 
-            // $totalBarangKeluar = 0;
-            // foreach ($barangKeluar as $key => $value) {
-            //     $totalBarangKeluar += $value->harga_perolehan * $value->jumlah;
-            // }
-            // $total = $totalBarangMasuk - $totalBarangKeluar;
+            $totalBarangKeluar = 0;
+            foreach ($barangKeluar as $key => $value) {
+                $totalBarangKeluar += $value->harga_perolehan * $value->jumlah;
+            }
+            $total = $totalBarangMasuk - $totalBarangKeluar;
 
-            $saldo[] = $dc->stokBarang()*$dc->harga_perolehan;
+            if(($dataBarangWithSaldo[$dc->kategori_barang->nama_kategori ?? null]??null) == null){
+                $dataBarangWithSaldo[$dc->kategori_barang->nama_kategori ?? null] = $total;
+            }else{
+                $dataBarangWithSaldo[$dc->kategori_barang->nama_kategori ?? null] += $total;
+            }
+
+            $saldo[] = $total;
             $kategori[] = $dc->kategori_barang->nama_kategori ?? null;
         }
 
-        $data['kategori']= $kategori;
-        $data['saldo']= $saldo;
+        $data['kategori']= array_keys($dataBarangWithSaldo);
+        $data['saldo']= array_values($dataBarangWithSaldo);
 
+        // dd(array_values($dataBarangWithSaldo));
 
 
         $data['request'] = $request;
@@ -61,68 +68,7 @@ class DashboardController extends Controller
 
     }
 
-    public function index2(Request $request)
-    {
-        $kd_dokter = Auth::user()->fs_kd_peg;
 
-
-        $date_from = date('Y-m-d', strtotime($request->date_from)) ?? date('Y-m-d');
-        $date_to = date('Y-m-d', strtotime($request->date_to)) ?? date('Y-m-d');
-        $data['perairan'] = Perairan::orderBy('id', 'desc')->get();
-
-        if($request->type == 'tahun'){
-            $dataBulan = [
-                date('Y') . '-01',
-                date('Y') . '-02',
-                date('Y') . '-03',
-                date('Y') . '-04',
-                date('Y') . '-05',
-                date('Y') . '-06',
-                date('Y') . '-07',
-                date('Y') . '-08',
-                date('Y') . '-09',
-                date('Y') . '-10',
-                date('Y') . '-11',
-                date('Y') . '-12',
-            ];
-        }else{
-            $dataBulan = [];
-            for ($i=1; $i <= date('t') ; $i++) {
-                if(strlen($i)<2){
-                    $i= '0'.$i;
-                }
-                $dataBulan[] = date('Y-') .date('m-').$i;
-            }
-        }
-
-
-        $dataChart =[];
-        foreach ($dataBulan as $key => $value) {
-            $dataLaporan = LaporanPengawasan::where('tanggal_laporan','like','%'.$value.'%')->get();
-            $totalData = $dataLaporan->count();
-            $keandalan = 0;
-            $kondisiTeknis = 0;
-            $kelainan = 0;
-            if ($totalData != 0) {
-                foreach ($dataLaporan as $v) {
-                    $keandalan += $v->keandalan();
-                    $kondisiTeknis += $v->kondisiTeknis();
-                    $kelainan += $v->kelainan();
-                }
-                $keandalan = $keandalan / $totalData;
-                $kondisiTeknis = $kondisiTeknis / $totalData;
-                $kelainan = $kelainan / $totalData;
-            }
-            $dataChart['keandalan'][] =  (float)number_format($keandalan,2);
-            $dataChart['kondisiTeknis'][] =  (float)number_format($kondisiTeknis,2);
-            $dataChart['kelainan'][] =  (float)number_format($kelainan,2);
-        }
-
-        $data['data_chart'] = $dataChart;
-        $data['data_bulan'] = $dataBulan;
-
-        return view('dashboard.index-2', $data);
-    }
 
 
 
@@ -145,7 +91,6 @@ class DashboardController extends Controller
             }
         }else{
             return $model = $model->get();
-
         }
 
     }

@@ -534,7 +534,7 @@ class ApprovalRencanaKebutuhanController extends Controller
                     $dataApproval['rencana_kebutuhan_id'] = $id;
                     $dataApproval['user_peminta_id'] = $rencanaKebutuhan->created_by;
                     $dataApproval['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
-                    $dataApproval['role_to_name'] = $rencanaKebutuhan->user->role->name ?? '';
+                    $dataApproval['role_to_name'] = 'Staff Seksi Pengadaan' ?? '';
                     $dataApproval['type'] = 'Perintah Pembuatan RAB';
                     $dataApproval['status'] = '';
                     $dataApproval['step'] = 0;

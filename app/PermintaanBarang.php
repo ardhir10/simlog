@@ -70,7 +70,6 @@ class PermintaanBarang extends Model
         return $this->hasMany(PermintaanBarangDetail::class,'permintaan_barang_id','id');
     }
     public function dimintaOleh(){
-
         $roleName = $this->user->role->name ?? null;
         if ($roleName == 'Nakhoda') {
             $kode = $this->user->kapalNegara->nama_kapal ?? null;
@@ -79,7 +78,6 @@ class PermintaanBarang extends Model
 
         } else if ($roleName == 'Kepala SROP') {
             $kode = $this->user->srop->nama_srop ?? null;
-
         } else if (
             $roleName == 'Kepala Distrik Navigasi'
         ) {
@@ -117,7 +115,6 @@ class PermintaanBarang extends Model
         } else {
             $kode = 'NONUSER';
         }
-
         return $kode;
     }
 
@@ -184,6 +181,41 @@ class PermintaanBarang extends Model
             $kode = User::where('role_id', 35)->first()->name;
         } else {
             $kode = 'NONUSER';
+        }
+
+        return $kode;
+    }
+
+    public function kepalaBagiannyaId()
+    {
+        $roleName = $this->user->role->id ?? null;
+        if (
+            $roleName == 'Kepala Distrik Navigasi' ||
+            $roleName == 'Kabag Tata Usaha' ||
+            $roleName == 'Subbag Kepegawaian dan Umum' ||
+            $roleName == 'Subbag Keuangan'
+        ) {
+            $kode = User::where('role_id', 33)->first()->id;
+        } else if (
+            $roleName == 'Kabid Operasi' ||
+            $roleName == 'Seksi Program' ||
+            $roleName == 'Seksi Sarana Prasarana' ||
+            $roleName == 'Nakhoda' ||
+            $roleName == 'Kepala VTS' ||
+            $roleName == 'Kepala SROP' ||
+            $roleName == 'Kepala Kelompok Pengamatan Laut' ||
+            $roleName == 'Kepala Kelompok Bengkel' ||
+            $roleName == 'Kepala Kelompok SBNP'
+        ) {
+            $kode = User::where('role_id', 34)->first()->id;
+        } else if (
+            $roleName == 'Kabid Logistik' ||
+            $roleName == 'Seksi Pengadaan' ||
+            $roleName == 'Seksi Inventaris'
+        ) {
+            $kode = User::where('role_id', 35)->first()->id;
+        } else {
+            $kode = User::where('role_id', 34)->first()->id;
         }
 
         return $kode;
