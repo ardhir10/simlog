@@ -67,7 +67,7 @@
                 <li>
                     <a href="{{route('rencana-kebutuhan.index')}}">
                         <i class="icon nav-icon" data-feather="trello"></i>
-                        <span class="menu-item" data-key="t-sales">Rencana Kebutuhan</span>
+                        <span class="menu-item" data-key="t-sales">Usulan Kebutuhan</span>
                     </a>
                 </li>
                 <li>

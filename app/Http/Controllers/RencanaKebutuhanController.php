@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\DB;
 class RencanaKebutuhanController extends Controller
 {
     public function index(){
-        $data['page_title'] = 'Rencana Kebutuhan';
+        $data['page_title'] = 'Usulan Kebutuhan';
         $data['data'] = RencanaKebutuhan::get();
         return view('rencana-kebutuhan.index',$data);
     }
 
     public function create()
     {
-        $data['page_title'] = 'Rencana Kebutuhan';
+        $data['page_title'] = 'Usulan Kebutuhan';
         $data['satuan'] = Satuan::orderBy('id', 'desc')->get();
         $dataRk = RencanaKebutuhan::where('created_by', Auth::user()->id)
         ->where('is_draft', true)
@@ -62,7 +62,7 @@ class RencanaKebutuhanController extends Controller
                     $dataRk['status'] = 'draft';
                     $dataRk['nomor_rk'] = $this->generateNomorRk($request->pengguna);
                     RencanaKebutuhan::create($dataRk);
-                    return redirect()->route('rencana-kebutuhan.create')->with(['success' => 'Rencana Kebutuhan di buat !']);
+                    return redirect()->route('rencana-kebutuhan.create')->with(['success' => 'Usulan Kebutuhan di buat !']);
                 }
             } catch (\Throwable $th) {
                 return redirect()->route('rencana-kebutuhan.create')->with(['failed' => $th->getMessage()]);
@@ -98,7 +98,7 @@ class RencanaKebutuhanController extends Controller
 
 
                     DB::commit();
-                    return redirect()->route('rencana-kebutuhan.index')->with(['success' => 'Rencana Kebutuhan di Ajukan !']);
+                    return redirect()->route('rencana-kebutuhan.index')->with(['success' => 'Usulan Kebutuhan di Ajukan !']);
                 }
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -109,7 +109,7 @@ class RencanaKebutuhanController extends Controller
 
     public function detail($id)
     {
-        $data['page_title'] = 'Rencana Kebutuhan';
+        $data['page_title'] = 'Usulan Kebutuhan';
         $data['data'] = RencanaKebutuhan::find($id);
 
         return view('rencana-kebutuhan.detail', $data);
@@ -172,7 +172,7 @@ class RencanaKebutuhanController extends Controller
             RencanaKebutuhanDetail::where('rencana_kebutuhan_id', $id)->delete();
             RencanaKebutuhan::whereId($id)->delete();
             DB::commit();
-            return redirect()->route('rencana-kebutuhan.create')->with(['success' => 'Rencana Kebutuhan Dibatalkan !']);
+            return redirect()->route('rencana-kebutuhan.create')->with(['success' => 'Usulan Kebutuhan Dibatalkan !']);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();

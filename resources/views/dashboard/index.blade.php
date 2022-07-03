@@ -451,7 +451,7 @@
             <div class="col-lg-12">
                 <div class="card bg-card-dashboard text-dashboard" style="border:1px solid;">
                     <div class="card-body p-3">
-                        <h5 class="text-dashboard fw-bolder">Rencana Kebutuhan Tahunan</h5>
+                        <h5 class="text-dashboard fw-bolder">Usulan Kebutuhan Tahunan</h5>
                         <div class="d-block ">
                             <div class="form-group">
                                 <select name="" class="rencana-tahunan-daterange d-none" id="distribusiTahunanBulan">

@@ -80,6 +80,17 @@ class BarangExport implements FromView
             },
         ];
     }
+    public function headings(): array
+    {
+        return [
+            ['Title'],
+            [
+                'col_1',
+                'col_2',
+                'col_3',
+            ]
+        ];
+    }
 
     public function view(): View
     {

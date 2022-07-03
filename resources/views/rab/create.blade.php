@@ -59,17 +59,17 @@
                             <div class="row mb-3">
                                 <div class="col-lg-7 mb-3">
                                     <div class="form-group">
-                                        <label for="">Rencana Kebutuhan</label>
+                                        <label for="">Usulan Kebutuhan</label>
                                         @if ($data->rencana_kebutuhan_id ?? null)
                                             <select name="rencana_kebutuhan_id" class="form-select select2" disabled>
-                                                <option  value="">PILIH RENCANA KEBUTUHAN</option>
+                                                <option  value="">PILIH USULAN KEBUTUHAN</option>
                                                 @foreach ($rencana_kebutuhan as $rk)
                                                     <option {{($rk->id ?? null ) == $data->rencana_kebutuhan_id ?? null ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
                                                 @endforeach
                                             </select>
                                         @else
                                             <select name="rencana_kebutuhan_id" class="form-select select2" >
-                                                <option  value="">PILIH RENCANA KEBUTUHAN</option>
+                                                <option  value="">PILIH USULAN KEBUTUHAN</option>
                                                 @foreach ($rencana_kebutuhan as $rk)
                                                     <option {{($rk->id ?? null ) == ($data->rencana_kebutuhan_id ?? null) ? 'selected=selected' :''}} value="{{$rk->id}}">{{$rk->nomor_rk}}</option>
                                                 @endforeach

@@ -854,7 +854,7 @@ class ApprovalRencanaKebutuhanController extends Controller
             $dataPersetujuan['user_peminta_id'] = $rencanaKebutuhan->created_by;
             $dataPersetujuan['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
             $dataPersetujuan['role_to_name'] ='';
-            $dataPersetujuan['type'] = 'Rencana Kebutuhan Telah di Setujui';
+            $dataPersetujuan['type'] = 'Usulan Kebutuhan Telah di Setujui';
             $dataPersetujuan['status'] = 'done';
             $dataPersetujuan['step'] = 0;
             $dataPersetujuan['keterangan'] = $request->keterangan;
@@ -867,7 +867,7 @@ class ApprovalRencanaKebutuhanController extends Controller
 
 
             DB::commit();
-            return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['success' => 'Rencana Kebutuhan disetujui !']);
+            return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['success' => 'Usulan Kebutuhan disetujui !']);
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('rk-approval.review', $rencanaKebutuhan->id)->with(['failed' => $th->getMessage()]);

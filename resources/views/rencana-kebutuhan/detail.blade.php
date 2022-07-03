@@ -140,7 +140,7 @@
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide ">
                                                 <div class="event-list text-start">
-                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Rencana Kebutuhan Diajukan</h5>
+                                                    <h5 class="font-size-14 mb-1 fw-bold mt-3">Usulan Kebutuhan Diajukan</h5>
                                                     <p class="text-muted">
                                                         {{date('d F T',strtotime($data->timestamp))}} ||
                                                         {{date('H:i:s',strtotime($data->timestamp))}}</p>

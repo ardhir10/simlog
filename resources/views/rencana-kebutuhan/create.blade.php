@@ -132,7 +132,7 @@
                                     <input type="hidden" name="submit" value="AJUKAN">
                                     <button class="btn  btn-success btn-lg">
                                     <i class="fa fa-list-alt"></i>
-                                    Ajukan Rencana Kebutuhan </button>
+                                    Ajukan Usulan Kebutuhan </button>
                                 @endif
                             @else
                                     <input type="hidden" name="submit" value="PILIH ITEM">
@@ -157,7 +157,7 @@
                 <form action="{{route('rencana-kebutuhan.input-item',$data->id ?? null)}}" method="POST">
                         @csrf
                         <div class="card-body p-4">
-                            <div class="fw-bold mb-3 fs-4">Input Item Rencana Kebutuhan</div>
+                            <div class="fw-bold mb-3 fs-4">Input Item Usulan Kebutuhan</div>
                             <div class="col-lg-12">
                                 <div class="row mb-3">
                                     <div class="col-lg-6">

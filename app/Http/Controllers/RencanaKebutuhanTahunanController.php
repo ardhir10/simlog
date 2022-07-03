@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class RencanaKebutuhanTahunanController extends Controller
 {
     public function index(Request $request){
-        $data['page_title'] = "Rencana Kebutuhan Tahunan";
+        $data['page_title'] = "Usulan Kebutuhan Tahunan";
 
         if($request->tahun){
             $data['rencana_kebutuhan_tahunan'] = RencanaKebutuhanTahunan::where('tahun',$request->tahun)->orderby('id', 'desc')->get();
@@ -24,13 +24,13 @@ class RencanaKebutuhanTahunanController extends Controller
         return view('rencana-kebutuhan-tahunan.index',$data);
     }
     public function create(){
-        $data['page_title'] = "Buat Rencana Kebutuhan Tahunan";
+        $data['page_title'] = "Buat Usulan Kebutuhan Tahunan";
         $data['barang_persediaan'] = BarangPersediaan::distinct('nama_barang')->get();
         $data['data'] = null;
         return view('rencana-kebutuhan-tahunan.create',$data);
     }
     public function edit($id){
-        $data['page_title'] = "Edit Rencana Kebutuhan Tahunan";
+        $data['page_title'] = "Edit Usulan Kebutuhan Tahunan";
         $data['barang_persediaan'] = BarangPersediaan::distinct('nama_barang')->get();
         $data['data'] = RencanaKebutuhanTahunan::find($id);
         return view('rencana-kebutuhan-tahunan.edit',$data);
@@ -68,7 +68,7 @@ class RencanaKebutuhanTahunanController extends Controller
                 $dataInsert['p12'] = $request->p12;
                 $dataInsert['created_by'] = Auth::user()->id;
                 RencanaKebutuhanTahunan::create($dataInsert);
-                return redirect()->route('rencana-kebutuhan-tahunan.index')->with(['success' => 'Rencana kebutuhan tahunan berhasil dibuat !']);
+                return redirect()->route('rencana-kebutuhan-tahunan.index')->with(['success' => 'Usulan kebutuhan tahunan berhasil dibuat !']);
             }else{
                 // CREATE BARU
                 $dataUpdate['p01'] = $request->p01;
@@ -85,7 +85,7 @@ class RencanaKebutuhanTahunanController extends Controller
                 $dataUpdate['p12'] = $request->p12;
                 $dataUpdate['created_by'] = Auth::user()->id;
                 RencanaKebutuhanTahunan::where('id',$id)->update($dataUpdate);
-                return redirect()->route('rencana-kebutuhan-tahunan.index')->with(['success' => 'Rencana kebutuhan tahunan berhasil diupdate !']);
+                return redirect()->route('rencana-kebutuhan-tahunan.index')->with(['success' => 'Usulan kebutuhan tahunan berhasil diupdate !']);
             }
 
         } catch (\Throwable $th) {

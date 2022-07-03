@@ -68,6 +68,9 @@ tr:nth-child(even) {
 </style>
 <table >
     <thead>
+        <tr>
+            <th>Laporan Stock Opname - {{date("Y-m-d H:i:s")}} - Rp.{{$grand_total}}</th>
+        </tr>
         <tr >
             <th style="background-color: #92D050;text-align:center;vertical-align: top;border:1px solid" rowspan="2">NO</th>
             <th style="background-color: #92D050;text-align:center;vertical-align: top;border:1px solid" rowspan="2">KODE</th>

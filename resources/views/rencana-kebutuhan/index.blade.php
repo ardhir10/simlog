@@ -47,7 +47,7 @@
                 <h4 class="card-title">{{$page_title}}</h4>
 
 
-                 <a href="{{route('rencana-kebutuhan.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat Rencana Kebutuhan
+                 <a href="{{route('rencana-kebutuhan.create')}}" class="btn btn-outline btn-outline-success  btn-rounded"> Buat Usulan Kebutuhan
                         <i class="fa fa-plus align-middle"></i>
                     </a>
 
