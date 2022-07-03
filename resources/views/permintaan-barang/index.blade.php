@@ -88,7 +88,7 @@
                                             <div class="avatar-title bg-diproses rounded-circle ">
                                             </div>
                                         </div>
-                                        <span class="m-tauto ">Dalam Proses</span>
+                                        <span class="mt-auto ">Dalam Proses</span>
                                     </div>
                                 </td>
                                  <td>
@@ -134,7 +134,7 @@
                                             <td>
                                                @if ($item->status == 'Diproses')
                                                     <div class="avatar-sm ">
-                                                        <div class="avatar-title bg-diproses rounded-circle font-size-12">
+                                                        <div class="avatar-title bg-diproses rounded-circle font-size-10">
 
                                                         </div>
                                                     </div>

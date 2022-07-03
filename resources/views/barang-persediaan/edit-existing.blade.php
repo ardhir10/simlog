@@ -72,7 +72,7 @@
     <div class="col-lg-4">
         <div class="form-group">
             <label for=""><strong>Jumlah</strong></label>
-            <input type="number" class="form-control" name="jumlah" value="{{$data->jumlah}}">
+            <input type="number" class="form-control" name="jumlah" value="{{$data->stokBarang()}}">
         </div>
     </div>
     <div class="col-lg-4">
