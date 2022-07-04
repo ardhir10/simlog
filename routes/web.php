@@ -97,6 +97,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/delete-item/{id?}', 'RencanaKebutuhanController@deleteItem')->name('delete-item');
         Route::get('/detail/{id?}', 'RencanaKebutuhanController@detail')->name('detail');
 
+        // --- ROUTE NOTA DINAS RK
+        Route::get('/rk-nota-dinas/{id}', 'RencanaKebutuhanController@pdfNotaDinas')->name('nota-dinas');
+        Route::get('/rk-nota-usulan-kebutuhan/{id}', 'RencanaKebutuhanController@pdfUsulanKebutuhan')->name('usulan-kebutuhan');
+
+
     });
 
     Route::prefix('laporan')->name('laporan.')->group(function () {
@@ -266,7 +271,7 @@ Route::get('/master-data/user/{id}/delete', 'UserController@delete')->name('user
 Route::get('/master-data/user/show/{id}', 'UserController@show')->name('user.show');
 Route::get('/user-setting', 'UserController@userSetting')->name('user.setting');
 Route::post('/user-setting', 'UserController@userSettingUpdate')->name('user.setting.update');
- 
+
 Route::get('/public-data/user/{id}', 'UserController@viewUserPublic')->name('public-data.user');
 
 

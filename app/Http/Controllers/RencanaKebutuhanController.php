@@ -7,6 +7,8 @@ use App\BarangPersediaan;
 use App\RencanaKebutuhan;
 use App\RencanaKebutuhanDetail;
 use App\Satuan;
+// use Barryvdh\DomPDF\PDF;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -206,6 +208,40 @@ class RencanaKebutuhanController extends Controller
         }
         return $generateOrder_nr;
     }
+
+    public function pdfNotaDinas(Request $request, $id)
+    {
+        $data['title'] = 'Nota Tagih';
+
+        $rencanaKebutuhan = RencanaKebutuhan::where('id', $id)
+            ->first();
+        $data['data'] = $rencanaKebutuhan;
+        if ($request->v == 'html') {
+            return view('pdf.nota-dinas-rencana-kebutuhan', $data);
+        }
+
+        $pdf = PDF::loadView('pdf.nota-dinas-rencana-kebutuhan', $data)->setOptions(['isRemoteEnabled' => true])->setPaper('a4', 'potrait');
+        return $pdf->stream($rencanaKebutuhan->nomor_rk . ' (Nota Dinas).pdf');
+    }
+
+    public function pdfUsulanKebutuhan(Request $request, $id)
+    {
+        $data['title'] = 'Nota Tagih';
+
+        $rencanaKebutuhan = RencanaKebutuhan::where('id', $id)
+        ->first();
+        $data['data'] = $rencanaKebutuhan;
+        if ($request->v == 'html') {
+            return view('pdf.usulan-kebutuhan', $data);
+        }
+
+
+        $pdf = PDF::loadView('pdf.usulan-kebutuhan', $data)->setOptions(['isRemoteEnabled' => true, "isPhpEnabled" => true])->setPaper('a4', 'potrait');
+        // $font = Font_Metrics::get_font("helvetica", "bold");
+
+        return $pdf->stream($rencanaKebutuhan->nomor_rk . ' (Usulan Kebutuhan).pdf');
+    }
+
     private function getRomawi($bln)
     {
         switch ($bln) {
