@@ -9,7 +9,7 @@
                 @csrf
                 <div class="card">
                     <div class="card-header justify-content-between d-flex align-items-center">
-                        <h4 class="card-title">Simoli - User Information</h4>
+                        <h4 class="card-title">SIMLOG - User Information</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">

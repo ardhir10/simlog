@@ -229,9 +229,8 @@
                                     <i class="fa fa-list-alt"></i>
                                     Ajukan RAB </button>
                                 @endif
-
                             @else
-                                    <input type="hidden" name="submit" value="PILIH ITEM">
+                                <input type="hidden" name="submit" value="PILIH ITEM">
                                 <button class="btn  btn-warning btn-lg">
                                 <i class="fa fa-list-alt"></i>
                                 Pilih Item </button>

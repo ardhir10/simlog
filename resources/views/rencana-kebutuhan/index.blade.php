@@ -116,7 +116,13 @@
                                     <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('rk-approval.review',$item->id) : route('rab.create')}}'>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item->nomor_rk}}
-                                            @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
+
+
+                                            @if (optional($item->lastProcess())->role_to_name == 'Staff Seksi Pengadaan')
+                                                @if (optional($item->lastProcess())->role_to_id == Auth::user()->id)
+                                                    <span class="noti-dotnya bg-danger"> ! </span>
+                                                @endif
+                                            @elseif ((optional($item->lastProcess())->role_to_name == Auth::user()->role->name))
                                                 <span class="noti-dotnya bg-danger"> ! </span>
                                             @else
 

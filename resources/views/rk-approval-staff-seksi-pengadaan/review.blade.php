@@ -67,7 +67,7 @@
             <div class="card shadow-lg">
                 <div class="card-header justify-content-between d-flex align-items-center">
                     <h4 class="card-title">{{$page_title}}
-                        @if (optional($data->lastProcess())->role_to_name == Auth::user()->role->name)
+                        @if (optional($data->lastProcess())->role_to_id == Auth::user()->id)
                             <span class="noti-dotnya bg-danger"> ! </span>
                         @else
 
@@ -102,13 +102,13 @@
                                 </div>
                             </div>
                              <div class="col-lg-6">
-                                    @if (($data->isNeedApprove()->role_to_name ?? null) == Auth::user()->role->name ||
+                                    @if (($data->isNeedApprove()->role_to_id ?? null) == Auth::user()->id ||
                                     ($data->isNeedApproveDisposisi()->role_to_name ?? null) == Auth::user()->role->name
                                     )
 
                                         <div class="text-end">
                                             @if ($data->isNeedApprove()->type == 'Perintah Pembuatan RAB')
-                                                <a href="{{route('rab.create')}}">
+                                                <a href="{{route('rab.create',['perintah_rab'=>$data->id])}}">
                                                     <button class="btn btn-lg btn-success " >
                                                         <i class="fas fa-success"></i>
                                                         BUAT RAB</button>
@@ -184,7 +184,6 @@
                                                             <p class="text-muted">
                                                                 {{date('d F T',strtotime($apv->timestamp))}} ||
                                                                 {{date('H:i:s',strtotime($apv->timestamp))}}
-                                                                {{-- {{$apv->role_to_name}} --}}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -235,7 +234,7 @@
                                                     <td>
                                                         <div>
                                                             <span
-                                                                class="d-block font-size-15 fw-bold">{{$bd->barang->nama_barang ?? 'N/A'}}</span>
+                                                                class="d-block font-size-15 fw-bold">{{$bd->nama_barang ?? 'N/A'}}</span>
                                                             {{-- <span class="">{{$bd->barang->kode_barang ?? 'N/A'}}</span>
                                                             <span
                                                                 class="">{{$bd->barang->kategori_barang->nama_kategori ?? 'N/A'}}</span>
@@ -251,7 +250,7 @@
                                                     <td><span
                                                             class="font-size-15">{{$bd->barang->kategori_barang->nama_kategori ?? 'N/A'}}</span>
                                                     </td>
-                                                    <td class="font-size-15">{{$bd->jumlah}}</td>
+                                                    <td class="font-size-15">{{$bd->qty}}</td>
                                                     <td class="font-size-15">{{$bd->jumlah_disetujui ?? 0}}</td>
                                                     <td class="font-size-15">
                                                         {{$bd->barang->satuan->nama_satuan ?? 'N/A'}}</td>
@@ -288,7 +287,6 @@
                                                                     {{date('d F T',strtotime($appvs->timestamp))}} ||
                                                                     {{date('H:i:s',strtotime($appvs->timestamp))}}</p>
                                                                     {{-- <span class="fw-bold d-block">Dari : {{$appvs->user->name ?? 'N/A'}} ({{$appvs->user->role->name ?? 'N/A'}})</span> --}}
-                                                                    {{-- <span class="fw-bold d-block">Ke : {{$appvs->role_to_name ?? 'N/A'}} </span> --}}
                                                                     <span class="d-block mb-2">Disetujui oleh {{$appvs->role_to_name}}</span>
                                                                     <span class="d-block mb-2">Keterangan :</span>
                                                                     <span>{{$appvs->keterangan}}</span>

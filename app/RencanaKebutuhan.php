@@ -14,6 +14,14 @@ class RencanaKebutuhan extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
+
+    public function detail()
+    {
+        return $this->hasMany(RencanaKebutuhanDetail::class, 'rencana_kebutuhan_id', 'id');
+    }
+
+
+
     public function lastProcess($role = '')
     {
         if ($role) {

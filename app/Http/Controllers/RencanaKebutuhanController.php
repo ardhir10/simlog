@@ -141,7 +141,7 @@ class RencanaKebutuhanController extends Controller
             return redirect()->route('rencana-kebutuhan.create')->with(['success' => 'Item Diupdate !']);
         } else {
             $data['rencana_kebutuhan_id'] = $id;
-            // $data['barang_id'] = $request->barang_id;
+            $data['barang_id'] = $request->barang_id;
             $data['nama_barang'] = $request->nama_barang;
             $data['satuan'] = $request->satuan;
             $data['qty'] = $request->qty;

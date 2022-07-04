@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ApprovalRab;
+use App\ApprovalRencanaKebutuhanProcess;
 use App\BarangPersediaan;
 use App\RAB;
 use App\RabDetail;
@@ -24,16 +25,137 @@ class RencanaAnggaranBiayaController extends Controller
         return view('rab.index',$data);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $data['page_title'] = 'Rencana Anggaran Biaya';
         $data['satuan'] = Satuan::orderBy('id','desc')->get();
         $data['barang_persediaan'] = BarangPersediaan::orderBy('id','desc')->get();
-        $dataRab = RAB::where('created_by',Auth::user()->id)
-        ->where('is_draft',true)
-        ->first();
-        if($dataRab){
-            $data['data'] = $dataRab;
+
+        $dataRabCreated = RAB::where('created_by', Auth::user()->id)
+            ->where('is_draft', true)
+            ->first();
+        // --- RAB DARI PERINTAH
+        if($request->perintah_rab){
+            $rkb = RencanaKebutuhan::where('id',$request->perintah_rab)->first();
+            if ($dataRabCreated) {
+                RabDetail::where('rab_id', $dataRabCreated->id)->delete();
+                RAB::whereId($dataRabCreated->id)->delete();
+            }
+
+            try {
+                //code...
+                DB::beginTransaction();
+
+                // Saat Klik Pilih Item
+                $dataRab['kegiatan'] = $rkb->kegiatan;
+                $dataRab['mak'] = $rkb->mak;
+                $dataRab['pengguna'] = $rkb->pengguna;
+                $dataRab['tahun_anggaran'] = $rkb->tahun_anggaran;
+                $dataRab['is_draft'] = true;
+                $dataRab['created_by'] = Auth::user()->id;
+                $dataRab['created_by_name'] = Auth::user()->name;
+                $dataRab['timestamp'] = date('Y-m-d H:i:s');
+                $dataRab['status'] = 'draft';
+                $dataRab['nomor_rab'] = $this->generateNomorRab();
+                $dataRab['rencana_kebutuhan_id'] = $rkb->id;
+
+
+                $id = RAB::create($dataRab);
+                $id = $id->id;
+                // Jika Dari Rencan Kebutuhan
+                if ($rkb->detail) {
+                    $listBarangRencanaKebutuhan = RencanaKebutuhanDetail::where('rencana_kebutuhan_id', $rkb->id)->get();
+                    foreach ($listBarangRencanaKebutuhan as $key => $lbrk) {
+                        $cariBarang = RabDetail::where('rab_id', $id)
+                            ->where('nama_barang', $lbrk->nama_barang)
+                            ->where('satuan', $lbrk->satuan)
+                            ->where('harga_satuan', $lbrk->harga_satuan)
+                            ->where('mata_uang', $lbrk->mata_uang)
+                            ->first();
+
+
+                        if ($cariBarang) {
+
+                            $datarkd['rab_id'] = $id;
+                            $datarkd['nama_barang'] = $lbrk->nama_barang;
+                            $datarkd['satuan'] = $lbrk->satuan;
+                            $datarkd['qty'] = $lbrk->qty;
+                            $datarkd['harga_satuan']
+                                = $lbrk->harga_satuan;
+                            $datarkd['mata_uang']
+                                = $lbrk->mata_uang;
+                            $datarkd['keterangan']
+                                = $lbrk->keterangan;
+                            $datarkd['add_by'] = Auth::user()->id;
+
+                            RabDetail::where('rab_id', $id)->update($datarkd);
+                        } else {
+                            $datarkd['rab_id'] = $id;
+                            $datarkd['nama_barang'] = $lbrk->nama_barang;
+                            $datarkd['satuan'] = $lbrk->satuan;
+                            $datarkd['qty'] = $lbrk->qty;
+                            $datarkd['harga_satuan']
+                                = $lbrk->harga_satuan;
+                            $datarkd['mata_uang']
+                                = $lbrk->mata_uang;
+                            $datarkd['keterangan']
+                                = $lbrk->keterangan;
+                            $datarkd['add_by'] = Auth::user()->id;
+
+
+                            RabDetail::create($datarkd);
+                        }
+                    }
+                }
+
+                // --- UPDATE STATUS RENCANA KEBUTUHAN DISETUJUI
+                $approvalBefore = ApprovalRencanaKebutuhanProcess::where('rencana_kebutuhan_id', $rkb->id)
+                ->where('type', 'Perintah Pembuatan RAB')
+                ->orderBy('id', 'desc')
+                ->first()
+                ->update([
+                    'status' => 'done'
+                ])
+                ;
+
+                $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
+                $dataPersetujuan['rencana_kebutuhan_id'] = $rkb->id;
+                $dataPersetujuan['user_peminta_id'] = $rkb->created_by;
+                $dataPersetujuan['user_peminta_name'] = $rkb->user->name ?? '';
+                $dataPersetujuan['role_to_name'] = 'Staff Seksi Pengadaan' ?? '';
+                $dataPersetujuan['type'] = 'RAB Telah Dibuat';
+                $dataPersetujuan['status'] = 'done';
+                $dataPersetujuan['step'] = 0;
+                $dataPersetujuan['keterangan'] = 'Selesai';
+                $dataPersetujuan['tindak_lanjut'] = null;
+                $dataPersetujuan['approve_by_id'] = Auth::user()->id;
+                $dataPersetujuan['kategori'] = 'PERSETUJUAN';
+                ApprovalRencanaKebutuhanProcess::create($dataPersetujuan);
+
+                RencanaKebutuhan::where('id', $rkb->id)
+                ->update(['status'=>'Disetujui']);
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+
+            }
+
+
+        }
+        $dataRabCreated = RAB::where('created_by', Auth::user()->id)
+            ->where('is_draft', true)
+            ->first();
+
+
+
+
+
+        if($dataRabCreated){
+
+            $data['data'] = $dataRabCreated;
+
         }else{
             $data['data'] = null;
         }
@@ -42,7 +164,7 @@ class RencanaAnggaranBiayaController extends Controller
         // $data['rencana_kebutuhan'] = RencanaKebutuhan::where('status','Disetujui')->get();
         $data['rencana_kebutuhan'] = RencanaKebutuhan::get();
 
-        $data['rab_details'] = RabDetail::where('rab_id',$dataRab->id ??null)->get();
+        $data['rab_details'] = RabDetail::where('rab_id', $dataRabCreated->id ??null)->get();
         $data['rab'] = RAB::orderBy('id', 'desc')->get();
         return view('rab.create', $data);
     }

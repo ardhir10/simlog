@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>SIMOLI</title>
+    <title>SIMLOG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/icon/base-favicon.png')}}">
@@ -363,7 +363,7 @@
                             <script>
                                 document.write(new Date().getFullYear())
 
-                            </script> &copy; SIMOLI
+                            </script> &copy; SIMLOG
                         </div>
                     </div>
                 </div>

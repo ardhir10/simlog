@@ -170,7 +170,7 @@
     <div class="footer">
         <div style="float:right;width:40%;text-align: left;">
             <div style="margin-bottom:25px;">
-                <span style="display: block">Kepala {{$data->bagianBidang()}}</span>
+                <span style="display: block">{{$data->bagianBidangNotaDinas()}}</span>
                 <span style="display: block">Distrik Navigasi Kelas I Tanjung Priok</span>
             </div>
             {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->kepalaBagiannyaId() ?? 0), 'QRCODE',3,3) . '" alt="barcode"   />' !!}

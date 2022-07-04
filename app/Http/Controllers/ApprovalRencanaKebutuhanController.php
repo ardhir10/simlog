@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\ApprovalRencanaKebutuhanProcess;
+use App\BarangKeluar;
+use App\BarangPersediaan;
 use App\RencanaKebutuhan;
 use App\RencanaKebutuhanDetail;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +59,10 @@ class ApprovalRencanaKebutuhanController extends Controller
         } else if (Auth::user()->role->name == 'Pengelola Gudang') {
             return view('rk-approval-kepala-gudang.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Pengadaan') {
+            $data['staff_pengadaan'] = User::whereHas('role',function($q){
+                $q->where('name', 'Staff Seksi Pengadaan');
+            })->get();
+
             return view('rk-approval-kasie-pengadaan.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Inventaris') {
             return view('rk-approval-kasie-inventaris.review', $data);
@@ -535,6 +542,7 @@ class ApprovalRencanaKebutuhanController extends Controller
                     $dataApproval['user_peminta_id'] = $rencanaKebutuhan->created_by;
                     $dataApproval['user_peminta_name'] = $rencanaKebutuhan->user->name ?? '';
                     $dataApproval['role_to_name'] = 'Staff Seksi Pengadaan' ?? '';
+                    $dataApproval['role_to_id'] = $request->staff_pengadaan_id;
                     $dataApproval['type'] = 'Perintah Pembuatan RAB';
                     $dataApproval['status'] = '';
                     $dataApproval['step'] = 0;

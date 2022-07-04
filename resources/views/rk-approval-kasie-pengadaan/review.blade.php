@@ -392,7 +392,14 @@
 
                     <div class="modal-body">
                         {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
-
+                        <div class="form-group">
+                            <label for="">Pilih Staff Pengadaan</label>
+                            <select name="staff_pengadaan_id"  id="" class="form-select">
+                                @foreach ($staff_pengadaan as $item)
+                                     <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="">Keterangan</label>
                             <textarea name="keterangan" id=""  cols="30" rows="5" class="form-control"></textarea>
@@ -452,6 +459,14 @@
                 </div>
                 <form action="{{route('rk-approval.kasie-pengadaan-setuju-disposisi-kadisnav',$data->id)}}" method="post">
                     @csrf
+                     <div class="form-group">
+                        <label for="">Pilih Staff Pengadaan</label>
+                        <select name="staff_pengadaan_id"  id="" class="form-select">
+                            @foreach ($staff_pengadaan as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="modal-body">
                         {{-- <p class="text-center">Dengan menekan tombol lanjutkan anda sebagai Pengelola Gudang telah menyiapkan barang-barang sesuai dengan nomor UPP4 {{$data->nomor_upp4}}</p> --}}
