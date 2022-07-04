@@ -239,6 +239,7 @@
                                                             Kategori</th>
                                                         <th class="td-head text-center" colspan="2">Jumlah</th>
                                                         <th class="td-head" rowspan="2">Satuan</th>
+                                                        <th class="td-head" rowspan="2"></th>
 
                                                     </tr>
                                                     <tr class="tr-head"
@@ -275,7 +276,9 @@
                                                     <td class="font-size-15">{{$bd->jumlah_disetujui ?? 0}}</td>
                                                     <td class="font-size-15">
                                                         {{$bd->barang->satuan->nama_satuan ?? 'N/A'}}</td>
-
+                                                    <td>
+                                                        <textarea name="" class="form-control" id="" cols="10" rows="2"> {{$bd->berita_tambahan}}</textarea>
+                                                    </td>
 
                                                 </tr>
                                                 @endforeach
