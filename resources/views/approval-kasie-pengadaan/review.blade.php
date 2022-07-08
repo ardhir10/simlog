@@ -564,10 +564,19 @@
 
                         <div class="form-group mb-3">
                             <label for="">Disposisi Ke :</label>
-                            <select name="disposisi_ke" id="" class="form-select">
+                            <select name="disposisi_ke" id="disposisiKe" class="form-select">
                                 <option value="Kabid Logistik">Kabid Logistik</option>
                                 <option value="Bendahara Materil">Bendahara Materil</option>
                                 <option value="Staff Seksi Pengadaan">Staff Seksi Pengadaan</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 pilih-staff d-none">
+                            <label for="">Pilih Staff :</label>
+                            <select name="role_to_id" id="" class="form-select ">
+                                @foreach ($staff_pengadaan as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+
                             </select>
                         </div>
                         <div class="form-group">
@@ -602,6 +611,14 @@
         paging: false
 
     });
+
+    $('#disposisiKe').on('change',function(){
+        if(this.value == 'Staff Seksi Pengadaan'){
+            $('.pilih-staff').removeClass('d-none');
+        }else{
+            $('.pilih-staff').addClass('d-none');
+        }
+    })
 
     $(".clickable-row").click(function () {
         window.location = $(this).data("href");

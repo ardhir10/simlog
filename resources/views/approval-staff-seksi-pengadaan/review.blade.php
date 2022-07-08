@@ -68,7 +68,11 @@
                 <div class="card-header justify-content-between d-flex align-items-center">
                     <h4 class="card-title">{{$page_title}}
                         @if (optional($data->lastProcess())->role_to_name == Auth::user()->role->name)
-                            <span class="noti-dotnya bg-danger"> ! </span>
+                            {{-- CEK SIAPA YANG DIPILIH  --}}
+                            @if (optional($data->lastProcess())->role_to_id == Auth::user()->id)
+                                <span class="noti-dotnya bg-danger"> ! </span>
+                            @else
+                            @endif
                         @else
 
                         @endif
@@ -98,15 +102,19 @@
                                     @if (($data->isNeedApprove()->role_to_name ?? null) == Auth::user()->role->name ||
                                     ($data->isNeedApproveDisposisi()->role_to_name ?? null) == Auth::user()->role->name
                                     )
-
-                                        <div class="text-end">
+                                        {{-- CEK SIAPA YANG DIPILIH  --}}
+                                        @if (optional($data->lastProcess())->role_to_id == Auth::user()->id)
+                                            <div class="text-end">
                                             <button class="btn btn-lg btn-warning " data-bs-toggle="modal" data-bs-target="#disposisiModal">
                                                 <i class="fas fa-comments"></i>
                                                 DISPOSISI</button>
                                             <button class="btn btn-lg btn-success " data-bs-toggle="modal" data-bs-target="#myModal">
                                                 <i class="fa fa-check"></i>
                                                 SETUJU</button>
-                                        </div>
+                                            </div>
+                                        @endif
+
+
                                     @endif
                                 </div>
 

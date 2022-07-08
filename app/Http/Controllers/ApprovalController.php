@@ -10,6 +10,7 @@ use App\FileLaporanDistribusi;
 use App\LaporanDistribusi;
 use App\PermintaanBarang;
 use App\PermintaanBarangDetail;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,7 @@ class ApprovalController extends Controller
             (Auth::user()->role->name ?? null) == 'Admin SIMLOG' ||
             (Auth::user()->role->name ?? null) == 'Kasie Pengadaan' ||
             (Auth::user()->role->name ?? null) == 'Bendahara Materil' ||
-            (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan' ||
+
             (Auth::user()->role->name ?? null) == 'Kasie Inventaris' ||
             (Auth::user()->role->name ?? null) == 'Kabid Operasi' ||
             (Auth::user()->role->name ?? null) == 'Kasie Program' ||
@@ -49,6 +50,14 @@ class ApprovalController extends Controller
             ) {
             $data['permintaan_barang'] = PermintaanBarang::orderBy('id', 'desc')
             ->get();
+        } else if (
+             (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan'
+            ) {
+
+            $data['permintaan_barang'] = PermintaanBarang::whereHas('approvals', function ($q) {
+                $q->where('role_to_id', Auth::user()->id);
+            })->orderBy('id', 'desc')
+                ->get();
         } else if ((Auth::user()->role->name ?? null) == 'Kurir/Offsetter') {
             $data['permintaan_barang'] = PermintaanBarang::whereHas('approvals', function ($q) {
                 $q->where('approve_by_id', Auth::user()->id);
@@ -100,19 +109,18 @@ class ApprovalController extends Controller
             return view('approval-kasie-program.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Sarpras') {
             return view('approval-kasie-sarpras.review', $data);
-        }
-
-         else if (Auth::user()->role->name == 'Kabag Tata Usaha') {
+        }else if (Auth::user()->role->name == 'Kabag Tata Usaha') {
             return view('approval-kabag-tata-usaha.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Kepeg & Umum') {
             return view('approval-kasie-kepeg-umum.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Keuangan') {
             return view('approval-kasie-kepeg-umum.review', $data);
-        }
-
-         else if (Auth::user()->role->name == 'Pengelola Gudang') {
+        }else if (Auth::user()->role->name == 'Pengelola Gudang') {
             return view('approval-kepala-gudang.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Pengadaan') {
+            $data['staff_pengadaan'] = User::whereHas('role', function ($q) {
+                $q->where('name', 'Staff Seksi Pengadaan');
+            })->get();
             return view('approval-kasie-pengadaan.review', $data);
         } else if (Auth::user()->role->name == 'Kasie Inventaris') {
             return view('approval-kasie-inventaris.review', $data);
@@ -496,11 +504,12 @@ class ApprovalController extends Controller
             $dataPersetujuan['approve_by_id'] = Auth::user()->id;
             $dataPersetujuan['kategori'] = 'DISPOSISI';
             $dataPersetujuan['from_kadisnav'] = $permintaanBarang->fromKadisnav();
+            if($request->disposisi_ke == 'Staff Seksi Pengadaan'){
+                $dataPersetujuan['role_to_id']= $request->role_to_id;
+            }else{
+                $dataPersetujuan['role_to_id']= null;
+            }
             ApprovalProcess::create($dataPersetujuan);
-
-
-
-
             DB::commit();
             return redirect()->route('approval.review', $permintaanBarang->id)->with(['success' => 'Data Berhasil di Desposisi ke '.$request->disposisi_ke.' !']);
         } catch (\Throwable $th) {

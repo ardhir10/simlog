@@ -123,8 +123,23 @@
                                         <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('approval.review',$item->id) : route('permintaan-barang.create')}}'>
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$item->nomor_nota_dinas}}
-                                                @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
+                                                {{-- @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
                                                     <span class="noti-dotnya bg-danger"> ! </span>
+                                                @else
+
+                                                @endif --}}
+                                                @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
+                                                    {{-- JIKA STAFF KASIE PENGADAAN PERLU DI CEK ROLE TO IDNYA --}}
+
+                                                    @if (optional($item->lastProcess())->role_to_name == 'Staff Seksi Pengadaan')
+                                                        {{-- CEK SIAPA YANG DIPILIH  --}}
+                                                        @if (optional($item->lastProcess())->role_to_id == Auth::user()->id)
+                                                            <span class="noti-dotnya bg-danger"> ! </span>
+                                                        @else
+                                                        @endif
+                                                    @else
+                                                        <span class="noti-dotnya bg-danger"> ! </span>
+                                                    @endif
                                                 @else
 
                                                 @endif
@@ -169,8 +184,19 @@
                                         <tr class='clickable-row' data-href='{{ $item->is_draft != true ? route('permintaan-barang.detail',$item->id) : ''}}'>
                                             <td>{{$loop->iteration}}</td>
                                              <td>{{$item->nomor_nota_dinas}}
+
                                                 @if (optional($item->lastProcess())->role_to_name == Auth::user()->role->name)
-                                                    <span class="noti-dotnya bg-danger"> ! </span>
+                                                    {{-- JIKA STAFF KASIE PENGADAAN PERLU DI CEK ROLE TO IDNYA --}}
+
+                                                    @if (optional($item->lastProcess())->role_to_name == 'Staff Seksi Pengadaan')
+                                                        {{-- CEK SIAPA YANG DIPILIH  --}}
+                                                        @if (optional($item->lastProcess())->role_to_id == Auth::user()->id)
+                                                            <span class="noti-dotnya bg-danger"> ! </span>
+                                                        @else
+                                                        @endif
+                                                    @else
+                                                        <span class="noti-dotnya bg-danger"> ! </span>
+                                                    @endif
                                                 @else
 
                                                 @endif

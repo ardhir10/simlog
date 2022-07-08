@@ -183,7 +183,7 @@
                                                                 <span class="d-block fs-5 fw-bold">{{$bd->barang->nama_barang ?? 'N/A'}}</span>
                                                                 <span class="">{{$bd->barang->kode_barang ?? 'N/A'}}</span>
                                                                 <span class="">{{$bd->barang->kategori_barang->nama_kategori ?? 'N/A'}}</span>
-                                                                <span class="d-block">Sisa Stock : {{$bd->barang->jumlah ?? 'N/A'}}</span>
+                                                                <span class="d-block">Sisa Stock : {{$bd->barang->stokBarang() ?? 'N/A'}}</span>
 
                                                             </div>
                                                         </td>
