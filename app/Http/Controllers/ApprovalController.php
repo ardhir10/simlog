@@ -53,7 +53,6 @@ class ApprovalController extends Controller
         } else if (
              (Auth::user()->role->name ?? null) == 'Staff Seksi Pengadaan'
             ) {
-
             $data['permintaan_barang'] = PermintaanBarang::whereHas('approvals', function ($q) {
                 $q->where('role_to_id', Auth::user()->id);
             })->orderBy('id', 'desc')
@@ -1077,7 +1076,6 @@ class ApprovalController extends Controller
 
                 $barangPersediaan = BarangPersediaan::where('id', $value->barang_persediaan_id)
                     ->first();
-
 
                 BarangKeluar::create([
                     'timestamp'=> date('Y-m-d H:i:s'),
