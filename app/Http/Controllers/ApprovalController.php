@@ -186,7 +186,7 @@ class ApprovalController extends Controller
                 $dataApproval['user_peminta_name'] = $permintaanBarang->user->name ?? '';
                 $dataApproval['role_to_name'] = 'Kabid Logistik';
 
-                // Udate Barang Diminta Sesuai Request
+                // Update Barang Diminta Sesuai Request
                 foreach ($request->jumlah_disetujui as $key => $value) {
                     PermintaanBarangDetail::where('id', $key)
                         ->update(['jumlah_disetujui'=>$value]);
@@ -507,6 +507,11 @@ class ApprovalController extends Controller
                 $dataPersetujuan['role_to_id']= $request->role_to_id;
             }else{
                 $dataPersetujuan['role_to_id']= null;
+            }
+            // Update Barang Diminta Sesuai Request
+            foreach ($request->jumlah_disetujui as $key => $value) {
+                PermintaanBarangDetail::where('id', $key)
+                    ->update(['jumlah_disetujui' => $value]);
             }
             ApprovalProcess::create($dataPersetujuan);
             DB::commit();

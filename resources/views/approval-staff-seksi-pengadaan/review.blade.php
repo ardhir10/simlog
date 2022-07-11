@@ -452,7 +452,7 @@
 
     <!-- MODAL DISPOSISI -->
     <div id="disposisiModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">DISPOSISI PERMINTAAN</h5>
@@ -470,6 +470,32 @@
                             <select name="disposisi_ke" id="" class="form-select">
                                 <option value="Kasie Pengadaan">Kasie Pengadaan</option>
                             </select>
+                        </div>
+                        <div class="table-responsive " id="">
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>nama Barang</th>
+                                        <th>Kode Barang</th>
+                                        <th>Jumah</th>
+                                        <th>Update Disetujui</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data->barang_diminta as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->barang->nama_barang?? 'N/A'}}</td>
+                                            <td>{{$item->barang->kode_barang?? 'N/A'}}</td>
+                                            <td>{{$item->jumlah}}</td>
+                                            <td><input name="jumlah_disetujui[{{$item->id}}]" type="number" step="0.01" value="{{$item->jumlah}}"></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+
                         </div>
                         <div class="form-group">
                             <label for="">Keterangan</label>
