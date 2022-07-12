@@ -470,6 +470,7 @@ class ApprovalController extends Controller
     public function kabidLogistikDisposisi(Request $request, $id)
     {
         $permintaanBarang = PermintaanBarang::find($id);
+        dd();
 
         try {
             DB::beginTransaction();
@@ -544,6 +545,7 @@ class ApprovalController extends Controller
             ->orderBy('id', 'desc')
             ->first();
 
+
             // update approval sebelumnya
             ApprovalProcess::where('permintaan_barang_id', $id)
             ->where(function ($q) {
@@ -559,8 +561,10 @@ class ApprovalController extends Controller
                 'keterangan' => $request->keterangan
             ]);
 
-            if ($disposisiSebelumnya) {
-                $roleDesposisi = $disposisiSebelumnya->user->role->name ?? '';
+            $roleDesposisi = $disposisiSebelumnya->user->role->name ?? '';
+            if ($disposisiSebelumnya && $roleDesposisi != 'Staff Seksi Pengadaan') {
+
+
                 // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEUSER YANG MELAKUKAN DISPOSISI
                 $dataPersetujuan['timestamp'] = date('Y-m-d H:i:s');
                 $dataPersetujuan['permintaan_barang_id'] = $id;
@@ -598,6 +602,8 @@ class ApprovalController extends Controller
                 ->where('status','done')
                 ->orderBy('id', 'desc')
                 ->first();
+            
+
                 if($kabidlogSetujui){
                     // Jika sudah di setujui kabidlog baru lanjut ke benmat
                     // JIKA TIDAK ADA DISPOSISI MAKA SETUJUI AKAN KEBENDAHARA MATERIL
