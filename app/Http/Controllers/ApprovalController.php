@@ -470,7 +470,6 @@ class ApprovalController extends Controller
     public function kabidLogistikDisposisi(Request $request, $id)
     {
         $permintaanBarang = PermintaanBarang::find($id);
-        dd();
 
         try {
             DB::beginTransaction();
