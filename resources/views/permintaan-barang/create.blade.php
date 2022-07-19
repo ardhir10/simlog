@@ -229,7 +229,7 @@
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label for="">Perihal</label>
-                                        <textarea class="form-control" name="perihal" cols="" rows="5"></textarea>
+                                        <textarea class="form-control" name="perihal" cols="" rows="5" required></textarea>
                                     </div>
                                 </div>
                             </div>

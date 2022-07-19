@@ -169,7 +169,10 @@ class PermintaanBarang extends Model
             $kode = 'Kepala Kelompok Bengkel';
         } elseif($roleName == 'Kasie Program' || $roleName == 'Kasie Sarpras') {
             $kode = 'Kabid Operasi';
-        } elseif($roleName == 'Kepala Distrik Navigasi' || $roleName == 'Kasie Kepeg & Umum'|| $roleName == 'Kasie Keuangan') {
+        } elseif($roleName == 'Kepala Distrik Navigasi' 
+            || $roleName == 'Kasie Kepeg & Umum'
+            || $roleName == 'Kasie Keuangan'
+            ) {
             $kode = 'Kabag Tata Usaha';
         } elseif($roleName == 'Kasie Inventaris' || $roleName == 'Kasie Pengadaan') {
             $kode = 'Kabid Logistik';

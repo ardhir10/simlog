@@ -63,7 +63,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="">Perihal</label>
-                                            <input type="text" name="perihal" class="form-control" value="">
+                                            <input type="text" name="perihal" class="form-control" value="" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">

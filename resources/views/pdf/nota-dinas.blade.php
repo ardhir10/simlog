@@ -131,7 +131,7 @@
                 </div>
             </div>
             <div class="middle">
-                Yth. Kepada Distrik Navigasi Kelas I Tanjung Priok
+                Yth. Kepala Distrik Navigasi Kelas I Tanjung Priok
                 <div>
                     <table style="width: 100%">
                         <tr>
@@ -142,7 +142,7 @@
                         <tr>
                             <td>Hal</td>
                             <td style="width: 1%">:</td>
-                            <td> {{$data->perihal}}</td>
+                            <td> {{$data->perihal ?? '-'}}</td>
                         </tr>
 
                         <tr>
@@ -156,7 +156,7 @@
                     <span>Dalam rangka menunjang kegiatan operasional pada bagian/seksi/instalasi kami, dibutuhkan barang-barang baik barang persediaan maupun barang asset.</span>
                     <br>
                     <br>
-                    <span>Sehubungan butir tersebut diatas, bersama ini kamu sampaikan daftar kebutuhan barang yang diminta. (Terlampir)</span>
+                    <span>Sehubungan butir tersebut diatas, bersama ini kami sampaikan daftar kebutuhan barang yang diminta. (Terlampir)</span>
                     <br>
                     <br>
                     <span>Demikian disampaikan, mohon petunjuk dan arahan lebih lanjut</span>
@@ -170,11 +170,11 @@
     <div class="footer">
         <div style="float:right;width:40%;text-align: left;">
             <div style="margin-bottom:25px;">
-                <span style="display: block">{{$data->bagianBidangNotaDinas()}}</span>
+                <span style="display: block">{{$data->user->role->name ?? ''}}</span>
                 <span style="display: block">Distrik Navigasi Kelas I Tanjung Priok</span>
             </div>
             {!! '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG(route('public-data.user',$data->kepalaBagiannyaId() ?? 0), 'QRCODE',3,3) . '" alt="barcode"   />' !!}
-            <span style="display: block">{{$data->kepalaBagiannya() ?? '-'}}</span>
+            <span style="display: block">{{$data->user->name ?? '-'}}</span>
             <span style="display: block">{{$data->user->nip ?? '-'}}</span>
         </div>
         <div class="left-note" style="padding: 0px 50px;margin-top:230px;margin-left:-60px">

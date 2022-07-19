@@ -286,7 +286,51 @@
                         </div>
 
 
+                        {{-- DOKUMEN DOWNLOAD --}}
+                        <div class="row animate__animated  animate__fadeIn">
+                            <div class="col-lg-12">
+                                <div class="card shadow-lg">
+                                    <div class="card-body ">
+                                        <div class="row ">
+                                            <div class="col-lg-3">
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <img height="65" src="{{asset('assets/images/icon/file.png')}}"
+                                                            alt="">
+                                                    </div>
+                                                    <div>
+                                                        <span class="d-block"
+                                                            style="font-size:20px;font-weight:bold;">Nota Dinas</span>
+                                                        <a href="{{route('rencana-kebutuhan.nota-dinas',$data->id)}}"
+                                                            target="_blank">
+                                                            <button class="btn btn-sm btn-success">Download</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <img height="65" src="{{asset('assets/images/icon/file.png')}}"
+                                                            alt="">
+                                                    </div>
+                                                    <div>
+                                                        <span class="d-block"
+                                                            style="font-size:20px;font-weight:bold;">Usulan Kebutuhan</span>
+                                                        <a href="{{route('rencana-kebutuhan.usulan-kebutuhan',$data->id)}}"
+                                                            target="_blank">
+                                                            <button class="btn btn-sm btn-success">Download</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
 
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                        {{-- PERSETUJUAN --}}
                         <hr>
                         <div class="row animate__animated  animate__fadeIn">

@@ -22,8 +22,12 @@ class BarangPersediaan extends Model
     public function stokBarang(){
         $BarangMasuk = BarangMasuk::where('barang_id',$this->id)->get()->sum('jumlah');
         $Barangkeluar = BarangKeluar::where('barang_keluar_id',$this->id)->get()->sum('jumlah');
+        $barangDipermintaan =PermintaanBarangDetail::where('barang_persediaan_id', $this->id)->whereHas('permintaanBarang',function($q){
+            $q->where('status', 'Diproses');
+        })->get()->sum('jumlah');
         $BarangRetur = ReturDetail::where('barang_id', $this->id)->where('status', 'done')->get()->sum('jumlah_retur') ?? 0;
-        return $stock = $BarangMasuk-$Barangkeluar+$BarangRetur;
+       
+        return $stock = ($BarangMasuk-$Barangkeluar+$BarangRetur)- $barangDipermintaan;
     }
 
     public function barangMasuk()
