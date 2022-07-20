@@ -328,59 +328,59 @@ class BarangPersediaanController extends Controller
                             $namaBarang = trim($namaBarang, ' ');
                         }
                         $dataBarang['nama_barang'] = $namaBarang;
-                        $dataBarang['tahun_perolehan'] = $value[3];
-                        $dataBarang['satuan'] = $value[5];
-                        $dataBarang['harga_perolehan'] = $value[6];
-                        $dataBarang['kategori'] = $value[13];
+                        $dataBarang['tahun_perolehan'] = 0;
+                        $dataBarang['satuan'] = $value[3];
+                        $dataBarang['harga_perolehan'] = $value[5];
+                        $dataBarang['kategori'] = $value[11];
                         // // Peruntukkan Apa saja yang ada stocknya
                         $peruntukkan = [];
-                        if($value[14]>0){
+                        if($value[13]>0){
                             // umum
-                            $peruntukkan[] = ['kode_peruntukkan'=>'01','value'=>$value[14]];
+                            $peruntukkan[] = ['kode_peruntukkan'=>'01','value'=>$value[13]];
                         }
-                        if($value[15]>0){
+                        if($value[14]>0){
                             // SBNP
-                            $peruntukkan[] = ['kode_peruntukkan'=>'08','value'=>$value[15]];
+                            $peruntukkan[] = ['kode_peruntukkan'=>'08','value'=>$value[14]];
+                        }
+                        if ($value[15]>0) {
+                            // TELKOMPEL
+                            $peruntukkan[] = ['kode_peruntukkan'=>'09','value'=>$value[15]];
                         }
                         if ($value[16]>0) {
-                            // TELKOMPEL
-                            $peruntukkan[] = ['kode_peruntukkan'=>'09','value'=>$value[16]];
+                            // PENGLA
+                            $peruntukkan[] = ['kode_peruntukkan'=>'10','value'=>$value[16]];
                         }
                         if ($value[17]>0) {
-                            // PENGLA
-                            $peruntukkan[] = ['kode_peruntukkan'=>'10','value'=>$value[17]];
+                            // KNK
+                            $peruntukkan[] = ['kode_peruntukkan'=>'11','value'=>$value[17]];
                         }
                         if ($value[18]>0) {
-                            // KNK
-                            $peruntukkan[] = ['kode_peruntukkan'=>'11','value'=>$value[18]];
+                            // BEGNKEL
+                            $peruntukkan[] = ['kode_peruntukkan'=>'12','value'=>$value[18]];
                         }
                         if ($value[19]>0) {
-                            // BEGNKEL
-                            $peruntukkan[] = ['kode_peruntukkan'=>'12','value'=>$value[19]];
+                            // Sie Kepeg & Umum
+                            $peruntukkan[] = ['kode_peruntukkan'=>'02','value'=>$value[19]];
                         }
                         if ($value[20]>0) {
-                            // Sie Kepeg & Umum
-                            $peruntukkan[] = ['kode_peruntukkan'=>'02','value'=>$value[20]];
+                            // Sie Keuangan
+                            $peruntukkan[] = ['kode_peruntukkan'=>'03','value'=>$value[20]];
                         }
                         if ($value[21]>0) {
-                            // Sie Keuangan
-                            $peruntukkan[] = ['kode_peruntukkan'=>'03','value'=>$value[21]];
+                            // Sie Pengadaan
+                            $peruntukkan[] = ['kode_peruntukkan'=>'04','value'=>$value[21]];
                         }
                         if ($value[22]>0) {
-                            // Sie Pengadaan
-                            $peruntukkan[] = ['kode_peruntukkan'=>'04','value'=>$value[22]];
+                            // Sie Inventaris
+                            $peruntukkan[] = ['kode_peruntukkan'=>'05','value'=>$value[22]];
                         }
                         if ($value[23]>0) {
-                            // Sie Inventaris
-                            $peruntukkan[] = ['kode_peruntukkan'=>'05','value'=>$value[23]];
+                            // Sie Sarpras
+                            $peruntukkan[] = ['kode_peruntukkan'=>'06','value'=>$value[23]];
                         }
                         if ($value[24]>0) {
                             // Sie Sarpras
-                            $peruntukkan[] = ['kode_peruntukkan'=>'06','value'=>$value[24]];
-                        }
-                        if ($value[25]>0) {
-                            // Sie Sarpras
-                            $peruntukkan[] = ['kode_peruntukkan'=>'07','value'=>$value[25]];
+                            $peruntukkan[] = ['kode_peruntukkan'=>'07','value'=>$value[24]];
                         }
 
                         $dataBarang['peruntukkan_available'] = $peruntukkan;
@@ -444,7 +444,7 @@ class BarangPersediaanController extends Controller
                                 }
                                 DB::commit();
                             } catch (\Throwable $th) {
-                                dd($value);
+                                dd($value, $th->getMessage());
                             }
                         }
 
