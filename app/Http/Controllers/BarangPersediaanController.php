@@ -330,7 +330,9 @@ class BarangPersediaanController extends Controller
                         $dataBarang['nama_barang'] = $namaBarang;
                         $dataBarang['tahun_perolehan'] = 0;
                         $dataBarang['satuan'] = $value[3];
-                        $dataBarang['harga_perolehan'] = $value[5];
+                        if ($value[9] > 0) {
+                            $dataBarang['harga_perolehan'] = $value[10]/ $value[9];
+                        }
                         $dataBarang['kategori'] = $value[11];
                         // // Peruntukkan Apa saja yang ada stocknya
                         $peruntukkan = [];
