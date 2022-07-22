@@ -402,7 +402,7 @@ class BarangPersediaanController extends Controller
 
                                 // LOOP BERDASARKAN PERUNTUKKAN
                                 foreach ($peruntukkan as $key => $value2) {
-                                    $BarangPersediaan = BarangPersediaan::where('nama_barang', $namaBarang)
+                                    $BarangPersediaan = BarangPersediaan::where('nama_barang','ilike', '%'.$namaBarang.'%')
                                         ->where('sub_sub_kategori', $value2['kode_peruntukkan'])
                                         ->where('harga_perolehan', $dataBarang['harga_perolehan'])
                                         ->where('kode_barang', $dataBarang['kode_barang'])
